@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Store staff or admin user",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "staff"] },
+        "storeName": { "type": "string" }
+      },
+      "required": ["email", "role"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Store customer profile",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "outstandingDue": { "type": "number" },
+        "totalPurchases": { "type": "number" },
+        "lastPurchaseDate": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "phone", "outstandingDue"]
+    },
+    "Item": {
+      "title": "Item",
+      "description": "Inventory product item",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "sku": { "type": "string" },
+        "category": { "type": "string" },
+        "price": { "type": "number" },
+        "stock": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "price", "stock"]
+    },
+    "Bill": {
+      "title": "Bill",
+      "description": "Sales transaction record",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "total": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "dueAmount": { "type": "number" },
+        "paymentStatus": { "type": "string", "enum": ["PAID", "PARTIAL", "DUE"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["customerId", "total", "paymentStatus", "createdAt"]
+    },
+    "BillItem": {
+      "title": "BillItem",
+      "description": "Individual item in a bill",
+      "type": "object",
+      "properties": {
+        "billId": { "type": "string" },
+        "itemId": { "type": "string" },
+        "name": { "type": "string" },
+        "quantity": { "type": "number" },
+        "priceAtPurchase": { "type": "number" },
+        "total": { "type": "number" }
+      },
+      "required": ["billId", "itemId", "quantity", "priceAtPurchase"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Customer payment record",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "amount": { "type": "number" },
+        "mode": { "type": "string", "enum": ["CASH", "UPI", "CARD", "NET_BANKING"] },
+        "billId": { "type": "string" },
+        "date": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["customerId", "amount", "mode", "date"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Customer records"
+    },
+    "items/{itemId}": {
+      "schema": "Item",
+      "description": "Inventory items"
+    },
+    "bills/{billId}": {
+      "schema": "Bill",
+      "description": "Sales transactions"
+    },
+    "bills/{billId}/items/{itemId}": {
+      "schema": "BillItem",
+      "description": "Bill line items"
+    },
+    "payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Payment transactions"
+    }
+  }
+}

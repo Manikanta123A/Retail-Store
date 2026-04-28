@@ -1,0 +1,114 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isStaff() {
+      return isSignedIn() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // User Profiles
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && isAdmin();
+      allow update: if isSignedIn() && isAdmin();
+    }
+
+    // Customers
+    match /customers/{customerId} {
+      function isValidCustomer(data) {
+        return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+               data.phone is string && data.phone.size() >= 10 &&
+               data.outstandingDue is number;
+      }
+
+      allow list: if isStaff();
+      allow get: if isStaff();
+      allow create: if isStaff() && isValidCustomer(incoming());
+      allow update: if isStaff() && isValidCustomer(incoming()) && (
+        // Only allow due updates or basic info updates
+        incoming().diff(existing()).affectedKeys().hasOnly(['outstandingDue', 'totalPurchases', 'lastPurchaseDate', 'name', 'phone', 'email'])
+      );
+    }
+
+    // items
+    match /items/{itemId} {
+      function isValidItem(data) {
+        return data.name is string && data.name.size() > 0 &&
+               data.price is number && data.price >= 0 &&
+               data.stock is number;
+      }
+      allow list: if isStaff();
+      allow get: if isStaff();
+      allow create: if isAdmin() && isValidItem(incoming());
+      allow update: if isStaff() && isValidItem(incoming()) && (
+        isAdmin() || (isStaff() && incoming().diff(existing()).affectedKeys().hasOnly(['stock']))
+      );
+    }
+
+    // bills
+    match /bills/{billId} {
+      function isValidBill(data) {
+        return data.customerId is string &&
+               data.total is number && 
+               data.paymentStatus in ['PAID', 'PARTIAL', 'DUE'] &&
+               data.createdAt == request.time;
+      }
+      allow list: if isStaff();
+      allow get: if isStaff();
+      allow create: if isStaff() && isValidBill(incoming());
+      allow update: if isStaff() && (
+        // Bills are mostly immutable, only paymentStatus and outstanding/paid amounts can change
+        incoming().diff(existing()).affectedKeys().hasOnly(['paymentStatus', 'paidAmount', 'dueAmount'])
+      );
+
+      // bill line items
+      match /items/{lineItemId} {
+        allow read: if isStaff();
+        allow create: if isStaff();
+      }
+    }
+
+    // payments
+    match /payments/{paymentId} {
+      function isValidPayment(data) {
+        return data.customerId is string &&
+               data.amount is number && data.amount > 0 &&
+               data.mode in ['CASH', 'UPI', 'CARD', 'NET_BANKING'] &&
+               data.date is string;
+      }
+      allow list: if isStaff();
+      allow get: if isStaff();
+      allow create: if isStaff() && isValidPayment(incoming());
+      allow update: if false; // Payments are immutable
+      allow delete: if false;
+    }
+  }
+}
