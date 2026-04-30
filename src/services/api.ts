@@ -26,6 +26,7 @@ export const customerService = {
   getCustomer: (id: string) => api.get(`/customers/${id}`),
   updateCustomer: (id: string, data: any) => api.put(`/customers/${id}`, data),
   deleteCustomer: (id: string) => api.delete(`/customers/${id}`),
+  collectDues: (id: string, amount: number) => api.put(`/customers/${id}/collect`, { amount }),
 };
 
 export const itemService = {
@@ -37,8 +38,10 @@ export const itemService = {
 
 export const billingService = {
   getBills: (search = '', customerId = '') => api.get(`/billing/?search=${search}&customer_id=${customerId}`),
+  getBill: (id: string) => api.get(`/billing/${id}`),
   createBill: (data: any) => api.post('/billing/', data),
   deleteBill: (id: string) => api.delete(`/billing/${id}`),
+  payBill: (id: string, amount: number) => api.put(`/billing/${id}/pay`, { amount }),
 };
 
 export const authService = {

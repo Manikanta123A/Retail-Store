@@ -279,7 +279,7 @@ export default function Billing() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-lg border border-[#E5E7EB] shadow-sm flex flex-col gap-6 flex-1">
+        <div className="bg-white p-5 rounded-lg border border-[#E5E7EB] shadow-sm flex flex-col gap-6 flex-1 overflow-y-auto min-h-[300px]">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">Settlement Info</h3>
           
           <div className="space-y-3">

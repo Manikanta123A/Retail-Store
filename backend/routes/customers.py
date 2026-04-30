@@ -71,3 +71,53 @@ def delete_customer(id):
     db.session.delete(customer)
     db.session.commit()
     return '', 204
+
+@customers_bp.route('/<id>/collect', methods=['PUT'])
+def collect_dues(id):
+    user_id = request.headers.get('X-User-Id')
+    customer = Customer.query.filter_by(id=id, user_id=user_id).first_or_404()
+    
+    data = request.get_json()
+    amount_to_collect = float(data.get('amount', 0))
+    
+    if amount_to_collect <= 0:
+        return jsonify({"error": "Invalid amount"}), 400
+        
+    from decimal import Decimal
+    from models.bill import Bill
+    
+    # Get all unpaid/partial bills for this customer, oldest first
+    bills = Bill.query.filter(
+        Bill.customer_id == id,
+        Bill.user_id == user_id,
+        Bill.due_amount > 0
+    ).order_by(Bill.created_at.asc()).all()
+    
+    remaining_collection = Decimal(str(amount_to_collect))
+    
+    for bill in bills:
+        if remaining_collection <= 0:
+            break
+            
+        due = bill.due_amount
+        if remaining_collection >= due:
+            # Pay off this bill completely
+            bill.paid_amount += due
+            bill.due_amount = 0
+            bill.status = 'paid'
+            remaining_collection -= due
+        else:
+            # Pay partially
+            bill.paid_amount += remaining_collection
+            bill.due_amount -= remaining_collection
+            bill.status = 'partial'
+            remaining_collection = Decimal('0')
+            
+    # Amount actually applied
+    applied_amount = Decimal(str(amount_to_collect)) - remaining_collection
+    customer.outstanding_due -= applied_amount
+    if customer.outstanding_due < 0:
+        customer.outstanding_due = 0
+        
+    db.session.commit()
+    return jsonify({"success": True, "applied": float(applied_amount), "customer": customer.to_dict()})

@@ -7,15 +7,19 @@ import {
   FileText,
   Filter,
   Download,
-  Loader2
+  Loader2,
+  ArrowRight
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { billingService, customerService } from '@/services/api';
+import BillDetailsModal from '@/components/BillDetailsModal';
 
 export default function Payments() {
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  
+  const [selectedBillId, setSelectedBillId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPayments();
@@ -104,10 +108,14 @@ export default function Payments() {
                 <tr><td colSpan={5} className="p-8 text-center text-gray-500">No payments found.</td></tr>
               ) : (
                 filteredPayments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-gray-50 transition-colors">
+                  <tr 
+                    key={payment.id} 
+                    onClick={() => setSelectedBillId(payment.id)}
+                    className="hover:bg-blue-50 cursor-pointer transition-colors"
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                           <CreditCard size={16} />
                         </div>
                         <div>
@@ -143,6 +151,13 @@ export default function Payments() {
           </table>
         </div>
       </div>
+
+      {selectedBillId && (
+        <BillDetailsModal
+          billId={selectedBillId}
+          onClose={() => setSelectedBillId(null)}
+        />
+      )}
     </div>
   );
 }

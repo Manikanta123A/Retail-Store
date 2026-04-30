@@ -5,6 +5,8 @@ import {
 import { format } from 'date-fns';
 import { customerService, billingService } from '@/services/api';
 import { formatCurrency, cn } from '@/lib/utils';
+import BillDetailsModal from '@/components/BillDetailsModal';
+import CollectPaymentModal from '@/components/CollectPaymentModal';
 
 export default function Customers() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -286,6 +288,10 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
   const [bills, setBills] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
+  
+  const [selectedBillId, setSelectedBillId] = useState<string | null>(null);
+  const [collectBill, setCollectBill] = useState<any>(null);
+  const [collectCustomerModal, setCollectCustomerModal] = useState(false);
 
   useEffect(() => {
     fetchBills();
@@ -342,7 +348,17 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
             </div>
             <div className="bg-amber-50 border border-amber-100 p-4 rounded-lg">
               <p className="text-xs uppercase font-bold text-amber-600 mb-1">Pending Due</p>
-              <p className="text-xl font-bold text-amber-900">{formatCurrency(customer.outstanding_due)}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xl font-bold text-amber-900">{formatCurrency(customer.outstanding_due)}</p>
+                {customer.outstanding_due > 0 && (
+                  <button 
+                    onClick={() => setCollectCustomerModal(true)}
+                    className="bg-amber-600 text-white text-[10px] px-2 py-1 rounded font-bold hover:bg-amber-700 transition-colors shadow-sm"
+                  >
+                    COLLECT ALL
+                  </button>
+                )}
+              </div>
             </div>
             <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
               <p className="text-xs uppercase font-bold text-slate-600 mb-1">Last Purchase</p>
@@ -361,8 +377,8 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
             >
               <option value="">All Statuses</option>
               <option value="paid">Paid</option>
-              <option value="unpaid">Unpaid</option>
-              <option value="paid_due">Paid Due</option>
+              <option value="unpaid">Unpaid / Due</option>
+              <option value="partial">Partial</option>
             </select>
           </div>
 
@@ -383,7 +399,7 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {filteredBills.length > 0 ? filteredBills.map(b => (
-                    <tr key={b.id} className="hover:bg-slate-50">
+                    <tr key={b.id} className="hover:bg-blue-50 cursor-pointer transition-colors" onClick={() => setSelectedBillId(b.id)}>
                       <td className="p-3 font-mono">#{b.bill_number}</td>
                       <td className="p-3">{format(new Date(b.created_at), 'dd MMM yyyy')}</td>
                       <td className="p-3 font-bold">{formatCurrency(b.final_amount)}</td>
@@ -398,12 +414,28 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
                         </span>
                       </td>
                       <td className="p-3 text-right">
-                        <button 
-                          onClick={() => handleDeleteBill(b.id)}
-                          className="p-1.5 text-slate-400 hover:text-red-600 bg-white border border-gray-200 rounded-md shadow-sm"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                        <div className="flex justify-end gap-2">
+                          {b.due_amount > 0 && (
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCollectBill(b);
+                              }}
+                              className="px-2 py-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded text-xs font-bold transition-colors"
+                            >
+                              Collect
+                            </button>
+                          )}
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteBill(b.id);
+                            }}
+                            className="p-1.5 text-slate-400 hover:text-red-600 bg-white border border-gray-200 rounded-md shadow-sm"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )) : (
@@ -415,6 +447,41 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
           )}
         </div>
       </div>
+      
+      {selectedBillId && (
+        <BillDetailsModal
+          billId={selectedBillId}
+          onClose={() => setSelectedBillId(null)}
+        />
+      )}
+
+      {collectBill && (
+        <CollectPaymentModal
+          type="bill"
+          targetId={collectBill.id}
+          customerName={`Bill #${collectBill.bill_number}`}
+          maxAmount={collectBill.due_amount}
+          onClose={() => setCollectBill(null)}
+          onSuccess={() => {
+            setCollectBill(null);
+            fetchBills();
+          }}
+        />
+      )}
+
+      {collectCustomerModal && (
+        <CollectPaymentModal
+          type="customer"
+          targetId={customer.id}
+          customerName={customer.name}
+          maxAmount={customer.outstanding_due}
+          onClose={() => setCollectCustomerModal(false)}
+          onSuccess={() => {
+            setCollectCustomerModal(false);
+            onClose(); // Refresh the list by closing and requiring reopen
+          }}
+        />
+      )}
     </div>
   );
 }

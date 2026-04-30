@@ -97,6 +97,58 @@ def create_bill():
     
     return jsonify(new_bill.to_dict()), 201
 
+@billing_bp.route('/<id>', methods=['GET'])
+def get_bill(id):
+    user_id = request.headers.get('X-User-Id')
+    bill = Bill.query.filter_by(id=id, user_id=user_id).first_or_404()
+    
+    bill_dict = bill.to_dict()
+    items = []
+    for bi in bill.items:
+        item = Item.query.get(bi.item_id)
+        items.append({
+            "name": item.name if item else "Deleted Item",
+            "quantity": bi.quantity,
+            "price": float(bi.price_at_purchase),
+            "total": float(bi.total_price)
+        })
+    bill_dict['items'] = items
+    
+    customer = Customer.query.get(bill.customer_id)
+    bill_dict['customer_name'] = customer.name if customer else "Deleted Customer"
+    
+    return jsonify(bill_dict)
+
+@billing_bp.route('/<id>/pay', methods=['PUT'])
+def pay_bill(id):
+    user_id = request.headers.get('X-User-Id')
+    bill = Bill.query.filter_by(id=id, user_id=user_id).first_or_404()
+    data = request.get_json()
+    amount = float(data.get('amount', 0))
+    
+    if amount <= 0:
+        return jsonify({"error": "Invalid amount"}), 400
+        
+    if amount > float(bill.due_amount):
+        return jsonify({"error": "Amount exceeds due amount"}), 400
+        
+    from decimal import Decimal
+    bill.paid_amount += Decimal(str(amount))
+    bill.due_amount -= Decimal(str(amount))
+    
+    if bill.due_amount == 0:
+        bill.status = 'paid'
+    else:
+        bill.status = 'partial'
+        
+    # Update customer due
+    customer = Customer.query.get(bill.customer_id)
+    if customer:
+        customer.outstanding_due -= Decimal(str(amount))
+        
+    db.session.commit()
+    return jsonify(bill.to_dict())
+
 @billing_bp.route('/<id>', methods=['DELETE'])
 def delete_bill(id):
     user_id = request.headers.get('X-User-Id')

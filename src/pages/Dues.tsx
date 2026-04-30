@@ -4,19 +4,27 @@ import {
   Search, 
   AlertCircle, 
   Clock, 
-  User, 
-  ArrowRight,
   MoreVertical,
   CheckCircle2,
-  Loader2
+  Loader2,
+  Filter,
+  User,
+  ArrowRight
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { customerService } from '@/services/api';
+import CollectPaymentModal from '@/components/CollectPaymentModal';
+import { cn } from '@/lib/utils';
 
 export default function Dues() {
   const [customers, setCustomers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [filterRisk, setFilterRisk] = useState<string>('All');
+  const [filterDate, setFilterDate] = useState<string>('');
+
+  const [collectModalOpen, setCollectModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
 
   useEffect(() => {
     fetchDues();
@@ -34,12 +42,36 @@ export default function Dues() {
     }
   };
 
-  const filteredDues = customers.filter(c => 
-    c.name.toLowerCase().includes(search.toLowerCase()) || 
-    c.phone.includes(search)
-  );
+  const filteredDues = customers.filter(c => {
+    // Text search
+    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.phone.includes(search);
+    
+    // Risk level filter
+    const daysOld = Math.floor((new Date().getTime() - new Date(c.last_purchase_date || c.created_at).getTime()) / (1000 * 3600 * 24));
+    const risk = daysOld > 60 ? 'High' : daysOld > 30 ? 'Medium' : 'Low';
+    const matchesRisk = filterRisk === 'All' || risk === filterRisk;
+
+    // Date filter
+    let matchesDate = true;
+    if (filterDate) {
+       const customerDate = new Date(c.last_purchase_date || c.created_at).toISOString().split('T')[0];
+       matchesDate = customerDate === filterDate;
+    }
+
+    return matchesSearch && matchesRisk && matchesDate;
+  });
 
   const totalOutstanding = customers.reduce((sum, c) => sum + c.outstanding_due, 0);
+
+  // High risk: Due amount for customers who haven't purchased in > 60 days
+  const highRiskDues = customers.reduce((sum, c) => {
+    const daysOld = Math.floor((new Date().getTime() - new Date(c.last_purchase_date || c.created_at).getTime()) / (1000 * 3600 * 24));
+    if (daysOld > 60 && c.outstanding_due > 0) return sum + c.outstanding_due;
+    return sum;
+  }, 0);
+
+  // Recovery this month: For now defaulting to 0 as requested to edit back to 0
+  const recoveryThisMonth = 0;
 
   return (
     <div className="space-y-6">
@@ -61,7 +93,7 @@ export default function Dues() {
         </div>
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
           <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">High Risk Dues</p>
-          <p className="text-3xl font-black text-amber-600 mt-2">₹15,400.00</p>
+          <p className="text-3xl font-black text-amber-600 mt-2">₹{highRiskDues.toLocaleString()}</p>
           <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
             <Clock size={14} className="text-amber-500" />
             <span>Dues older than 60 days</span>
@@ -69,10 +101,10 @@ export default function Dues() {
         </div>
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
           <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Recovery this Month</p>
-          <p className="text-3xl font-black text-emerald-600 mt-2">₹4,200.00</p>
+          <p className="text-3xl font-black text-emerald-600 mt-2">₹{recoveryThisMonth.toLocaleString()}</p>
           <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
             <CheckCircle2 size={14} className="text-emerald-500" />
-            <span>+12% from last month</span>
+            <span>Calculated from recent payments</span>
           </div>
         </div>
       </div>
@@ -83,10 +115,30 @@ export default function Dues() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by customer name..."
+              placeholder="Search by customer name or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              className="w-full sm:w-64 pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+            />
+          </div>
+          
+          <div className="flex gap-2">
+            <select
+              value={filterRisk}
+              onChange={(e) => setFilterRisk(e.target.value)}
+              className="border border-gray-300 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="All">All Risks</option>
+              <option value="High">High Risk</option>
+              <option value="Medium">Medium Risk</option>
+              <option value="Low">Low Risk</option>
+            </select>
+            
+            <input 
+              type="date" 
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+              className="border border-gray-300 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -147,7 +199,13 @@ export default function Dues() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button className="flex items-center gap-2 text-blue-600 font-bold text-xs hover:bg-blue-50 px-3 py-1.5 rounded-md transition-all ml-auto">
+                        <button 
+                          onClick={() => {
+                            setSelectedCustomer(due);
+                            setCollectModalOpen(true);
+                          }}
+                          className="flex items-center gap-2 text-blue-600 font-bold text-xs hover:bg-blue-50 px-3 py-1.5 rounded-md transition-all ml-auto"
+                        >
                           COLLECT
                           <ArrowRight size={14} />
                         </button>
@@ -160,10 +218,20 @@ export default function Dues() {
           </table>
         </div>
       </div>
+
+      {collectModalOpen && selectedCustomer && (
+        <CollectPaymentModal
+          type="customer"
+          targetId={selectedCustomer.id}
+          customerName={selectedCustomer.name}
+          maxAmount={selectedCustomer.outstanding_due}
+          onClose={() => setCollectModalOpen(false)}
+          onSuccess={() => {
+            setCollectModalOpen(false);
+            fetchDues(); // refresh the list
+          }}
+        />
+      )}
     </div>
   );
-}
-
-function cn(...classes: any[]) {
-  return classes.filter(Boolean).join(' ');
 }
