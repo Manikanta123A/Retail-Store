@@ -1,19 +1,12 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { 
-  onAuthStateChanged, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut,
-  User as FirebaseUser
-} from 'firebase/auth';
-import { auth, db } from '../lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { User } from '../types';
+import { authService } from '../services/api';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: () => Promise<void>;
+  login: (credentials: any) => Promise<void>;
+  signup: (userData: any) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -24,42 +17,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const userRef = doc(db, 'users', firebaseUser.uid);
-        const userSnap = await getDoc(userRef);
-        
-        if (userSnap.exists()) {
-          setUser(userSnap.data() as User);
-        } else {
-          // New User Setup (Default to staff)
-          const newUser: User = {
-            id: firebaseUser.uid,
-            email: firebaseUser.email!,
-            role: 'staff',
-            storeName: 'My Retail Store'
-          };
-          await setDoc(userRef, newUser);
-          setUser(newUser);
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
+    // Check local storage for session
+    const savedUser = localStorage.getItem('retail_pro_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    setLoading(false);
   }, []);
 
-  const login = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+  const login = async (credentials: any) => {
+    try {
+      const response = await authService.login(credentials);
+      const userData = response.data.user;
+      setUser(userData);
+      localStorage.setItem('retail_pro_user', JSON.stringify(userData));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const signup = async (userData: any) => {
+    try {
+      const response = await authService.signup(userData);
+      const newUserData = response.data.user;
+      setUser(newUserData);
+      localStorage.setItem('retail_pro_user', JSON.stringify(newUserData));
+    } catch (error) {
+      throw error;
+    }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    setUser(null);
+    localStorage.removeItem('retail_pro_user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

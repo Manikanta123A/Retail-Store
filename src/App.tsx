@@ -2,6 +2,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Layout } from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Billing from './pages/Billing';
+import Customers from './pages/Customers';
+import Inventory from './pages/Inventory';
+import Dues from './pages/Dues';
+import Payments from './pages/Payments';
 import Login from './pages/Login';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { Loader2 } from 'lucide-react';
@@ -52,10 +56,10 @@ export default function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="billing" element={<Billing />} />
-            <Route path="customers" element={<Placeholder title="Customer Management" />} />
-            <Route path="inventory" element={<Placeholder title="Inventory & Stock" />} />
-            <Route path="dues" element={<Placeholder title="Due Management" />} />
-            <Route path="payments" element={<Placeholder title="Payment History" />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="inventory" element={<Inventory />} />
+            <Route path="dues" element={<Dues />} />
+            <Route path="payments" element={<Payments />} />
             <Route path="reports" element={<Placeholder title="Operational Reports" />} />
             <Route path="analytics" element={<Placeholder title="Business Analytics" />} />
             <Route path="emails" element={<Placeholder title="Email Invoices" />} />

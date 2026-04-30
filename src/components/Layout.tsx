@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Search, Bell, Calendar, Plus } from 'lucide-react';
 import { format } from 'date-fns';
@@ -29,10 +29,13 @@ export function Layout() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 bg-[#2563EB] text-white px-4 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors active:scale-95">
+            <Link 
+              to="/billing"
+              className="flex items-center gap-2 bg-[#2563EB] text-white px-4 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors active:scale-95"
+            >
               <Plus className="w-4 h-4" />
               New Bill
-            </button>
+            </Link>
           </div>
         </header>
 

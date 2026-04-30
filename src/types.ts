@@ -18,9 +18,10 @@ export enum PaymentMode {
 
 export interface User {
   id: string;
-  email: string;
+  username: string;
+  full_name: string;
+  email?: string;
   role: 'admin' | 'staff';
-  storeName: string;
 }
 
 export interface Customer {
