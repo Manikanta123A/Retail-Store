@@ -37,8 +37,22 @@ def get_dashboard_data():
     bills_count = len(bills)
     dues_added = sum(float(b.due_amount) for b in bills)
     
-    # dues collected - we'll approximate for now
-    dues_collected = sum(float(b.paid_amount) for b in bills if b.status == 'paid_due')
+    # dues collected - Use the payments table
+    from models.payment import Payment
+    # Dues collected are payments made where balance_before > 0
+    # Actually, let's just sum all payments in this period
+    payments_query = Payment.query.filter(Payment.created_at >= start_date, Payment.user_id == user_id)
+    if time_range == 'last_week':
+        payments_query = payments_query.filter(Payment.created_at < end_date)
+    
+    # We want to distinguish between "Initial payment during billing" and "Later collection"
+    # For simplicity, let's say 'Dues Collected' are all payments made to OLD bills? 
+    # Or just all payments made?
+    # Let's count payments where they weren't the full amount of a brand new bill?
+    # Better: sum of all payments that reduced an EXISTING debt.
+    # In my logic, if balance_before > 0, it was reducing debt.
+    all_payments = payments_query.all()
+    dues_collected = sum(float(p.amount) for p in all_payments if p.balance_before and float(p.balance_before) > 0)
     
     # recent transactions
     recent_bills_query = Bill.query.filter_by(user_id=user_id).order_by(Bill.created_at.desc()).limit(10).all()

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from database import db
 from models.bill import Bill, BillItem
+from models.payment import Payment
 from models.item import Item
 from models.customer import Customer
 import uuid
@@ -92,6 +93,19 @@ def create_bill():
     db.session.add(new_bill)
     for bi in bill_items:
         db.session.add(bi)
+        
+    if paid_amount > 0:
+        payment = Payment(
+            id=str(uuid.uuid4()),
+            bill_id=bill_id,
+            customer_id=customer.id,
+            amount=paid_amount,
+            balance_before=final_amount,
+            balance_after=due_amount,
+            payment_mode=data.get('payment_mode', 'Cash'),
+            user_id=user_id
+        )
+        db.session.add(payment)
     
     db.session.commit()
     
@@ -113,11 +127,46 @@ def get_bill(id):
             "total": float(bi.total_price)
         })
     bill_dict['items'] = items
+    bill_dict['payments'] = [p.to_dict() for p in bill.payments]
     
     customer = Customer.query.get(bill.customer_id)
     bill_dict['customer_name'] = customer.name if customer else "Deleted Customer"
     
     return jsonify(bill_dict)
+
+@billing_bp.route('/payments', methods=['GET'])
+def get_payments():
+    user_id = request.headers.get('X-User-Id')
+    query = Payment.query.filter_by(user_id=user_id)
+    
+    customer_id = request.args.get('customer_id')
+    if customer_id:
+        query = query.filter_by(customer_id=customer_id)
+        
+    start_date = request.args.get('start_date')
+    if start_date:
+        from datetime import datetime, timedelta
+        date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+        next_day = date_obj + timedelta(days=1)
+        query = query.filter(Payment.created_at >= date_obj, Payment.created_at < next_day)
+
+    search = request.args.get('search')
+    if search:
+        # Join with customer to search by name
+        query = query.join(Customer, Payment.customer_id == Customer.id).filter(Customer.name.ilike(f'%{search}%'))
+        
+    payments = query.order_by(Payment.created_at.desc()).all()
+    
+    results = []
+    for p in payments:
+        bill = Bill.query.get(p.bill_id)
+        customer = Customer.query.get(p.customer_id)
+        res = p.to_dict()
+        res['bill_number'] = bill.bill_number if bill else "N/A"
+        res['customer_name'] = customer.name if customer else "N/A"
+        results.append(res)
+        
+    return jsonify(results)
 
 @billing_bp.route('/<id>/pay', methods=['PUT'])
 def pay_bill(id):
@@ -133,6 +182,7 @@ def pay_bill(id):
         return jsonify({"error": "Amount exceeds due amount"}), 400
         
     from decimal import Decimal
+    old_due = bill.due_amount
     bill.paid_amount += Decimal(str(amount))
     bill.due_amount -= Decimal(str(amount))
     
@@ -145,6 +195,19 @@ def pay_bill(id):
     customer = Customer.query.get(bill.customer_id)
     if customer:
         customer.outstanding_due -= Decimal(str(amount))
+        
+    # Record payment
+    payment = Payment(
+        id=str(uuid.uuid4()),
+        bill_id=id,
+        customer_id=bill.customer_id,
+        amount=amount,
+        balance_before=float(old_due),
+        balance_after=float(bill.due_amount),
+        user_id=user_id,
+        payment_mode=data.get('payment_mode', 'Cash')
+    )
+    db.session.add(payment)
         
     db.session.commit()
     return jsonify(bill.to_dict())

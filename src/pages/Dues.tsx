@@ -12,7 +12,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { customerService } from '@/services/api';
+import { customerService, billingService } from '@/services/api';
 import CollectPaymentModal from '@/components/CollectPaymentModal';
 import { cn } from '@/lib/utils';
 
@@ -22,13 +22,28 @@ export default function Dues() {
   const [search, setSearch] = useState('');
   const [filterRisk, setFilterRisk] = useState<string>('All');
   const [filterDate, setFilterDate] = useState<string>('');
+  const [recoveryThisMonth, setRecoveryThisMonth] = useState(0);
 
   const [collectModalOpen, setCollectModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
 
   useEffect(() => {
     fetchDues();
+    fetchMonthlyRecovery();
   }, []);
+
+  const fetchMonthlyRecovery = async () => {
+    try {
+      const now = new Date();
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+      const res = await billingService.getPayments({ start_date: firstDay });
+      // Sum only the payments (collections)
+      const total = res.data.reduce((sum: number, p: any) => sum + p.amount, 0);
+      setRecoveryThisMonth(total);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const fetchDues = async () => {
     try {
@@ -70,8 +85,8 @@ export default function Dues() {
     return sum;
   }, 0);
 
-  // Recovery this month: For now defaulting to 0 as requested to edit back to 0
-  const recoveryThisMonth = 0;
+  // Recovery this month: Calculated dynamically from recent payments
+  // (state set via fetchMonthlyRecovery)
 
   return (
     <div className="space-y-6">

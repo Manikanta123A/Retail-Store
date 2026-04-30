@@ -99,6 +99,7 @@ def collect_dues(id):
         if remaining_collection <= 0:
             break
             
+        old_due = bill.due_amount
         due = bill.due_amount
         if remaining_collection >= due:
             # Pay off this bill completely
@@ -106,12 +107,28 @@ def collect_dues(id):
             bill.due_amount = 0
             bill.status = 'paid'
             remaining_collection -= due
+            payment_amount = due
         else:
             # Pay partially
             bill.paid_amount += remaining_collection
             bill.due_amount -= remaining_collection
             bill.status = 'partial'
+            payment_amount = remaining_collection
             remaining_collection = Decimal('0')
+            
+        # Record payment for this bill
+        from models.payment import Payment
+        payment = Payment(
+            id=str(uuid.uuid4()),
+            bill_id=bill.id,
+            customer_id=id,
+            amount=float(payment_amount),
+            balance_before=float(old_due),
+            balance_after=float(bill.due_amount),
+            user_id=user_id,
+            payment_mode=data.get('payment_mode', 'Collection')
+        )
+        db.session.add(payment)
             
     # Amount actually applied
     applied_amount = Decimal(str(amount_to_collect)) - remaining_collection

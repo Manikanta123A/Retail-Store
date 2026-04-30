@@ -16,6 +16,9 @@ class Bill(db.Model):
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    items = db.relationship('BillItem', backref='bill', lazy=True, cascade="all, delete-orphan")
+    payments = db.relationship('Payment', backref='bill', lazy=True, cascade="all, delete-orphan")
+
     def to_dict(self):
         return {
             "id": self.id,

@@ -26,7 +26,8 @@ export default function Billing() {
   
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(PaymentStatus.PAID);
-  const [paidAmount, setPaidAmount] = useState<number>(0);
+  const [paidAmount, setPaidAmount] = useState<string>('0');
+  const [paymentMode, setPaymentMode] = useState<string>('Cash');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -59,16 +60,6 @@ export default function Billing() {
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const tax = 0; // Set to 0 or calculate as needed
   const total = subtotal + tax;
-
-  useEffect(() => {
-    if (paymentStatus === PaymentStatus.PAID) {
-      setPaidAmount(total);
-    } else if (paymentStatus === PaymentStatus.DUE) {
-      setPaidAmount(0);
-    } else if (paymentStatus === PaymentStatus.PARTIAL && paidAmount >= total) {
-      setPaidAmount(0); // Reset if it was previously set higher
-    }
-  }, [paymentStatus, total]);
 
   const addToCart = (item: any) => {
     if (item.stock_quantity <= 0) return;
@@ -109,12 +100,15 @@ export default function Billing() {
     }
 
     setIsSubmitting(true);
+    const pAmount = parseFloat(paidAmount) || 0;
     try {
       const payload = {
-        customer_id: selectedCustomer.id,
-        items: cart.map(c => ({ item_id: c.id, quantity: c.quantity })),
-        discount_amount: 0,
-        paid_amount: paidAmount
+        customer_id: selectedCustomer?.id,
+        items: cart.map(i => ({ item_id: i.id, quantity: i.quantity })),
+        total_amount: total,
+        paid_amount: pAmount,
+        payment_mode: paymentMode,
+        status: pAmount >= total ? 'paid' : (pAmount > 0 ? 'partial' : 'unpaid')
       };
       await billingService.createBill(payload);
       setSuccessMessage("Bill saved successfully!");
@@ -285,7 +279,7 @@ export default function Billing() {
           <div className="space-y-3">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bill Status</p>
             <div className="grid grid-cols-1 gap-2">
-              {[PaymentStatus.PAID, PaymentStatus.PARTIAL, PaymentStatus.DUE].map((status) => (
+              {[PaymentStatus.PAID, PaymentStatus.PARTIAL, PaymentStatus.DUE, PaymentStatus.UNPAID].map((status) => (
                 <button
                   key={status}
                   onClick={() => setPaymentStatus(status)}
@@ -301,10 +295,38 @@ export default function Billing() {
               ))}
             </div>
 
-            {paymentStatus === PaymentStatus.PARTIAL && (
-              <div className="mt-4">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Amount Paid</label>
-                <input type="number" value={paidAmount} onChange={e => setPaidAmount(parseFloat(e.target.value))} className="mt-1 w-full p-2 text-sm border rounded" />
+            {paymentStatus !== PaymentStatus.UNPAID && (
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-bold text-gray-700 uppercase tracking-widest block mb-2">Paid Amount (₹)</label>
+                  <input 
+                    type="number" 
+                    value={paidAmount}
+                    onChange={(e) => setPaidAmount(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md p-3 font-bold text-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="0.00"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs font-bold text-gray-700 uppercase tracking-widest block mb-2">Payment Mode</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['Cash', 'UPI', 'Card'].map((mode) => (
+                      <button
+                        key={mode}
+                        type="button"
+                        onClick={() => setPaymentMode(mode)}
+                        className={`py-2 px-1 rounded-md text-[10px] font-black uppercase tracking-tighter border transition-all ${
+                          paymentMode === mode 
+                          ? 'bg-blue-50 border-blue-500 text-blue-700 ring-2 ring-blue-500/20' 
+                          : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
+                        }`}
+                      >
+                        {mode}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>

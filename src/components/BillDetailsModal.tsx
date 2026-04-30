@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Receipt, Printer, Loader2 } from 'lucide-react';
+import { X, Receipt, Printer, Loader2, ArrowRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { billingService } from '@/services/api';
 import { formatCurrency, cn } from '@/lib/utils';
@@ -110,6 +110,28 @@ export default function BillDetailsModal({ billId, onClose }: BillDetailsModalPr
               <span className="text-slate-500">Balance Due</span>
               <span className="text-red-600">{formatCurrency(bill.due_amount)}</span>
             </div>
+            
+            {bill.payments && bill.payments.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Payment History</p>
+                <div className="space-y-2">
+                  {bill.payments.map((p: any) => (
+                    <div key={p.id} className="bg-white p-2 rounded border border-gray-100">
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-500 font-medium">{format(new Date(p.created_at), 'MMM dd, yyyy')} ({p.payment_mode})</span>
+                        <span className="font-black text-emerald-600">+{formatCurrency(p.amount)}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] text-slate-400">
+                        <span className="font-bold">{formatCurrency(p.balance_before)}</span>
+                        <ArrowRight size={10} />
+                        <span className="font-bold text-slate-600">{formatCurrency(p.balance_after)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="pt-2 mt-2 border-t border-gray-200">
                 <span className={cn("px-2 py-1 rounded text-xs font-bold uppercase", 
                   bill.status === 'paid' ? 'bg-green-100 text-green-700' :

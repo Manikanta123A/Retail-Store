@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Users, Search, Plus, Phone, Mail, ArrowUpRight, MoreVertical, Filter, Loader2, X, FileText, Trash2, Edit3
+  Users, Search, Plus, Phone, Mail, ArrowUpRight, MoreVertical, Filter, Loader2, X, FileText, Trash2, Edit3, CheckCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { customerService, billingService } from '@/services/api';
@@ -278,13 +278,14 @@ export default function Customers() {
         <CustomerDetailsModal 
           customer={selectedCustomer} 
           onClose={() => setSelectedCustomer(null)} 
+          onUpdate={fetchCustomers}
         />
       )}
     </div>
   );
 }
 
-function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: () => void }) {
+function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, onClose: () => void, onUpdate: () => void }) {
   const [bills, setBills] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
@@ -293,9 +294,32 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
   const [collectBill, setCollectBill] = useState<any>(null);
   const [collectCustomerModal, setCollectCustomerModal] = useState(false);
 
+  const [quickAmount, setQuickAmount] = useState<string>(customer.outstanding_due.toString());
+  const [quickMode, setQuickMode] = useState<string>('Cash');
+  const [isCollecting, setIsCollecting] = useState(false);
+
   useEffect(() => {
     fetchBills();
   }, [customer.id]);
+
+  const handleQuickCollect = async () => {
+    const amount = parseFloat(quickAmount);
+    if (isNaN(amount) || amount <= 0) return alert('Enter valid amount');
+    if (amount > customer.outstanding_due) return alert('Amount exceeds due');
+
+    setIsCollecting(true);
+    try {
+      await customerService.collectDues(customer.id, amount, quickMode);
+      setQuickAmount('0');
+      fetchBills();
+      onUpdate(); // Refresh parent list
+    } catch (e) {
+      console.error(e);
+      alert('Failed to collect');
+    } finally {
+      setIsCollecting(false);
+    }
+  };
 
   const fetchBills = async () => {
     setLoading(true);
@@ -348,17 +372,7 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
             </div>
             <div className="bg-amber-50 border border-amber-100 p-4 rounded-lg">
               <p className="text-xs uppercase font-bold text-amber-600 mb-1">Pending Due</p>
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-bold text-amber-900">{formatCurrency(customer.outstanding_due)}</p>
-                {customer.outstanding_due > 0 && (
-                  <button 
-                    onClick={() => setCollectCustomerModal(true)}
-                    className="bg-amber-600 text-white text-[10px] px-2 py-1 rounded font-bold hover:bg-amber-700 transition-colors shadow-sm"
-                  >
-                    COLLECT ALL
-                  </button>
-                )}
-              </div>
+              <p className="text-xl font-bold text-amber-900">{formatCurrency(customer.outstanding_due)}</p>
             </div>
             <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
               <p className="text-xs uppercase font-bold text-slate-600 mb-1">Last Purchase</p>
@@ -368,12 +382,45 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
             </div>
           </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-lg">Billing History</h3>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+              Billing History
+            </h3>
+            
+            <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200">
+              <div className="relative">
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] font-bold">₹</span>
+                <input 
+                  type="number" 
+                  value={quickAmount}
+                  onChange={(e) => setQuickAmount(e.target.value)}
+                  className="w-24 pl-5 pr-2 py-1.5 text-sm font-bold bg-white border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Amount"
+                />
+              </div>
+              <select 
+                value={quickMode}
+                onChange={(e) => setQuickMode(e.target.value)}
+                className="text-xs font-bold bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-2 focus:ring-blue-500 outline-none"
+              >
+                <option value="Cash">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="Card">Card</option>
+              </select>
+              <button 
+                onClick={handleQuickCollect}
+                disabled={isCollecting || parseFloat(quickAmount) <= 0}
+                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-black uppercase rounded shadow-sm transition-all flex items-center gap-2"
+              >
+                {isCollecting ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
+                Collect
+              </button>
+            </div>
+
             <select 
-              className="border border-gray-300 rounded-md text-sm p-2 focus:ring-blue-500"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
+              className="text-xs font-bold border border-gray-300 rounded-md px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Statuses</option>
               <option value="paid">Paid</option>
@@ -478,7 +525,8 @@ function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: (
           onClose={() => setCollectCustomerModal(false)}
           onSuccess={() => {
             setCollectCustomerModal(false);
-            onClose(); // Refresh the list by closing and requiring reopen
+            fetchCustomers(); // Refresh the list dynamically
+            onClose(); // Also close the details view
           }}
         />
       )}
