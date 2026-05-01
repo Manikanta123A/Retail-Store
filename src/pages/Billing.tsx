@@ -31,6 +31,8 @@ export default function Billing() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
+
+
   useEffect(() => {
     fetchItems();
   }, [searchItem]);
@@ -60,6 +62,14 @@ export default function Billing() {
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const tax = 0; // Set to 0 or calculate as needed
   const total = subtotal + tax;
+
+  useEffect(() => {
+    if (paymentStatus === PaymentStatus.PAID) {
+      setPaidAmount(total.toString());
+    } else if (paymentStatus === PaymentStatus.DUE) {
+      setPaidAmount('0');
+    }
+  }, [paymentStatus, total]);
 
   const addToCart = (item: any) => {
     if (item.stock_quantity <= 0) return;
@@ -279,7 +289,7 @@ export default function Billing() {
           <div className="space-y-3">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bill Status</p>
             <div className="grid grid-cols-1 gap-2">
-              {[PaymentStatus.PAID, PaymentStatus.PARTIAL, PaymentStatus.DUE, PaymentStatus.UNPAID].map((status) => (
+              {[PaymentStatus.PAID, PaymentStatus.PARTIAL, PaymentStatus.DUE].map((status) => (
                 <button
                   key={status}
                   onClick={() => setPaymentStatus(status)}
@@ -295,20 +305,22 @@ export default function Billing() {
               ))}
             </div>
 
-            {paymentStatus !== PaymentStatus.UNPAID && (
+            {paymentStatus !== PaymentStatus.DUE && (
               <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-bold text-gray-700 uppercase tracking-widest block mb-2">Paid Amount (₹)</label>
-                  <input 
-                    type="number" 
-                    value={paidAmount}
-                    onChange={(e) => setPaidAmount(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md p-3 font-bold text-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="0.00"
-                  />
-                </div>
+                {paymentStatus === PaymentStatus.PARTIAL && (
+                  <div>
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-widest block mb-2">Paid Amount (₹)</label>
+                    <input 
+                      type="number" 
+                      value={paidAmount}
+                      onChange={(e) => setPaidAmount(e.target.value)}
+                      className="w-full border border-gray-300 rounded-md p-3 font-bold text-lg focus:ring-2 focus:ring-blue-500 outline-none animate-in slide-in-from-top-2"
+                      placeholder="0.00"
+                    />
+                  </div>
+                )}
                 
-                <div>
+                <div className="animate-in fade-in">
                   <label className="text-xs font-bold text-gray-700 uppercase tracking-widest block mb-2">Payment Mode</label>
                   <div className="grid grid-cols-3 gap-2">
                     {['Cash', 'UPI', 'Card'].map((mode) => (
