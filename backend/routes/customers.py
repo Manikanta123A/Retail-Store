@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from database import db
 from models.customer import Customer
 import uuid
+from utils.email_utils import send_payment_email
 
 customers_bp = Blueprint('customers', __name__)
 
@@ -79,6 +80,7 @@ def collect_dues(id):
     
     data = request.get_json()
     amount_to_collect = float(data.get('amount', 0))
+    payment_ids = []
     
     if amount_to_collect <= 0:
         return jsonify({"error": "Invalid amount"}), 400
@@ -129,6 +131,7 @@ def collect_dues(id):
             payment_mode=data.get('payment_mode', 'Collection')
         )
         db.session.add(payment)
+        payment_ids.append(payment.id)
             
     # Amount actually applied
     applied_amount = Decimal(str(amount_to_collect)) - remaining_collection
@@ -137,4 +140,12 @@ def collect_dues(id):
         customer.outstanding_due = 0
         
     db.session.commit()
+    
+    # Send Receipt Emails
+    for pid in payment_ids:
+        try:
+            send_payment_email(pid)
+        except:
+            pass
+            
     return jsonify({"success": True, "applied": float(applied_amount), "customer": customer.to_dict()})

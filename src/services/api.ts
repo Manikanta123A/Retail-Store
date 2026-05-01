@@ -54,4 +54,9 @@ export const dashboardService = {
   getDashboard: (range: string = 'today') => api.get(`/dashboard/?range=${range}`),
 };
 
+export const analyticsService = {
+  getAnalytics: (filter: string = 'monthly', startDate?: string, endDate?: string) => 
+    api.get('/analytics/', { params: { filter, start_date: startDate, end_date: endDate } }),
+};
+
 export default api;

@@ -8,6 +8,7 @@ import Dues from './pages/Dues';
 import Payments from './pages/Payments';
 import Reports from './pages/Reports';
 import Login from './pages/Login';
+import Analytics from './pages/Analytics';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 
@@ -62,7 +63,7 @@ export default function App() {
             <Route path="dues" element={<Dues />} />
             <Route path="payments" element={<Payments />} />
             <Route path="reports" element={<Reports />} />
-            <Route path="analytics" element={<Placeholder title="Business Analytics" />} />
+            <Route path="analytics" element={<Analytics />} />
             <Route path="emails" element={<Placeholder title="Email Invoices" />} />
             <Route path="settings" element={<Placeholder title="System Settings" />} />
           </Route>

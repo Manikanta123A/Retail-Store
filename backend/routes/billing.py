@@ -5,6 +5,7 @@ from models.payment import Payment
 from models.item import Item
 from models.customer import Customer
 import uuid
+from utils.email_utils import send_bill_email, send_payment_email
 
 billing_bp = Blueprint('billing', __name__)
 
@@ -109,6 +110,12 @@ def create_bill():
     
     db.session.commit()
     
+    # Send Email Invoice
+    try:
+        send_bill_email(bill_id)
+    except:
+        pass
+    
     return jsonify(new_bill.to_dict()), 201
 
 @billing_bp.route('/<id>', methods=['GET'])
@@ -210,6 +217,13 @@ def pay_bill(id):
     db.session.add(payment)
         
     db.session.commit()
+    
+    # Send Receipt Email
+    try:
+        send_payment_email(payment.id)
+    except:
+        pass
+        
     return jsonify(bill.to_dict())
 
 @billing_bp.route('/<id>', methods=['DELETE'])

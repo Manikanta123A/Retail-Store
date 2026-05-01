@@ -15,17 +15,24 @@ import { format } from 'date-fns';
 import { customerService, billingService } from '@/services/api';
 import CollectPaymentModal from '@/components/CollectPaymentModal';
 import { cn } from '@/lib/utils';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Dues() {
+  const [searchParams] = useSearchParams();
   const [customers, setCustomers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const [filterRisk, setFilterRisk] = useState<string>('All');
   const [filterDate, setFilterDate] = useState<string>('');
   const [recoveryThisMonth, setRecoveryThisMonth] = useState(0);
 
   const [collectModalOpen, setCollectModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+
+  useEffect(() => {
+    const s = searchParams.get('search');
+    if (s !== null) setSearch(s);
+  }, [searchParams]);
 
   useEffect(() => {
     fetchDues();
