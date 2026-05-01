@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   Users, Search, Plus, Phone, Mail, ArrowUpRight, MoreVertical, Filter, Loader2, X, FileText, Trash2, Edit3, CheckCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -17,9 +17,9 @@ export default function Customers() {
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
-  
+
   const [newCustomer, setNewCustomer] = useState({ name: '', phone: '', email: '' });
-  
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [editCustomer, setEditCustomer] = useState({ id: '', name: '', phone: '', email: '' });
 
@@ -81,7 +81,7 @@ export default function Customers() {
     }
   };
 
-  const filteredCustomers = customers.filter(c => 
+  const filteredCustomers = customers.filter(c =>
     filterDue ? c.outstanding_due > 0 : true
   );
 
@@ -92,7 +92,7 @@ export default function Customers() {
           <h1 className="text-2xl font-bold text-gray-900">Customers</h1>
           <p className="text-sm text-gray-500">Manage your store's customer database and purchase history.</p>
         </div>
-        <button 
+        <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 bg-[#2563EB] text-white px-4 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors"
         >
@@ -113,7 +113,7 @@ export default function Customers() {
               className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
           </div>
-          <button 
+          <button
             onClick={() => setFilterDue(!filterDue)}
             className={cn(
               "flex items-center justify-center gap-2 px-3 py-2 border rounded-md text-sm font-medium transition-colors",
@@ -154,8 +154,8 @@ export default function Customers() {
                 </tr>
               ) : (
                 filteredCustomers.map((customer) => (
-                  <tr 
-                    key={customer.id} 
+                  <tr
+                    key={customer.id}
                     onClick={() => setSelectedCustomer(customer)}
                     className="hover:bg-blue-50 transition-colors group cursor-pointer"
                   >
@@ -174,7 +174,7 @@ export default function Customers() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-500">
-                      {customer.last_purchase_date 
+                      {customer.last_purchase_date
                         ? format(new Date(customer.last_purchase_date), 'MMM dd, yyyy')
                         : 'Never'}
                     </td>
@@ -183,7 +183,7 @@ export default function Customers() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditCustomer({ id: customer.id, name: customer.name, phone: customer.phone, email: customer.email || '' });
@@ -193,7 +193,7 @@ export default function Customers() {
                         >
                           <Edit3 size={14} />
                         </button>
-                        <button 
+                        <button
                           onClick={(e) => handleDeleteCustomer(customer.id, e)}
                           className="p-1.5 text-slate-400 hover:text-red-600 bg-white border border-gray-200 rounded-md shadow-sm"
                         >
@@ -222,15 +222,15 @@ export default function Customers() {
             <form onSubmit={handleAddCustomer} className="p-5 space-y-4">
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Name</label>
-                <input required type="text" value={newCustomer.name} onChange={e => setNewCustomer({...newCustomer, name: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input required type="text" value={newCustomer.name} onChange={e => setNewCustomer({ ...newCustomer, name: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Phone</label>
-                <input required type="text" value={newCustomer.phone} onChange={e => setNewCustomer({...newCustomer, phone: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input required type="text" value={newCustomer.phone} onChange={e => setNewCustomer({ ...newCustomer, phone: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email (Optional)</label>
-                <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({...newCustomer, email: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({ ...newCustomer, email: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div className="pt-4 flex justify-end gap-2">
                 <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 border rounded-md font-semibold text-gray-600 hover:bg-gray-50">Cancel</button>
@@ -254,15 +254,15 @@ export default function Customers() {
             <form onSubmit={handleUpdateCustomer} className="p-5 space-y-4">
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Name</label>
-                <input required type="text" value={editCustomer.name} onChange={e => setEditCustomer({...editCustomer, name: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input required type="text" value={editCustomer.name} onChange={e => setEditCustomer({ ...editCustomer, name: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Phone</label>
-                <input required type="text" value={editCustomer.phone} onChange={e => setEditCustomer({...editCustomer, phone: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input required type="text" value={editCustomer.phone} onChange={e => setEditCustomer({ ...editCustomer, phone: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email (Optional)</label>
-                <input type="email" value={editCustomer.email} onChange={e => setEditCustomer({...editCustomer, email: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <input type="email" value={editCustomer.email} onChange={e => setEditCustomer({ ...editCustomer, email: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div className="pt-4 flex justify-end gap-2">
                 <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border rounded-md font-semibold text-gray-600 hover:bg-gray-50">Cancel</button>
@@ -275,9 +275,9 @@ export default function Customers() {
 
       {/* Customer Details Modal */}
       {selectedCustomer && (
-        <CustomerDetailsModal 
-          customer={selectedCustomer} 
-          onClose={() => setSelectedCustomer(null)} 
+        <CustomerDetailsModal
+          customer={selectedCustomer}
+          onClose={() => setSelectedCustomer(null)}
           onUpdate={fetchCustomers}
         />
       )}
@@ -289,7 +289,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
   const [bills, setBills] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
-  
+
   const [selectedBillId, setSelectedBillId] = useState<string | null>(null);
   const [collectBill, setCollectBill] = useState<any>(null);
   const [collectCustomerModal, setCollectCustomerModal] = useState(false);
@@ -362,7 +362,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
             <X size={20} />
           </button>
         </div>
-        
+
         <div className="flex-1 overflow-auto p-5">
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-4 mb-6">
@@ -386,19 +386,19 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
             <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
               Billing History
             </h3>
-            
+
             <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200">
               <div className="relative">
                 <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] font-bold">₹</span>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={quickAmount}
                   onChange={(e) => setQuickAmount(e.target.value)}
                   className="w-24 pl-5 pr-2 py-1.5 text-sm font-bold bg-white border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="Amount"
                 />
               </div>
-              <select 
+              <select
                 value={quickMode}
                 onChange={(e) => setQuickMode(e.target.value)}
                 className="text-xs font-bold bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -407,7 +407,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
                 <option value="UPI">UPI</option>
                 <option value="Card">Card</option>
               </select>
-              <button 
+              <button
                 onClick={handleQuickCollect}
                 disabled={isCollecting || parseFloat(quickAmount) <= 0}
                 className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-black uppercase rounded shadow-sm transition-all flex items-center gap-2"
@@ -417,7 +417,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
               </button>
             </div>
 
-            <select 
+            <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="text-xs font-bold border border-gray-300 rounded-md px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500"
@@ -452,10 +452,10 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
                       <td className="p-3 font-bold">{formatCurrency(b.final_amount)}</td>
                       <td className="p-3">{formatCurrency(b.paid_amount)}</td>
                       <td className="p-3">
-                        <span className={cn("px-2 py-1 rounded text-xs font-bold uppercase", 
+                        <span className={cn("px-2 py-1 rounded text-xs font-bold uppercase",
                           b.status === 'paid' ? 'bg-green-100 text-green-700' :
-                          b.status === 'unpaid' ? 'bg-red-100 text-red-700' :
-                          'bg-amber-100 text-amber-700'
+                            b.status === 'unpaid' ? 'bg-red-100 text-red-700' :
+                              'bg-amber-100 text-amber-700'
                         )}>
                           {b.status}
                         </span>
@@ -463,7 +463,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
                       <td className="p-3 text-right">
                         <div className="flex justify-end gap-2">
                           {b.due_amount > 0 && (
-                            <button 
+                            <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setCollectBill(b);
@@ -473,7 +473,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
                               Collect
                             </button>
                           )}
-                          <button 
+                          <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteBill(b.id);
@@ -494,7 +494,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
           )}
         </div>
       </div>
-      
+
       {selectedBillId && (
         <BillDetailsModal
           billId={selectedBillId}

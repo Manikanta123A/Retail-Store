@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  History, 
-  Search, 
-  AlertCircle, 
-  Clock, 
+import {
+  History,
+  Search,
+  AlertCircle,
+  Clock,
   MoreVertical,
   CheckCircle2,
   Loader2,
@@ -60,7 +60,7 @@ export default function Dues() {
   const filteredDues = customers.filter(c => {
     // Text search
     const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.phone.includes(search);
-    
+
     // Risk level filter
     const daysOld = Math.floor((new Date().getTime() - new Date(c.last_purchase_date || c.created_at).getTime()) / (1000 * 3600 * 24));
     const risk = daysOld > 60 ? 'High' : daysOld > 30 ? 'Medium' : 'Low';
@@ -69,8 +69,8 @@ export default function Dues() {
     // Date filter
     let matchesDate = true;
     if (filterDate) {
-       const customerDate = new Date(c.last_purchase_date || c.created_at).toISOString().split('T')[0];
-       matchesDate = customerDate === filterDate;
+      const customerDate = new Date(c.last_purchase_date || c.created_at).toISOString().split('T')[0];
+      matchesDate = customerDate === filterDate;
     }
 
     return matchesSearch && matchesRisk && matchesDate;
@@ -136,7 +136,7 @@ export default function Dues() {
               className="w-full sm:w-64 pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             />
           </div>
-          
+
           <div className="flex gap-2">
             <select
               value={filterRisk}
@@ -148,9 +148,9 @@ export default function Dues() {
               <option value="Medium">Medium Risk</option>
               <option value="Low">Low Risk</option>
             </select>
-            
-            <input 
-              type="date" 
+
+            <input
+              type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
               className="border border-gray-300 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
@@ -178,7 +178,7 @@ export default function Dues() {
                 filteredDues.map((due) => {
                   const daysOld = Math.floor((new Date().getTime() - new Date(due.last_purchase_date || due.created_at).getTime()) / (1000 * 3600 * 24));
                   const risk_level = daysOld > 60 ? 'High' : daysOld > 30 ? 'Medium' : 'Low';
-                  
+
                   return (
                     <tr key={due.id} className="hover:bg-gray-50 transition-colors group">
                       <td className="px-6 py-4">
@@ -207,14 +207,14 @@ export default function Dues() {
                         <span className={cn(
                           "px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest",
                           risk_level === 'High' ? 'bg-red-50 text-red-600' :
-                          risk_level === 'Medium' ? 'bg-amber-50 text-amber-600' :
-                          'bg-blue-50 text-blue-600'
+                            risk_level === 'Medium' ? 'bg-amber-50 text-amber-600' :
+                              'bg-blue-50 text-blue-600'
                         )}>
                           {risk_level}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button 
+                        <button
                           onClick={() => {
                             setSelectedCustomer(due);
                             setCollectModalOpen(true);

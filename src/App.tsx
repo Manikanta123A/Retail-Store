@@ -6,13 +6,14 @@ import Customers from './pages/Customers';
 import Inventory from './pages/Inventory';
 import Dues from './pages/Dues';
 import Payments from './pages/Payments';
+import Reports from './pages/Reports';
 import Login from './pages/Login';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="h-screen w-screen flex flex-col items-center justify-center bg-slate-50 gap-4">
@@ -46,8 +47,8 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               <ProtectedRoute>
                 <Layout />
@@ -60,7 +61,7 @@ export default function App() {
             <Route path="inventory" element={<Inventory />} />
             <Route path="dues" element={<Dues />} />
             <Route path="payments" element={<Payments />} />
-            <Route path="reports" element={<Placeholder title="Operational Reports" />} />
+            <Route path="reports" element={<Reports />} />
             <Route path="analytics" element={<Placeholder title="Business Analytics" />} />
             <Route path="emails" element={<Placeholder title="Email Invoices" />} />
             <Route path="settings" element={<Placeholder title="System Settings" />} />

@@ -12,7 +12,7 @@ export default function Login() {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-    
+
     try {
       if (isLoginTab) {
         await login({ username, password });
@@ -45,23 +45,21 @@ export default function Login() {
 
         <div className="flex border-b border-gray-100">
           <button
-            className={`flex-1 py-4 text-sm font-bold uppercase tracking-wider transition-colors ${
-              isLoginTab ? 'text-[#2563EB] border-b-2 border-[#2563EB] bg-blue-50/50' : 'text-gray-400 hover:text-gray-600'
-            }`}
+            className={`flex-1 py-4 text-sm font-bold uppercase tracking-wider transition-colors ${isLoginTab ? 'text-[#2563EB] border-b-2 border-[#2563EB] bg-blue-50/50' : 'text-gray-400 hover:text-gray-600'
+              }`}
             onClick={() => { setIsLoginTab(true); setError(''); }}
           >
             Login
           </button>
           <button
-            className={`flex-1 py-4 text-sm font-bold uppercase tracking-wider transition-colors ${
-              !isLoginTab ? 'text-[#2563EB] border-b-2 border-[#2563EB] bg-blue-50/50' : 'text-gray-400 hover:text-gray-600'
-            }`}
+            className={`flex-1 py-4 text-sm font-bold uppercase tracking-wider transition-colors ${!isLoginTab ? 'text-[#2563EB] border-b-2 border-[#2563EB] bg-blue-50/50' : 'text-gray-400 hover:text-gray-600'
+              }`}
             onClick={() => { setIsLoginTab(false); setError(''); }}
           >
             Sign Up
           </button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
           {error && (
             <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-100 rounded-md text-red-600 text-sm font-medium">
@@ -69,7 +67,7 @@ export default function Login() {
               {error}
             </div>
           )}
-          
+
           <div className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Username</label>
@@ -134,7 +132,7 @@ export default function Login() {
                 </div>
               </>
             )}
-            
+
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Password</label>
               <div className="relative">
@@ -150,7 +148,7 @@ export default function Login() {
               </div>
             </div>
           </div>
-          
+
           <button
             type="submit"
             disabled={isSubmitting}
@@ -162,13 +160,13 @@ export default function Login() {
               isLoginTab ? 'LOGIN TO SYSTEM' : 'CREATE ACCOUNT'
             )}
           </button>
-          
+
           <div className="pt-4 text-center">
             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">Secure Terminal Session</p>
           </div>
         </form>
       </div>
-      
+
       <p className="mt-8 text-xs text-gray-400 font-medium italic">Authorized store personnel only.</p>
     </div>
   );

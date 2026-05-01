@@ -23,3 +23,12 @@
   scrollbar-width: none;
 }
 
+@media print {
+  @page {
+    margin: 0; /* Removes browser default headers and footers */
+  }
+  body {
+    margin: 1.5cm; /* Add some padding back to the actual content */
+  }
+}
+

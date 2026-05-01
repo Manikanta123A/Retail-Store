@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  CreditCard, 
-  Search, 
-  Calendar, 
-  User, 
+import {
+  CreditCard,
+  Search,
+  Calendar,
+  User,
   FileText,
   Filter,
   Loader2,
@@ -22,7 +22,7 @@ export default function Payments() {
   const [filterDate, setFilterDate] = useState('');
   const [filterMode, setFilterMode] = useState('All');
   const [filterMinAmount, setFilterMinAmount] = useState('');
-  
+
   const [selectedBillId, setSelectedBillId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Payments() {
       const params: any = { search };
       if (filterDate) params.start_date = filterDate;
       const res = await billingService.getPayments(params);
-      
+
       // Group payments by bill_id
       const grouped: any = {};
       res.data.forEach((p: any) => {
@@ -54,7 +54,7 @@ export default function Payments() {
           grouped[p.bill_id].payment_mode = p.payment_mode; // show latest mode
         }
       });
-      
+
       setPayments(Object.values(grouped));
     } catch (e) {
       console.error(e);
@@ -90,19 +90,19 @@ export default function Payments() {
               className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             />
           </div>
-          
+
           <div className="flex flex-wrap gap-2">
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input 
-                type="date" 
+              <input
+                type="date"
                 value={filterDate}
                 onChange={e => setFilterDate(e.target.value)}
                 className="pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
-            <select 
+            <select
               value={filterMode}
               onChange={e => setFilterMode(e.target.value)}
               className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
@@ -116,8 +116,8 @@ export default function Payments() {
 
             <div className="relative w-32 text-gray-400">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold">₹</span>
-              <input 
-                type="number" 
+              <input
+                type="number"
                 placeholder="Min ₹"
                 value={filterMinAmount}
                 onChange={e => setFilterMinAmount(e.target.value)}
@@ -145,12 +145,12 @@ export default function Payments() {
                 <tr><td colSpan={5} className="p-10 text-center text-gray-500 font-medium">No payments found.</td></tr>
               ) : (
                 filteredPayments.map((payment) => (
-                  <tr 
-                    key={payment.id} 
+                  <tr
+                    key={payment.id}
                     className="hover:bg-blue-50 transition-colors group"
                   >
                     <td className="px-6 py-4">
-                      <div 
+                      <div
                         className="flex items-center gap-3 group cursor-pointer"
                         onClick={() => setSelectedBillId(payment.bill_id)}
                       >
