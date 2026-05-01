@@ -11,7 +11,17 @@
 
 @layer base {
   body {
-    @apply font-sans text-ink bg-bg antialiased;
+    @apply font-sans text-slate-900 bg-slate-50 antialiased;
+  }
+  
+  /* Smooth row hover for all tables */
+  tbody tr {
+    transition: background-color 0.1s ease;
+  }
+
+  /* Remove default table cell padding inconsistency */
+  th {
+    font-weight: 600;
   }
 }
 

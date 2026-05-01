@@ -35,15 +35,15 @@ export function Sidebar() {
   const [showAccountDetails, setShowAccountDetails] = useState(false);
 
   return (
-    <div className="w-60 h-screen bg-slate-900 border-r border-slate-800 flex flex-col fixed left-0 top-0 z-40 text-slate-300">
-      <div className="p-6 border-b border-slate-800">
+    <div className="w-60 h-screen bg-white border-r border-slate-200 flex flex-col fixed left-0 top-0 z-40 text-slate-600">
+      <div className="p-6 border-b border-slate-100">
         <div className="flex flex-col">
-          <h1 className="text-xl font-bold text-blue-400 tracking-tight truncate">RETAIL PRO</h1>
-          <p className="text-[10px] text-slate-500 font-semibold uppercase mt-1 tracking-widest">Billing & Due System</p>
+          <h1 className="text-xl font-bold text-blue-600 tracking-tight truncate">RETAIL PRO</h1>
+          <p className="text-[10px] text-slate-400 font-semibold uppercase mt-1 tracking-widest">Billing & Due System</p>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-hide">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-hide">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -52,8 +52,8 @@ export function Sidebar() {
               cn(
                 'flex items-center gap-3 px-3 py-2 rounded-md font-medium transition-colors group',
                 isActive
-                  ? 'bg-blue-600/20 text-blue-400'
-                  : 'hover:bg-slate-800 hover:text-white'
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'hover:bg-slate-50 hover:text-slate-900 text-slate-500'
               )
             }
           >
@@ -63,20 +63,20 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="relative p-4 border-t border-slate-800 bg-slate-900/50">
+      <div className="relative p-4 border-t border-slate-100 bg-slate-50/50">
         {showAccountDetails && user && (
           <div className="absolute bottom-full left-0 mb-2 w-full p-2">
-            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl">
+            <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-md">
               <p className="text-xs font-semibold text-slate-400 mb-2 uppercase">Account Details</p>
               <div className="space-y-1 mb-3">
-                <p className="text-sm font-medium text-white">{user.full_name || user.username}</p>
-                <p className="text-xs text-slate-400">{user.email}</p>
-                <p className="text-xs text-slate-400">{user.phone}</p>
-                <p className="text-xs text-slate-400 capitalize">Role: {user.role}</p>
+                <p className="text-sm font-medium text-slate-900">{user.full_name || user.username}</p>
+                <p className="text-xs text-slate-500">{user.email}</p>
+                <p className="text-xs text-slate-500">{user.phone}</p>
+                <p className="text-xs text-slate-500 capitalize">Role: {user.role}</p>
               </div>
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-2 py-1.5 px-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded transition-colors text-xs font-medium"
+                className="w-full flex items-center justify-center gap-2 py-1.5 px-3 bg-red-50 hover:bg-red-100 text-red-600 rounded transition-colors text-xs font-medium"
               >
                 <LogOut size={14} />
                 Logout
@@ -86,15 +86,15 @@ export function Sidebar() {
         )}
         
         <div 
-          className="flex items-center gap-3 cursor-pointer hover:bg-slate-800 p-2 -m-2 rounded-md transition-colors"
+          className="flex items-center gap-3 cursor-pointer hover:bg-slate-100 p-2 -m-2 rounded-md transition-colors"
           onClick={() => setShowAccountDetails(!showAccountDetails)}
         >
-          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-sm">
+          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
             {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={16} />}
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-bold text-white truncate">{user?.full_name || user?.username || 'Guest'}</p>
-            <p className="text-[10px] text-slate-400 truncate capitalize">{user?.role || 'User'}</p>
+            <p className="text-xs font-bold text-slate-900 truncate">{user?.full_name || user?.username || 'Guest'}</p>
+            <p className="text-[10px] text-slate-500 truncate capitalize">{user?.role || 'User'}</p>
           </div>
         </div>
       </div>

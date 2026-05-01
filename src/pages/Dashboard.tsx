@@ -44,14 +44,14 @@ export default function Dashboard() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
         <div className="flex flex-col gap-1">
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">Dashboard Overview</h1>
-          <p className="text-gray-500 text-xs">Summary of your store's operational performance.</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
+          <p className="text-slate-400 text-xs mt-1">Store performance overview.</p>
         </div>
         
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
-          <Calendar size={16} className="text-gray-400 ml-2" />
+        <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
+          <Calendar size={14} className="text-slate-400" />
           <select 
-            className="bg-transparent border-none text-sm font-medium focus:ring-0 outline-none pr-2 py-1"
+            className="bg-transparent border-none text-sm font-medium text-slate-700 focus:ring-0 outline-none"
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
           >
@@ -93,8 +93,8 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Infographics / Plots */}
-        <div className="lg:col-span-2 bg-white p-5 rounded-lg border border-[#E5E7EB] shadow-sm flex flex-col h-80">
-          <h3 className="text-sm font-bold uppercase tracking-wide mb-4">Sales & Dues Trend</h3>
+        <div className="lg:col-span-2 bg-white p-6 rounded-lg border border-slate-200 flex flex-col h-80">
+          <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">Sales & Dues Trend</h3>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data?.chart_data || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -113,11 +113,11 @@ export default function Dashboard() {
         </div>
 
         {/* Top Dues */}
-        <div className="bg-white rounded-lg border border-[#E5E7EB] shadow-sm flex flex-col h-80">
-          <div className="p-4 border-b border-[#E5E7EB] bg-slate-50 rounded-t-lg">
-            <h3 className="text-sm font-bold uppercase tracking-wide text-amber-800">High Outstanding Dues</h3>
+        <div className="bg-white rounded-lg border border-slate-200 flex flex-col h-80">
+          <div className="px-5 py-4 border-b border-slate-100">
+            <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">High Outstanding Dues</h3>
           </div>
-          <div className="p-4 space-y-4 flex-1 overflow-auto">
+          <div className="p-4 space-y-3 flex-1 overflow-auto">
             {data?.top_dues?.length > 0 ? data.top_dues.map((d: any, i: number) => (
               <div key={i} className="flex justify-between items-center pb-3 border-b border-slate-50 last:border-0">
                 <div>
@@ -134,9 +134,9 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-white rounded-lg border border-[#E5E7EB] shadow-sm flex flex-col">
-        <div className="p-4 border-b border-[#E5E7EB] flex justify-between items-center bg-slate-50 rounded-t-lg">
-          <h3 className="text-sm font-bold uppercase tracking-wide">Recent Transactions</h3>
+      <div className="bg-white rounded-lg border border-slate-200 flex flex-col">
+        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+          <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Recent Transactions</h3>
         </div>
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left text-xs">
@@ -197,11 +197,15 @@ function StatCard({ title, value, trend, trendType }: any) {
   };
 
   return (
-    <div className="bg-white p-5 rounded-lg border border-[#E5E7EB] shadow-sm">
-      <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1", getTitleStyles())}>
+    <div className="bg-white p-5 rounded-lg border border-slate-200">
+      <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">
         {title}
       </p>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className={cn("text-2xl font-bold",
+        trendType === 'warning' ? 'text-amber-600' :
+        trendType === 'up' ? 'text-emerald-600' :
+        'text-slate-900'
+      )}>{value}</p>
       {trend && (
         <p className={cn("text-[10px] mt-2", getTrendStyles())}>
           {trend}

@@ -73,39 +73,39 @@ export default function Payments() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Payment History</h1>
-          <p className="text-sm text-gray-500">View and track all incoming payments and collections.</p>
+          <h1 className="text-2xl font-bold text-slate-900">Payment History</h1>
+          <p className="text-sm text-slate-400 mt-0.5">View and track all incoming payments and collections.</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex flex-col lg:flex-row gap-4 bg-gray-50">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100 flex flex-col lg:flex-row gap-3 bg-white">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search by customer name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             />
           </div>
 
           <div className="flex flex-wrap gap-2">
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="date"
                 value={filterDate}
                 onChange={e => setFilterDate(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                className="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
             <select
               value={filterMode}
               onChange={e => setFilterMode(e.target.value)}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             >
               <option value="All">All Modes</option>
               <option value="Cash">Cash</option>
@@ -114,14 +114,14 @@ export default function Payments() {
               <option value="Collection">Collection</option>
             </select>
 
-            <div className="relative w-32 text-gray-400">
+            <div className="relative w-32 text-slate-400">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold">₹</span>
               <input
                 type="number"
                 placeholder="Min ₹"
                 value={filterMinAmount}
                 onChange={e => setFilterMinAmount(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
           </div>
@@ -130,12 +130,12 @@ export default function Payments() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200">
-                <th className="px-6 py-4">Transaction Details</th>
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Mode</th>
-                <th className="px-6 py-4 text-right">Amount Paid</th>
-                <th className="px-6 py-4 text-right">Date</th>
+            <tr className="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 font-semibold border-b border-slate-200">
+                <th className="px-6 py-3">Transaction Details</th>
+                <th className="px-6 py-3">Customer</th>
+                <th className="px-6 py-3">Mode</th>
+                <th className="px-6 py-3 text-right">Amount Paid</th>
+                <th className="px-6 py-3 text-right">Date</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 text-sm">

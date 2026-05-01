@@ -99,48 +99,48 @@ export default function Dues() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Due Management</h1>
-          <p className="text-sm text-gray-500">Track and recover outstanding credit from customers.</p>
+          <h1 className="text-2xl font-bold text-slate-900">Due Management</h1>
+          <p className="text-sm text-slate-400 mt-0.5">Track and recover outstanding credit from customers.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Outstanding</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-5 rounded-lg border border-slate-200">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Total Outstanding</p>
           <p className="text-3xl font-black text-red-600 mt-2">₹{totalOutstanding.toLocaleString()}</p>
-          <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <AlertCircle size={14} className="text-red-500" />
+          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
+            <AlertCircle size={13} className="text-red-400" />
             <span>Across {customers.length} customers</span>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">High Risk Dues</p>
+        <div className="bg-white p-5 rounded-lg border border-slate-200">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">High Risk Dues</p>
           <p className="text-3xl font-black text-amber-600 mt-2">₹{highRiskDues.toLocaleString()}</p>
-          <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <Clock size={14} className="text-amber-500" />
+          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
+            <Clock size={13} className="text-amber-400" />
             <span>Dues older than 60 days</span>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Recovery this Month</p>
+        <div className="bg-white p-5 rounded-lg border border-slate-200">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Recovery this Month</p>
           <p className="text-3xl font-black text-emerald-600 mt-2">₹{recoveryThisMonth.toLocaleString()}</p>
-          <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <CheckCircle2 size={14} className="text-emerald-500" />
+          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
+            <CheckCircle2 size={13} className="text-emerald-400" />
             <span>Calculated from recent payments</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center gap-4 bg-gray-50">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center gap-3 bg-white">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search by customer name or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full sm:w-64 pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              className="w-full sm:w-72 pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             />
           </div>
 
@@ -148,7 +148,7 @@ export default function Dues() {
             <select
               value={filterRisk}
               onChange={(e) => setFilterRisk(e.target.value)}
-              className="border border-gray-300 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-slate-50 border border-slate-200 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="All">All Risks</option>
               <option value="High">High Risk</option>
@@ -160,7 +160,7 @@ export default function Dues() {
               type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="border border-gray-300 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-slate-50 border border-slate-200 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -168,13 +168,13 @@ export default function Dues() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200">
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Total Due</th>
-                <th className="px-6 py-4">Due Since</th>
-                <th className="px-6 py-4">Risk Level</th>
-                <th className="px-6 py-4"></th>
-              </tr>
+            <tr className="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 font-semibold border-b border-slate-200">
+              <th className="px-6 py-3">Customer</th>
+              <th className="px-6 py-3">Total Due</th>
+              <th className="px-6 py-3">Due Since</th>
+              <th className="px-6 py-3">Risk Level</th>
+              <th className="px-6 py-3"></th>
+            </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 text-sm">
               {loading ? (
