@@ -133,7 +133,7 @@ export default function Billing() {
   };
 
   return (
-    <div className="h-[calc(100vh-140px)] flex flex-col md:flex-row gap-6 overflow-hidden">
+    <div className="flex flex-col md:flex-row md:h-[calc(100vh-160px)] gap-6">
       {/* Left Column: Cart & Billing */}
       <div className="flex-1 flex flex-col bg-white rounded-xl border border-gray-100 overflow-hidden min-h-[400px]">
         <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">

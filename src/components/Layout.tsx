@@ -19,7 +19,7 @@ export function Layout() {
       {/* Main content: offset by sidebar width on desktop, full-width on mobile */}
       <div className="flex-1 lg:ml-60 print:ml-0 flex flex-col min-w-0">
         <header className="h-14 bg-white border-b border-[#E8ECF1] px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 print:hidden">
-          <div className="flex items-center gap-3 flex-1 ml-10 lg:ml-0">
+          <div className="flex items-center gap-3 flex-1 ml-12 lg:ml-0">
             <span className="text-sm text-gray-500 truncate">
               {greeting}, <span className="font-medium text-gray-700">{user?.full_name || user?.username || 'there'}</span>
               <span className="text-gray-300 mx-2 hidden sm:inline">·</span>
