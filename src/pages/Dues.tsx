@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  History,
-  Search,
-  AlertCircle,
-  Clock,
-  MoreVertical,
-  CheckCircle2,
-  Loader2,
-  Filter,
-  User,
-  ArrowRight
+  Search, AlertCircle, Clock, CheckCircle2, Loader2, User, ArrowRight
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { customerService, billingService } from '@/services/api';
 import CollectPaymentModal from '@/components/CollectPaymentModal';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Dues() {
@@ -44,7 +35,6 @@ export default function Dues() {
       const now = new Date();
       const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
       const res = await billingService.getPayments({ start_date: firstDay });
-      // Sum only the payments (collections)
       const total = res.data.reduce((sum: number, p: any) => sum + p.amount, 0);
       setRecoveryThisMonth(total);
     } catch (e) {
@@ -65,102 +55,87 @@ export default function Dues() {
   };
 
   const filteredDues = customers.filter(c => {
-    // Text search
     const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.phone.includes(search);
-
-    // Risk level filter
     const daysOld = Math.floor((new Date().getTime() - new Date(c.last_purchase_date || c.created_at).getTime()) / (1000 * 3600 * 24));
     const risk = daysOld > 60 ? 'High' : daysOld > 30 ? 'Medium' : 'Low';
     const matchesRisk = filterRisk === 'All' || risk === filterRisk;
-
-    // Date filter
     let matchesDate = true;
     if (filterDate) {
       const customerDate = new Date(c.last_purchase_date || c.created_at).toISOString().split('T')[0];
       matchesDate = customerDate === filterDate;
     }
-
     return matchesSearch && matchesRisk && matchesDate;
   });
 
   const totalOutstanding = customers.reduce((sum, c) => sum + c.outstanding_due, 0);
-
-  // High risk: Due amount for customers who haven't purchased in > 60 days
   const highRiskDues = customers.reduce((sum, c) => {
     const daysOld = Math.floor((new Date().getTime() - new Date(c.last_purchase_date || c.created_at).getTime()) / (1000 * 3600 * 24));
     if (daysOld > 60 && c.outstanding_due > 0) return sum + c.outstanding_due;
     return sum;
   }, 0);
 
-  // Recovery this month: Calculated dynamically from recent payments
-  // (state set via fetchMonthlyRecovery)
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Due Management</h1>
-          <p className="text-sm text-slate-400 mt-0.5">Track and recover outstanding credit from customers.</p>
-        </div>
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900">Due Management</h1>
+        <p className="text-sm text-gray-400 mt-0.5">Track and recover outstanding credit.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-lg border border-slate-200">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Total Outstanding</p>
-          <p className="text-3xl font-black text-red-600 mt-2">₹{totalOutstanding.toLocaleString()}</p>
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
-            <AlertCircle size={13} className="text-red-400" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] border-l-rose-500">
+          <p className="text-xs font-medium text-gray-400 mb-1">Total Outstanding</p>
+          <p className="text-2xl font-semibold text-rose-600 tabular-nums">{formatCurrency(totalOutstanding)}</p>
+          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+            <AlertCircle size={12} className="text-rose-400" />
             <span>Across {customers.length} customers</span>
           </div>
         </div>
-        <div className="bg-white p-5 rounded-lg border border-slate-200">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">High Risk Dues</p>
-          <p className="text-3xl font-black text-amber-600 mt-2">₹{highRiskDues.toLocaleString()}</p>
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
-            <Clock size={13} className="text-amber-400" />
-            <span>Dues older than 60 days</span>
+        <div className="bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] border-l-amber-500">
+          <p className="text-xs font-medium text-gray-400 mb-1">High Risk</p>
+          <p className="text-2xl font-semibold text-amber-600 tabular-nums">{formatCurrency(highRiskDues)}</p>
+          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+            <Clock size={12} className="text-amber-400" />
+            <span>Older than 60 days</span>
           </div>
         </div>
-        <div className="bg-white p-5 rounded-lg border border-slate-200">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Recovery this Month</p>
-          <p className="text-3xl font-black text-emerald-600 mt-2">₹{recoveryThisMonth.toLocaleString()}</p>
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400">
-            <CheckCircle2 size={13} className="text-emerald-400" />
-            <span>Calculated from recent payments</span>
+        <div className="bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] border-l-emerald-600">
+          <p className="text-xs font-medium text-gray-400 mb-1">Recovered this Month</p>
+          <p className="text-2xl font-semibold text-emerald-600 tabular-nums">{formatCurrency(recoveryThisMonth)}</p>
+          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+            <CheckCircle2 size={12} className="text-emerald-400" />
+            <span>From recent payments</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center gap-3 bg-white">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by customer name or phone..."
+              placeholder="Search by name or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full sm:w-72 pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              className="w-full sm:w-72 pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
             />
           </div>
-
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <select
               value={filterRisk}
               onChange={(e) => setFilterRisk(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="All">All Risks</option>
               <option value="High">High Risk</option>
               <option value="Medium">Medium Risk</option>
               <option value="Low">Low Risk</option>
             </select>
-
             <input
               type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-md text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
         </div>
@@ -168,68 +143,61 @@ export default function Dues() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-            <tr className="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 font-semibold border-b border-slate-200">
-              <th className="px-6 py-3">Customer</th>
-              <th className="px-6 py-3">Total Due</th>
-              <th className="px-6 py-3">Due Since</th>
-              <th className="px-6 py-3">Risk Level</th>
-              <th className="px-6 py-3"></th>
-            </tr>
+              <tr className="text-xs text-gray-400 font-medium border-b border-gray-100">
+                <th className="px-6 py-3">Customer</th>
+                <th className="px-6 py-3">Total Due</th>
+                <th className="px-6 py-3">Due Since</th>
+                <th className="px-6 py-3">Risk</th>
+                <th className="px-6 py-3"></th>
+              </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 text-sm">
+            <tbody className="divide-y divide-gray-50 text-sm">
               {loading ? (
-                <tr><td colSpan={5} className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-600" /></td></tr>
+                <tr><td colSpan={5} className="p-10 text-center"><Loader2 className="w-5 h-5 animate-spin mx-auto text-blue-600" /></td></tr>
               ) : filteredDues.length === 0 ? (
-                <tr><td colSpan={5} className="p-8 text-center text-gray-500">No dues found.</td></tr>
+                <tr><td colSpan={5} className="p-10 text-center text-gray-400 text-sm">No dues found.</td></tr>
               ) : (
                 filteredDues.map((due) => {
                   const daysOld = Math.floor((new Date().getTime() - new Date(due.last_purchase_date || due.created_at).getTime()) / (1000 * 3600 * 24));
                   const risk_level = daysOld > 60 ? 'High' : daysOld > 30 ? 'Medium' : 'Low';
 
                   return (
-                    <tr key={due.id} className="hover:bg-gray-50 transition-colors group">
-                      <td className="px-6 py-4">
+                    <tr key={due.id} className="hover:bg-gray-50/60 transition-colors group">
+                      <td className="px-6 py-3.5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                            <User size={16} />
+                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                            <User size={14} />
                           </div>
                           <div>
-                            <p className="font-bold text-gray-900">{due.name}</p>
-                            <p className="text-[10px] text-gray-500">{due.phone}</p>
+                            <p className="font-medium text-gray-800">{due.name}</p>
+                            <p className="text-xs text-gray-400">{due.phone}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <p className="text-red-600 font-black">₹{due.outstanding_due.toLocaleString()}</p>
+                      <td className="px-6 py-3.5">
+                        <p className="text-rose-600 font-semibold tabular-nums">{formatCurrency(due.outstanding_due)}</p>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-col">
-                          <span className="text-gray-900 font-medium">{format(new Date(due.last_purchase_date || due.created_at), 'MMM dd, yyyy')}</span>
-                          <span className="text-[10px] text-gray-400 uppercase font-bold">
-                            {daysOld} days ago
-                          </span>
-                        </div>
+                      <td className="px-6 py-3.5">
+                        <span className="text-gray-700 font-medium">{format(new Date(due.last_purchase_date || due.created_at), 'MMM dd, yyyy')}</span>
+                        <span className="text-xs text-gray-400 block mt-0.5">{daysOld} days ago</span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-3.5">
                         <span className={cn(
-                          "px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest",
-                          risk_level === 'High' ? 'bg-red-50 text-red-600' :
-                            risk_level === 'Medium' ? 'bg-amber-50 text-amber-600' :
-                              'bg-blue-50 text-blue-600'
+                          "px-2 py-1 rounded-md text-xs font-medium border",
+                          risk_level === 'High' ? 'bg-rose-50 text-rose-600 border-rose-200' :
+                          risk_level === 'Medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+                          'bg-blue-50 text-blue-600 border-blue-200'
                         )}>
                           {risk_level}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-3.5 text-right">
                         <button
-                          onClick={() => {
-                            setSelectedCustomer(due);
-                            setCollectModalOpen(true);
-                          }}
-                          className="flex items-center gap-2 text-blue-600 font-bold text-xs hover:bg-blue-50 px-3 py-1.5 rounded-md transition-all ml-auto"
+                          onClick={() => { setSelectedCustomer(due); setCollectModalOpen(true); }}
+                          className="flex items-center gap-1.5 text-[#1E40AF] font-medium text-xs hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-all ml-auto"
                         >
-                          COLLECT
-                          <ArrowRight size={14} />
+                          Collect
+                          <ArrowRight size={13} />
                         </button>
                       </td>
                     </tr>
@@ -248,10 +216,7 @@ export default function Dues() {
           customerName={selectedCustomer.name}
           maxAmount={selectedCustomer.outstanding_due}
           onClose={() => setCollectModalOpen(false)}
-          onSuccess={() => {
-            setCollectModalOpen(false);
-            fetchDues(); // refresh the list
-          }}
+          onSuccess={() => { setCollectModalOpen(false); fetchDues(); }}
         />
       )}
     </div>

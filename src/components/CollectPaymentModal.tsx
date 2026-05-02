@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, CreditCard } from 'lucide-react';
+import { X, CheckCircle } from 'lucide-react';
 import { customerService, billingService } from '@/services/api';
 
 interface CollectPaymentModalProps {
@@ -22,12 +22,12 @@ export default function CollectPaymentModal({ type, targetId, customerName, maxA
     const collectAmount = parseFloat(amount);
     
     if (isNaN(collectAmount) || collectAmount <= 0) {
-      setError('Please enter a valid amount greater than 0.');
+      setError('Please enter a valid amount.');
       return;
     }
 
     if (collectAmount > maxAmount) {
-      setError(`Cannot collect more than the due amount (₹${maxAmount}).`);
+      setError(`Cannot collect more than ₹${maxAmount.toLocaleString()}.`);
       return;
     }
 
@@ -50,29 +50,29 @@ export default function CollectPaymentModal({ type, targetId, customerName, maxA
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95">
-        <div className="flex justify-between items-center p-5 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900">Collect Payment</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-white p-1 rounded-full border shadow-sm">
-            <X size={20} />
+    <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden modal-enter">
+        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+          <h2 className="text-base font-semibold text-gray-900">Collect Payment</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors">
+            <X size={18} />
           </button>
         </div>
         
-        <form onSubmit={handleCollect} className="p-5 space-y-5">
+        <form onSubmit={handleCollect} className="p-6 space-y-5">
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Collecting From</p>
-            <p className="font-bold text-gray-900">{customerName}</p>
-            {type === 'customer' && <p className="text-[10px] text-slate-500 mt-1">Applying to oldest bills first (FCFS).</p>}
+            <p className="text-xs font-medium text-gray-400 mb-1">Collecting from</p>
+            <p className="font-semibold text-gray-900">{customerName}</p>
+            {type === 'customer' && <p className="text-xs text-gray-400 mt-1">Applied to oldest bills first.</p>}
           </div>
 
           <div>
-            <div className="flex justify-between mb-1">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-widest">Amount (₹)</label>
-              <span className="text-xs text-red-600 font-bold">Due: ₹{maxAmount.toLocaleString()}</span>
+            <div className="flex justify-between mb-1.5">
+              <label className="text-xs font-medium text-gray-500">Amount (₹)</label>
+              <span className="text-xs text-rose-600 font-medium tabular-nums">Due: ₹{maxAmount.toLocaleString()}</span>
             </div>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">₹</span>
               <input 
                 type="number" 
                 step="0.01"
@@ -81,22 +81,22 @@ export default function CollectPaymentModal({ type, targetId, customerName, maxA
                 required
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full pl-9 pr-4 py-3 bg-white border border-gray-300 rounded-md font-black text-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                className="w-full pl-9 pr-4 py-3 bg-white border border-gray-200 rounded-lg font-semibold text-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 outline-none transition-all tabular-nums"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 uppercase tracking-widest block mb-2">Payment Mode</label>
+            <label className="text-xs font-medium text-gray-500 block mb-2">Payment mode</label>
             <div className="grid grid-cols-3 gap-2">
               {['Cash', 'UPI', 'Card'].map((mode) => (
                 <button
                   key={mode}
                   type="button"
                   onClick={() => setPaymentMode(mode)}
-                  className={`py-2 px-3 rounded-md text-xs font-bold border transition-all ${
+                  className={`py-2.5 px-3 rounded-lg text-xs font-medium border transition-all ${
                     paymentMode === mode 
-                    ? 'bg-emerald-50 border-emerald-500 text-emerald-700 ring-2 ring-emerald-500/20' 
+                    ? 'bg-emerald-50 border-emerald-400 text-emerald-700' 
                     : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
                   }`}
                 >
@@ -106,17 +106,17 @@ export default function CollectPaymentModal({ type, targetId, customerName, maxA
             </div>
           </div>
 
-          {error && <p className="text-xs font-bold text-red-500 bg-red-50 p-2 rounded border border-red-100">{error}</p>}
+          {error && <p className="text-xs font-medium text-rose-500 bg-rose-50 p-2.5 rounded-lg border border-rose-100">{error}</p>}
 
-          <div className="pt-2">
+          <div className="pt-1">
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-black text-sm uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium text-sm transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.97]"
             >
               {loading ? 'Processing...' : (
                 <>
-                  <CheckCircle size={18} /> Confirm Collection
+                  <CheckCircle size={16} /> Confirm Collection
                 </>
               )}
             </button>

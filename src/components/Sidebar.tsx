@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { 
   LayoutDashboard, 
@@ -9,95 +9,193 @@ import {
   History, 
   BarChart3, 
   CreditCard, 
-  Mail, 
-  Settings,
-  PlusCircle,
   LogOut,
-  User as UserIcon
+  User as UserIcon,
+  ChevronDown,
+  Store,
+  Menu,
+  X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-  { icon: PlusCircle, label: 'New Bill', path: '/billing' },
-  { icon: Users, label: 'Customers', path: '/customers' },
-  { icon: Package, label: 'Inventory', path: '/inventory' },
-  { icon: History, label: 'Due Management', path: '/dues' },
-  { icon: CreditCard, label: 'Payments', path: '/payments' },
-  { icon: BarChart3, label: 'Reports', path: '/reports' },
-  { icon: BarChart3, label: 'Analytics', path: '/analytics' },
-  { icon: Mail, label: 'Email Invoices', path: '/emails' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+const navSections = [
+  {
+    label: null,
+    items: [
+      { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+      { icon: Receipt, label: 'New Bill', path: '/billing' },
+    ]
+  },
+  {
+    label: 'Manage',
+    items: [
+      { icon: Users, label: 'Customers', path: '/customers' },
+      { icon: Package, label: 'Inventory', path: '/inventory' },
+    ]
+  },
+  {
+    label: 'Finance',
+    items: [
+      { icon: History, label: 'Due Management', path: '/dues' },
+      { icon: CreditCard, label: 'Payments', path: '/payments' },
+    ]
+  },
+  {
+    label: 'Insights',
+    items: [
+      { icon: BarChart3, label: 'Reports', path: '/reports' },
+      { icon: BarChart3, label: 'Analytics', path: '/analytics' },
+    ]
+  }
 ];
 
 export function Sidebar() {
   const { user, logout } = useAuth();
   const [showAccountDetails, setShowAccountDetails] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
-  return (
-    <div className="w-60 h-screen bg-white border-r border-slate-200 flex flex-col fixed left-0 top-0 z-40 text-slate-600">
-      <div className="p-6 border-b border-slate-100">
-        <div className="flex flex-col">
-          <h1 className="text-xl font-bold text-blue-600 tracking-tight truncate">RETAIL PRO</h1>
-          <p className="text-[10px] text-slate-400 font-semibold uppercase mt-1 tracking-widest">Billing & Due System</p>
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  const sidebarContent = (
+    <>
+      {/* Brand */}
+      <div className="px-5 py-5 border-b border-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#1E40AF] flex items-center justify-center shadow-sm shadow-blue-500/20">
+              <Store size={16} className="text-white" />
+            </div>
+            <div>
+              <h1 className="text-sm font-bold text-gray-900 tracking-tight">Retail Pro</h1>
+              <p className="text-[10px] text-gray-400 font-medium">Billing & Dues</p>
+            </div>
+          </div>
+          {/* Close button — mobile only */}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X size={18} />
+          </button>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-hide">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-3 px-3 py-2 rounded-md font-medium transition-colors group',
-                isActive
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
-                  : 'hover:bg-slate-50 hover:text-slate-900 text-slate-500'
-              )
-            }
-          >
-            <item.icon size={18} className="flex-shrink-0" />
-            {item.label}
-          </NavLink>
+      {/* Navigation */}
+      <nav className="flex-1 py-3 overflow-y-auto scrollbar-hide">
+        {navSections.map((section, sIdx) => (
+          <div key={sIdx} className={sIdx > 0 ? 'mt-2' : ''}>
+            {section.label && (
+              <p className="px-5 pt-3 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                {section.label}
+              </p>
+            )}
+            <div className="px-3 space-y-0.5">
+              {section.items.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  end={item.path === '/'}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
+                      isActive
+                        ? 'bg-blue-50 text-[#1E40AF] font-semibold'
+                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
+                    )
+                  }
+                >
+                  <item.icon size={17} className="flex-shrink-0" />
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
 
-      <div className="relative p-4 border-t border-slate-100 bg-slate-50/50">
+      {/* User section */}
+      <div className="relative border-t border-gray-100">
         {showAccountDetails && user && (
-          <div className="absolute bottom-full left-0 mb-2 w-full p-2">
-            <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-md">
-              <p className="text-xs font-semibold text-slate-400 mb-2 uppercase">Account Details</p>
-              <div className="space-y-1 mb-3">
-                <p className="text-sm font-medium text-slate-900">{user.full_name || user.username}</p>
-                <p className="text-xs text-slate-500">{user.email}</p>
-                <p className="text-xs text-slate-500">{user.phone}</p>
-                <p className="text-xs text-slate-500 capitalize">Role: {user.role}</p>
+          <div className="absolute bottom-full left-0 mb-1 w-full px-3 pb-1">
+            <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-lg">
+              <div className="space-y-1.5 mb-3">
+                <p className="text-sm font-semibold text-gray-900">{user.full_name || user.username}</p>
+                {user.email && <p className="text-xs text-gray-500">{user.email}</p>}
+                {user.phone && <p className="text-xs text-gray-500">{user.phone}</p>}
               </div>
               <button
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-2 py-1.5 px-3 bg-red-50 hover:bg-red-100 text-red-600 rounded transition-colors text-xs font-medium"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md transition-colors text-xs font-medium"
               >
                 <LogOut size={14} />
-                Logout
+                Sign out
               </button>
             </div>
           </div>
         )}
         
         <div 
-          className="flex items-center gap-3 cursor-pointer hover:bg-slate-100 p-2 -m-2 rounded-md transition-colors"
+          className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors"
           onClick={() => setShowAccountDetails(!showAccountDetails)}
         >
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
-            {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={16} />}
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
+            {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={14} />}
           </div>
-          <div className="overflow-hidden">
-            <p className="text-xs font-bold text-slate-900 truncate">{user?.full_name || user?.username || 'Guest'}</p>
-            <p className="text-[10px] text-slate-500 truncate capitalize">{user?.role || 'User'}</p>
+          <div className="overflow-hidden flex-1">
+            <p className="text-xs font-semibold text-gray-800 truncate">{user?.full_name || user?.username || 'Guest'}</p>
+            <p className="text-[10px] text-gray-400 truncate capitalize">{user?.role || 'User'}</p>
           </div>
+          <ChevronDown size={14} className={cn("text-gray-400 transition-transform", showAccountDetails && "rotate-180")} />
         </div>
       </div>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile hamburger button — rendered in the header area */}
+      <button
+        onClick={() => setMobileOpen(true)}
+        className="lg:hidden fixed top-3 left-3 z-50 p-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+        aria-label="Open menu"
+      >
+        <Menu size={20} className="text-gray-700" />
+      </button>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/40 z-40 transition-opacity"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Sidebar panel — off-canvas on mobile, fixed on desktop */}
+      <div
+        className={cn(
+          "h-screen bg-white border-r border-[#E8ECF1] flex flex-col fixed left-0 top-0 z-50 w-60 transition-transform duration-300 ease-in-out",
+          // Desktop: always visible
+          "lg:translate-x-0",
+          // Mobile: slide in/out
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        )}
+      >
+        {sidebarContent}
+      </div>
+    </>
   );
 }

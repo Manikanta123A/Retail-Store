@@ -145,7 +145,7 @@ def collect_dues(id):
     for pid in payment_ids:
         try:
             send_payment_email(pid)
-        except:
-            pass
+        except Exception as e:
+            print(f"Error triggering collection email for {pid}: {str(e)}")
             
     return jsonify({"success": True, "applied": float(applied_amount), "customer": customer.to_dict()})

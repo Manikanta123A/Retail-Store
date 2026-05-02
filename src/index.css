@@ -1,30 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --color-primary: #2563EB;
-  --color-bg: #F8FAFC;
-  --color-border: #E5E7EB;
-  --color-ink: #111827;
+  --color-primary: #1E40AF;
+  --color-primary-light: #3B82F6;
+  --color-secondary: #0F766E;
+  --color-bg: #FAFBFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E8ECF1;
+  --color-ink: #1A1D23;
+  --color-muted: #6B7280;
 }
 
 @layer base {
   body {
-    @apply font-sans text-slate-900 bg-slate-50 antialiased;
+    @apply font-sans text-[#1A1D23] bg-[#FAFBFC] antialiased;
   }
   
   /* Smooth row hover for all tables */
   tbody tr {
-    transition: background-color 0.1s ease;
+    transition: background-color 0.15s ease, transform 0.1s ease;
   }
 
-  /* Remove default table cell padding inconsistency */
+  /* Clean table headers */
   th {
     font-weight: 600;
   }
+
+  /* Tabular nums for all currency/number displays */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
+/* Scrollbar hide */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -33,12 +43,95 @@
   scrollbar-width: none;
 }
 
+/* Modal animations — subtle slide-up + fade, NOT zoom */
+@keyframes modal-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes modal-overlay-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.modal-enter {
+  animation: modal-enter 0.2s ease-out both;
+}
+.modal-overlay {
+  animation: modal-overlay-enter 0.15s ease-out both;
+}
+
+/* Page transition — gentle fade-in */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: page-enter 0.25s ease-out both;
+}
+
+/* Toast animations */
+@keyframes toast-slide-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes toast-slide-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(100%); }
+}
+.toast-enter {
+  animation: toast-slide-in 0.3s ease-out both;
+}
+.toast-exit {
+  animation: toast-slide-out 0.2s ease-in both;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* Print styles */
 @media print {
   @page {
-    margin: 0; /* Removes browser default headers and footers */
+    margin: 0;
   }
   body {
-    margin: 1.5cm; /* Add some padding back to the actual content */
+    margin: 1.5cm;
   }
 }
 
+/* Mobile table responsiveness — ensure tables have min-width so they scroll horizontally */
+@media (max-width: 640px) {
+  table {
+    min-width: 600px;
+  }
+  
+  /* Reduce table cell padding on small screens */
+  td, th {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* Smooth momentum scrolling for overflow containers */
+.overflow-x-auto,
+.overflow-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile bottom-sheet modal animation */
+@keyframes slide-up-mobile {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@media (max-width: 640px) {
+  .modal-enter {
+    animation: slide-up-mobile 0.3s ease-out both;
+  }
+}

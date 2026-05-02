@@ -186,7 +186,7 @@ export default function Reports() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex flex-wrap gap-4 items-center print:hidden">
+      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex flex-wrap gap-3 items-center print:hidden">
         <select 
           value={reportType} 
           onChange={e => setReportType(e.target.value)}

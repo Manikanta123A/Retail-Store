@@ -113,8 +113,8 @@ def create_bill():
     # Send Email Invoice
     try:
         send_bill_email(bill_id)
-    except:
-        pass
+    except Exception as e:
+        print(f"Error triggering bill email: {str(e)}")
     
     return jsonify(new_bill.to_dict()), 201
 
@@ -221,8 +221,8 @@ def pay_bill(id):
     # Send Receipt Email
     try:
         send_payment_email(payment.id)
-    except:
-        pass
+    except Exception as e:
+        print(f"Error triggering payment email: {str(e)}")
         
     return jsonify(bill.to_dict())
 

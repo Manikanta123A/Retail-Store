@@ -1,27 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Users, Search, Plus, Phone, Mail, ArrowUpRight, MoreVertical, Filter, Loader2, X, FileText, Trash2, Edit3, CheckCircle
+  Users, Search, Plus, Phone, Mail, Loader2, X, Trash2, Edit3, CheckCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { customerService, billingService } from '@/services/api';
 import { formatCurrency, cn } from '@/lib/utils';
 import BillDetailsModal from '@/components/BillDetailsModal';
 import CollectPaymentModal from '@/components/CollectPaymentModal';
+import { useToast } from '@/components/Toast';
+
+// Hash a string to pick from a palette of avatar colors
+const avatarColors = [
+  'from-blue-500 to-blue-700',
+  'from-teal-500 to-teal-700',
+  'from-violet-500 to-violet-700',
+  'from-rose-500 to-rose-700',
+  'from-amber-500 to-amber-700',
+  'from-emerald-500 to-emerald-700',
+];
+function getAvatarColor(name: string) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return avatarColors[Math.abs(hash) % avatarColors.length];
+}
 
 export default function Customers() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDue, setFilterDue] = useState(false);
   const [customers, setCustomers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
-
   const [newCustomer, setNewCustomer] = useState({ name: '', phone: '', email: '' });
-
   const [showEditModal, setShowEditModal] = useState(false);
   const [editCustomer, setEditCustomer] = useState({ id: '', name: '', phone: '', email: '' });
+
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchCustomers();
@@ -46,9 +60,10 @@ export default function Customers() {
       setShowAddModal(false);
       setNewCustomer({ name: '', phone: '', email: '' });
       fetchCustomers();
+      toast("Customer added successfully", "success");
     } catch (error) {
       console.error('Failed to add customer', error);
-      alert('Failed to add customer. Ensure phone number is unique.');
+      toast('Failed to add customer. Ensure phone number is unique.', 'error');
     }
   };
 
@@ -62,21 +77,23 @@ export default function Customers() {
       });
       setShowEditModal(false);
       fetchCustomers();
+      toast("Customer updated", "success");
     } catch (error) {
       console.error('Failed to update customer', error);
-      alert('Failed to update customer.');
+      toast('Failed to update customer.', 'error');
     }
   };
 
   const handleDeleteCustomer = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm('Are you sure you want to delete this customer? This may fail if they have associated bills.')) {
+    if (confirm('Delete this customer? This may fail if they have bills.')) {
       try {
         await customerService.deleteCustomer(id);
         fetchCustomers();
+        toast("Customer deleted", "info");
       } catch (error) {
         console.error('Failed to delete customer', error);
-        alert('Failed to delete customer. They might have existing bills.');
+        toast('Cannot delete — customer has existing bills.', 'error');
       }
     }
   };
@@ -86,41 +103,40 @@ export default function Customers() {
   );
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Customers</h1>
-          <p className="text-sm text-gray-500">Manage your store's customer database and purchase history.</p>
+          <h1 className="text-xl font-semibold text-gray-900">Customers</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Manage your customer database and history.</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-[#2563EB] text-white px-4 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-[#1E40AF] text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm hover:bg-blue-800 transition-colors active:scale-[0.97] self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          Add New Customer
+          Add Customer
         </button>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center gap-4 bg-gray-50">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+        <div className="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by name, phone or email..."
+              placeholder="Search by name or phone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
             />
           </div>
           <button
             onClick={() => setFilterDue(!filterDue)}
             className={cn(
-              "flex items-center justify-center gap-2 px-3 py-2 border rounded-md text-sm font-medium transition-colors",
-              filterDue ? "border-amber-500 text-amber-700 bg-amber-50" : "border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+              "flex items-center gap-2 px-3 py-2.5 border rounded-lg text-sm font-medium transition-colors",
+              filterDue ? "border-amber-400 text-amber-700 bg-amber-50" : "border-gray-200 text-gray-600 bg-white hover:bg-gray-50"
             )}
           >
-            <Filter className="w-4 h-4" />
             {filterDue ? 'Dues Only' : 'All Customers'}
           </button>
         </div>
@@ -128,28 +144,27 @@ export default function Customers() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200">
-                <th className="px-6 py-4">Customer Details</th>
-                <th className="px-6 py-4">Outstanding Due</th>
-                <th className="px-6 py-4">Last Purchase</th>
-                <th className="px-6 py-4 text-right">Total Business</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+              <tr className="text-xs text-gray-400 font-medium border-b border-gray-100">
+                <th className="px-6 py-3">Customer</th>
+                <th className="px-6 py-3">Outstanding</th>
+                <th className="px-6 py-3">Last Purchase</th>
+                <th className="px-6 py-3 text-right">Total Business</th>
+                <th className="px-6 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 text-sm">
+            <tbody className="divide-y divide-gray-50 text-sm">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-400 font-medium">
-                    <div className="flex items-center justify-center gap-2">
-                      <Loader2 className="animate-spin" size={16} />
-                      Loading customers...
-                    </div>
+                  <td colSpan={5} className="px-6 py-10 text-center text-gray-400">
+                    <Loader2 className="animate-spin mx-auto mb-2" size={20} />
+                    <p className="text-sm">Loading customers...</p>
                   </td>
                 </tr>
               ) : filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-400 font-medium">
-                    No customers found.
+                  <td colSpan={5} className="px-6 py-10 text-center text-gray-400">
+                    <Users className="mx-auto mb-2 text-gray-200" size={32} />
+                    <p className="text-sm">No customers found.</p>
                   </td>
                 </tr>
               ) : (
@@ -157,45 +172,53 @@ export default function Customers() {
                   <tr
                     key={customer.id}
                     onClick={() => setSelectedCustomer(customer)}
-                    className="hover:bg-blue-50 transition-colors group cursor-pointer"
+                    className="hover:bg-blue-50/40 transition-colors group cursor-pointer"
                   >
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{customer.name}</span>
-                        <div className="flex items-center gap-3 mt-1 text-gray-500 text-xs">
-                          <span className="flex items-center gap-1"><Phone size={12} /> {customer.phone}</span>
-                          {customer.email && <span className="flex items-center gap-1"><Mail size={12} /> {customer.email}</span>}
+                    <td className="px-6 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className={cn("w-9 h-9 rounded-full bg-gradient-to-br flex items-center justify-center text-white font-medium text-xs shadow-sm", getAvatarColor(customer.name))}>
+                          {customer.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-800 group-hover:text-[#1E40AF] transition-colors">{customer.name}</span>
+                          <div className="flex items-center gap-3 mt-0.5 text-gray-400 text-xs">
+                            <span className="flex items-center gap-1"><Phone size={11} /> {customer.phone}</span>
+                            {customer.email && <span className="flex items-center gap-1"><Mail size={11} /> {customer.email}</span>}
+                          </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={customer.outstanding_due > 0 ? 'text-amber-600 font-bold bg-amber-50 px-2 py-1 rounded' : 'text-green-600 font-medium'}>
+                    <td className="px-6 py-3.5">
+                      <span className={customer.outstanding_due > 0 
+                        ? 'text-amber-700 font-medium bg-amber-50 px-2 py-1 rounded-md text-sm border border-amber-200 tabular-nums' 
+                        : 'text-emerald-600 font-medium text-sm'
+                      }>
                         {customer.outstanding_due > 0 ? formatCurrency(customer.outstanding_due) : 'Settled'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-500">
+                    <td className="px-6 py-3.5 text-gray-500 text-sm">
                       {customer.last_purchase_date
                         ? format(new Date(customer.last_purchase_date), 'MMM dd, yyyy')
                         : 'Never'}
                     </td>
-                    <td className="px-6 py-4 text-right font-semibold text-gray-900">
+                    <td className="px-6 py-3.5 text-right font-medium text-gray-800 tabular-nums">
                       {formatCurrency(customer.total_purchases)}
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
+                    <td className="px-6 py-3.5 text-right">
+                      <div className="flex justify-end gap-1.5">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditCustomer({ id: customer.id, name: customer.name, phone: customer.phone, email: customer.email || '' });
                             setShowEditModal(true);
                           }}
-                          className="p-1.5 text-slate-400 hover:text-blue-600 bg-white border border-gray-200 rounded-md shadow-sm"
+                          className="p-1.5 text-gray-400 hover:text-[#1E40AF] hover:bg-blue-50 rounded-md transition-colors"
                         >
                           <Edit3 size={14} />
                         </button>
                         <button
                           onClick={(e) => handleDeleteCustomer(customer.id, e)}
-                          className="p-1.5 text-slate-400 hover:text-red-600 bg-white border border-gray-200 rounded-md shadow-sm"
+                          className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -211,30 +234,30 @@ export default function Customers() {
 
       {/* Add Customer Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95">
-            <div className="flex justify-between items-center p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold">Add New Customer</h2>
-              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X size={20} />
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden modal-enter">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+              <h2 className="text-base font-semibold text-gray-900">Add customer</h2>
+              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <X size={18} />
               </button>
             </div>
-            <form onSubmit={handleAddCustomer} className="p-5 space-y-4">
+            <form onSubmit={handleAddCustomer} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Name</label>
-                <input required type="text" value={newCustomer.name} onChange={e => setNewCustomer({ ...newCustomer, name: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Name</label>
+                <input required type="text" value={newCustomer.name} onChange={e => setNewCustomer({ ...newCustomer, name: e.target.value })} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Phone</label>
-                <input required type="text" value={newCustomer.phone} onChange={e => setNewCustomer({ ...newCustomer, phone: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Phone</label>
+                <input required type="text" value={newCustomer.phone} onChange={e => setNewCustomer({ ...newCustomer, phone: e.target.value })} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email (Optional)</label>
-                <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({ ...newCustomer, email: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Email (optional)</label>
+                <input type="email" value={newCustomer.email} onChange={e => setNewCustomer({ ...newCustomer, email: e.target.value })} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
-              <div className="pt-4 flex justify-end gap-2">
-                <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 border rounded-md font-semibold text-gray-600 hover:bg-gray-50">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700">Save Customer</button>
+              <div className="pt-3 flex justify-end gap-2">
+                <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg font-medium text-sm text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#1E40AF] text-white rounded-lg font-medium text-sm hover:bg-blue-800 transition-colors">Save</button>
               </div>
             </form>
           </div>
@@ -243,30 +266,30 @@ export default function Customers() {
 
       {/* Edit Customer Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95">
-            <div className="flex justify-between items-center p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold">Edit Customer</h2>
-              <button onClick={() => setShowEditModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X size={20} />
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden modal-enter">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+              <h2 className="text-base font-semibold text-gray-900">Edit customer</h2>
+              <button onClick={() => setShowEditModal(false)} className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <X size={18} />
               </button>
             </div>
-            <form onSubmit={handleUpdateCustomer} className="p-5 space-y-4">
+            <form onSubmit={handleUpdateCustomer} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Name</label>
-                <input required type="text" value={editCustomer.name} onChange={e => setEditCustomer({ ...editCustomer, name: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Name</label>
+                <input required type="text" value={editCustomer.name} onChange={e => setEditCustomer({ ...editCustomer, name: e.target.value })} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Phone</label>
-                <input required type="text" value={editCustomer.phone} onChange={e => setEditCustomer({ ...editCustomer, phone: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Phone</label>
+                <input required type="text" value={editCustomer.phone} onChange={e => setEditCustomer({ ...editCustomer, phone: e.target.value })} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Email (Optional)</label>
-                <input type="email" value={editCustomer.email} onChange={e => setEditCustomer({ ...editCustomer, email: e.target.value })} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Email (optional)</label>
+                <input type="email" value={editCustomer.email} onChange={e => setEditCustomer({ ...editCustomer, email: e.target.value })} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
-              <div className="pt-4 flex justify-end gap-2">
-                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border rounded-md font-semibold text-gray-600 hover:bg-gray-50">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700">Save Changes</button>
+              <div className="pt-3 flex justify-end gap-2">
+                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg font-medium text-sm text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#1E40AF] text-white rounded-lg font-medium text-sm hover:bg-blue-800 transition-colors">Save</button>
               </div>
             </form>
           </div>
@@ -289,14 +312,14 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
   const [bills, setBills] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
-
   const [selectedBillId, setSelectedBillId] = useState<string | null>(null);
   const [collectBill, setCollectBill] = useState<any>(null);
   const [collectCustomerModal, setCollectCustomerModal] = useState(false);
-
   const [quickAmount, setQuickAmount] = useState<string>(customer.outstanding_due.toString());
   const [quickMode, setQuickMode] = useState<string>('Cash');
   const [isCollecting, setIsCollecting] = useState(false);
+
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchBills();
@@ -304,18 +327,19 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
 
   const handleQuickCollect = async () => {
     const amount = parseFloat(quickAmount);
-    if (isNaN(amount) || amount <= 0) return alert('Enter valid amount');
-    if (amount > customer.outstanding_due) return alert('Amount exceeds due');
+    if (isNaN(amount) || amount <= 0) { toast('Enter a valid amount', 'error'); return; }
+    if (amount > customer.outstanding_due) { toast('Amount exceeds due', 'error'); return; }
 
     setIsCollecting(true);
     try {
       await customerService.collectDues(customer.id, amount, quickMode);
       setQuickAmount('0');
       fetchBills();
-      onUpdate(); // Refresh parent list
+      onUpdate();
+      toast(`₹${amount.toLocaleString()} collected from ${customer.name}`, 'success');
     } catch (e) {
       console.error(e);
-      alert('Failed to collect');
+      toast('Failed to collect payment', 'error');
     } finally {
       setIsCollecting(false);
     }
@@ -334,13 +358,14 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
   };
 
   const handleDeleteBill = async (id: string) => {
-    if (confirm('Are you sure you want to delete this bill? Stock and dues will be reverted.')) {
+    if (confirm('Delete this bill? Stock and dues will be reverted.')) {
       try {
         await billingService.deleteBill(id);
         fetchBills();
+        toast("Bill deleted", "info");
       } catch (error) {
         console.error('Failed to delete bill', error);
-        alert('Failed to delete bill.');
+        toast('Failed to delete bill.', 'error');
       }
     }
   };
@@ -348,60 +373,58 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
   const filteredBills = bills.filter(b => statusFilter ? b.status === statusFilter : true);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95">
-        <div className="flex justify-between items-center p-5 border-b border-gray-100 bg-slate-50">
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 modal-overlay">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden modal-enter">
+        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">{customer.name}</h2>
-            <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
-              <span className="flex items-center gap-1"><Phone size={12} /> {customer.phone}</span>
-              {customer.email && <span className="flex items-center gap-1"><Mail size={12} /> {customer.email}</span>}
+            <h2 className="text-lg font-semibold text-gray-900">{customer.name}</h2>
+            <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-400">
+              <span className="flex items-center gap-1"><Phone size={11} /> {customer.phone}</span>
+              {customer.email && <span className="flex items-center gap-1"><Mail size={11} /> {customer.email}</span>}
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 bg-white p-2 rounded-full border shadow-sm">
-            <X size={20} />
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+            <X size={18} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-auto p-5">
+        <div className="flex-1 overflow-auto p-6">
           {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-blue-50 border border-blue-100 p-4 rounded-lg">
-              <p className="text-xs uppercase font-bold text-blue-600 mb-1">Total Business</p>
-              <p className="text-xl font-bold text-blue-900">{formatCurrency(customer.total_purchases)}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+            <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl">
+              <p className="text-xs font-medium text-blue-600 mb-1">Total Business</p>
+              <p className="text-lg font-semibold text-blue-900 tabular-nums">{formatCurrency(customer.total_purchases)}</p>
             </div>
-            <div className="bg-amber-50 border border-amber-100 p-4 rounded-lg">
-              <p className="text-xs uppercase font-bold text-amber-600 mb-1">Pending Due</p>
-              <p className="text-xl font-bold text-amber-900">{formatCurrency(customer.outstanding_due)}</p>
+            <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl">
+              <p className="text-xs font-medium text-amber-600 mb-1">Pending Due</p>
+              <p className="text-lg font-semibold text-amber-900 tabular-nums">{formatCurrency(customer.outstanding_due)}</p>
             </div>
-            <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
-              <p className="text-xs uppercase font-bold text-slate-600 mb-1">Last Purchase</p>
-              <p className="text-xl font-bold text-slate-900">
+            <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl">
+              <p className="text-xs font-medium text-gray-500 mb-1">Last Purchase</p>
+              <p className="text-lg font-semibold text-gray-800">
                 {customer.last_purchase_date ? format(new Date(customer.last_purchase_date), 'dd MMM yyyy') : 'N/A'}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              Billing History
-            </h3>
+          <div className="flex flex-col gap-3 sm:gap-4 mb-4">
+            <h3 className="text-sm font-medium text-gray-600">Billing History</h3>
 
-            <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200">
+            <div className="flex flex-wrap items-center gap-2 bg-gray-50 p-1.5 rounded-lg border border-gray-200">
               <div className="relative">
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] font-bold">₹</span>
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium">₹</span>
                 <input
                   type="number"
                   value={quickAmount}
                   onChange={(e) => setQuickAmount(e.target.value)}
-                  className="w-24 pl-5 pr-2 py-1.5 text-sm font-bold bg-white border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-24 pl-5 pr-2 py-1.5 text-sm font-medium bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 outline-none tabular-nums"
                   placeholder="Amount"
                 />
               </div>
               <select
                 value={quickMode}
                 onChange={(e) => setQuickMode(e.target.value)}
-                className="text-xs font-bold bg-white border border-slate-300 rounded px-2 py-1.5 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="text-xs font-medium bg-white border border-gray-200 rounded-md px-2 py-1.5 focus:ring-2 focus:ring-blue-500/20 outline-none"
               >
                 <option value="Cash">Cash</option>
                 <option value="UPI">UPI</option>
@@ -410,7 +433,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
               <button
                 onClick={handleQuickCollect}
                 disabled={isCollecting || parseFloat(quickAmount) <= 0}
-                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-black uppercase rounded shadow-sm transition-all flex items-center gap-2"
+                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-medium rounded-md shadow-sm transition-all flex items-center gap-1.5"
               >
                 {isCollecting ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
                 Collect
@@ -420,11 +443,11 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="text-xs font-bold border border-gray-300 rounded-md px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs font-medium border border-gray-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500/20"
             >
-              <option value="">All Statuses</option>
+              <option value="">All</option>
               <option value="paid">Paid</option>
-              <option value="unpaid">Unpaid / Due</option>
+              <option value="unpaid">Due</option>
               <option value="partial">Partial</option>
             </select>
           </div>
@@ -432,53 +455,47 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
           {loading ? (
             <div className="flex justify-center p-8"><Loader2 className="animate-spin text-blue-600" /></div>
           ) : (
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="border border-gray-200 rounded-xl overflow-hidden">
               <table className="w-full text-left text-sm">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="p-3 font-semibold text-gray-600">Bill No.</th>
-                    <th className="p-3 font-semibold text-gray-600">Date</th>
-                    <th className="p-3 font-semibold text-gray-600">Total</th>
-                    <th className="p-3 font-semibold text-gray-600">Paid</th>
-                    <th className="p-3 font-semibold text-gray-600">Status</th>
-                    <th className="p-3 font-semibold text-gray-600 text-right">Actions</th>
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr className="text-xs text-gray-400 font-medium">
+                    <th className="p-3">Bill No.</th>
+                    <th className="p-3">Date</th>
+                    <th className="p-3">Total</th>
+                    <th className="p-3">Paid</th>
+                    <th className="p-3">Status</th>
+                    <th className="p-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-50">
                   {filteredBills.length > 0 ? filteredBills.map(b => (
-                    <tr key={b.id} className="hover:bg-blue-50 cursor-pointer transition-colors" onClick={() => setSelectedBillId(b.id)}>
-                      <td className="p-3 font-mono">#{b.bill_number}</td>
-                      <td className="p-3">{format(new Date(b.created_at), 'dd MMM yyyy')}</td>
-                      <td className="p-3 font-bold">{formatCurrency(b.final_amount)}</td>
-                      <td className="p-3">{formatCurrency(b.paid_amount)}</td>
+                    <tr key={b.id} className="hover:bg-blue-50/40 cursor-pointer transition-colors" onClick={() => setSelectedBillId(b.id)}>
+                      <td className="p-3 font-mono text-xs text-gray-500">#{b.bill_number}</td>
+                      <td className="p-3 text-gray-600">{format(new Date(b.created_at), 'dd MMM yyyy')}</td>
+                      <td className="p-3 font-medium tabular-nums">{formatCurrency(b.final_amount)}</td>
+                      <td className="p-3 tabular-nums text-gray-500">{formatCurrency(b.paid_amount)}</td>
                       <td className="p-3">
-                        <span className={cn("px-2 py-1 rounded text-xs font-bold uppercase",
-                          b.status === 'paid' ? 'bg-green-100 text-green-700' :
-                            b.status === 'unpaid' ? 'bg-red-100 text-red-700' :
-                              'bg-amber-100 text-amber-700'
+                        <span className={cn("px-2 py-1 rounded-md text-xs font-medium border",
+                          b.status === 'paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                          b.status === 'unpaid' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                          'bg-amber-50 text-amber-700 border-amber-200'
                         )}>
                           {b.status}
                         </span>
                       </td>
                       <td className="p-3 text-right">
-                        <div className="flex justify-end gap-2">
+                        <div className="flex justify-end gap-1.5">
                           {b.due_amount > 0 && (
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setCollectBill(b);
-                              }}
-                              className="px-2 py-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded text-xs font-bold transition-colors"
+                              onClick={(e) => { e.stopPropagation(); setCollectBill(b); }}
+                              className="px-2 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-md text-xs font-medium transition-colors border border-emerald-200"
                             >
                               Collect
                             </button>
                           )}
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteBill(b.id);
-                            }}
-                            className="p-1.5 text-slate-400 hover:text-red-600 bg-white border border-gray-200 rounded-md shadow-sm"
+                            onClick={(e) => { e.stopPropagation(); handleDeleteBill(b.id); }}
+                            className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -486,7 +503,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
                       </td>
                     </tr>
                   )) : (
-                    <tr><td colSpan={5} className="p-4 text-center text-gray-500">No bills found.</td></tr>
+                    <tr><td colSpan={6} className="p-8 text-center text-gray-400 text-sm">No bills found.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -496,10 +513,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
       </div>
 
       {selectedBillId && (
-        <BillDetailsModal
-          billId={selectedBillId}
-          onClose={() => setSelectedBillId(null)}
-        />
+        <BillDetailsModal billId={selectedBillId} onClose={() => setSelectedBillId(null)} />
       )}
 
       {collectBill && (
@@ -509,10 +523,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
           customerName={`Bill #${collectBill.bill_number}`}
           maxAmount={collectBill.due_amount}
           onClose={() => setCollectBill(null)}
-          onSuccess={() => {
-            setCollectBill(null);
-            fetchBills();
-          }}
+          onSuccess={() => { setCollectBill(null); fetchBills(); }}
         />
       )}
 
@@ -523,11 +534,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
           customerName={customer.name}
           maxAmount={customer.outstanding_due}
           onClose={() => setCollectCustomerModal(false)}
-          onSuccess={() => {
-            setCollectCustomerModal(false);
-            fetchCustomers(); // Refresh the list dynamically
-            onClose(); // Also close the details view
-          }}
+          onSuccess={() => { setCollectCustomerModal(false); onUpdate(); onClose(); }}
         />
       )}
     </div>

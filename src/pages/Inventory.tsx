@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Package, Search, Plus, Edit3, Trash2, AlertTriangle, MoreVertical, Loader2, X
+  Package, Search, Plus, Edit3, Trash2, AlertTriangle, Loader2, X
 } from 'lucide-react';
 import { itemService } from '@/services/api';
+import { formatCurrency, cn } from '@/lib/utils';
+import { useToast } from '@/components/Toast';
 
 interface Item {
   id: string;
@@ -17,11 +19,12 @@ export default function Inventory() {
   const [searchTerm, setSearchTerm] = useState('');
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [showAddModal, setShowAddModal] = useState(false);
   const [newItem, setNewItem] = useState({ name: '', category: '', price: '', stock_quantity: '' });
   const [showEditModal, setShowEditModal] = useState(false);
   const [editItemForm, setEditItemForm] = useState({ id: '', name: '', category: '', price: '', stock_quantity: '' });
+
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchItems();
@@ -51,9 +54,10 @@ export default function Inventory() {
       setShowAddModal(false);
       setNewItem({ name: '', category: '', price: '', stock_quantity: '' });
       fetchItems();
+      toast("Item added successfully", "success");
     } catch (error) {
       console.error('Failed to add item', error);
-      alert('Failed to add item.');
+      toast('Failed to add item.', 'error');
     }
   };
 
@@ -68,69 +72,59 @@ export default function Inventory() {
       });
       setShowEditModal(false);
       fetchItems();
+      toast("Item updated", "success");
     } catch (error) {
       console.error('Failed to update item', error);
-      alert('Failed to update item.');
+      toast('Failed to update item.', 'error');
     }
   };
 
   const handleDeleteItem = async (id: string) => {
-    if (confirm('Are you sure you want to delete this item?')) {
+    if (confirm('Delete this item?')) {
       try {
         await itemService.deleteItem(id);
         fetchItems();
+        toast("Item deleted", "info");
       } catch (error) {
         console.error('Failed to delete item', error);
-        alert('Failed to delete item.');
+        toast('Failed to delete item.', 'error');
       }
     }
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Items & Inventory</h1>
-          <p className="text-sm text-gray-500">Manage products, pricing, and stock levels.</p>
+          <h1 className="text-xl font-semibold text-gray-900">Inventory</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Manage products, pricing, and stock levels.</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-[#2563EB] text-white px-4 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-[#1E40AF] text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm hover:bg-blue-800 transition-colors active:scale-[0.97] self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          Add New Item
+          Add Item
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Items</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{items.length}</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Low Stock</p>
-          <p className="text-2xl font-bold text-amber-600 mt-1">{items.filter(i => i.stock_quantity <= 10 && i.stock_quantity > 0).length}</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Out of Stock</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">{items.filter(i => i.stock_quantity === 0).length}</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Categories</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{new Set(items.map(i => i.category)).size}</p>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <StatMini label="Total Items" value={items.length} color="blue" />
+        <StatMini label="Low Stock" value={items.filter(i => i.stock_quantity <= 10 && i.stock_quantity > 0).length} color="amber" />
+        <StatMini label="Out of Stock" value={items.filter(i => i.stock_quantity === 0).length} color="rose" />
+        <StatMini label="Categories" value={new Set(items.map(i => i.category)).size} color="teal" />
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center gap-4 bg-gray-50">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+        <div className="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by item name or category..."
+              placeholder="Search by name or category..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
             />
           </div>
         </div>
@@ -138,70 +132,69 @@ export default function Inventory() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 text-xs uppercase tracking-wider text-gray-500 font-bold border-b border-gray-200">
-                <th className="px-6 py-4">Item Name</th>
-                <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4">Price</th>
-                <th className="px-6 py-4">Stock Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+              <tr className="text-xs text-gray-400 font-medium border-b border-gray-100">
+                <th className="px-6 py-3">Item</th>
+                <th className="px-6 py-3">Category</th>
+                <th className="px-6 py-3">Price</th>
+                <th className="px-6 py-3">Stock</th>
+                <th className="px-6 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 text-sm">
+            <tbody className="divide-y divide-gray-50 text-sm">
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-400 font-medium">
-                    <div className="flex items-center justify-center gap-2">
-                      <Loader2 className="animate-spin" size={16} />
-                      Loading inventory...
-                    </div>
+                  <td colSpan={5} className="px-6 py-10 text-center text-gray-400">
+                    <Loader2 className="animate-spin mx-auto mb-2" size={20} />
+                    <p className="text-sm">Loading inventory...</p>
                   </td>
                 </tr>
               ) : items.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-400 font-medium">
-                    No items found.
+                  <td colSpan={5} className="px-6 py-10 text-center text-gray-400">
+                    <Package className="mx-auto mb-2 text-gray-200" size={32} />
+                    <p className="text-sm">No items found.</p>
                   </td>
                 </tr>
               ) : (
                 items.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 transition-colors group">
-                    <td className="px-6 py-4">
-                      <span className="font-bold text-gray-900">{item.name}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-[10px] font-bold uppercase tracking-wider">
+                  <tr key={item.id} className="hover:bg-gray-50/60 transition-colors group">
+                    <td className="px-6 py-3.5 font-medium text-gray-800">{item.name}</td>
+                    <td className="px-6 py-3.5">
+                      <span className="px-2 py-1 bg-gray-50 text-gray-500 rounded-md text-xs font-medium border border-gray-200">
                         {item.category || 'General'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 font-bold text-gray-900">
-                      ₹{item.price.toLocaleString()}
+                    <td className="px-6 py-3.5 font-medium text-gray-800 tabular-nums">
+                      {formatCurrency(item.price)}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3.5">
                       <div className="flex items-center gap-2">
-                        <span className={item.stock_quantity <= 10 ? 'text-amber-600 font-bold' : 'text-emerald-600 font-bold'}>
+                        <span className={cn("font-medium tabular-nums", item.stock_quantity <= 10 ? 'text-amber-600' : 'text-emerald-600')}>
                           {item.stock_quantity}
                         </span>
                         {item.stock_quantity <= 10 && (
-                          <AlertTriangle size={14} className="text-amber-500" />
+                          <AlertTriangle size={14} className="text-amber-400" />
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right flex justify-end gap-2">
-                      <button 
-                        onClick={() => {
-                          setEditItemForm({ id: item.id, name: item.name, category: item.category, price: item.price.toString(), stock_quantity: item.stock_quantity.toString() });
-                          setShowEditModal(true);
-                        }}
-                        className="p-1.5 text-slate-400 hover:text-blue-600 bg-white border border-gray-200 rounded-md shadow-sm"
-                      >
-                        <Edit3 size={14} />
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteItem(item.id)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 bg-white border border-gray-200 rounded-md shadow-sm"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                    <td className="px-6 py-3.5 text-right">
+                      <div className="flex justify-end gap-1.5">
+                        <button 
+                          onClick={() => {
+                            setEditItemForm({ id: item.id, name: item.name, category: item.category, price: item.price.toString(), stock_quantity: item.stock_quantity.toString() });
+                            setShowEditModal(true);
+                          }}
+                          className="p-1.5 text-gray-400 hover:text-[#1E40AF] hover:bg-blue-50 rounded-md transition-colors"
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteItem(item.id)}
+                          className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -213,36 +206,36 @@ export default function Inventory() {
 
       {/* Add Item Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95">
-            <div className="flex justify-between items-center p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold">Add New Item</h2>
-              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X size={20} />
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden modal-enter">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+              <h2 className="text-base font-semibold text-gray-900">Add item</h2>
+              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <X size={18} />
               </button>
             </div>
-            <form onSubmit={handleAddItem} className="p-5 space-y-4">
+            <form onSubmit={handleAddItem} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Item Name</label>
-                <input required type="text" value={newItem.name} onChange={e => setNewItem({...newItem, name: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Item name</label>
+                <input required type="text" value={newItem.name} onChange={e => setNewItem({...newItem, name: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Price (₹)</label>
-                  <input required type="number" min="0" step="0.01" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Price (₹)</label>
+                  <input required type="number" min="0" step="0.01" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Initial Stock</label>
-                  <input required type="number" min="0" value={newItem.stock_quantity} onChange={e => setNewItem({...newItem, stock_quantity: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Initial stock</label>
+                  <input required type="number" min="0" value={newItem.stock_quantity} onChange={e => setNewItem({...newItem, stock_quantity: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Category</label>
-                <input type="text" value={newItem.category} onChange={e => setNewItem({...newItem, category: e.target.value})} placeholder="e.g. Groceries" className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Category</label>
+                <input type="text" value={newItem.category} onChange={e => setNewItem({...newItem, category: e.target.value})} placeholder="e.g. Groceries" className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
-              <div className="pt-4 flex justify-end gap-2">
-                <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 border rounded-md font-semibold text-gray-600 hover:bg-gray-50">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700">Save Item</button>
+              <div className="pt-3 flex justify-end gap-2">
+                <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg font-medium text-sm text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#1E40AF] text-white rounded-lg font-medium text-sm hover:bg-blue-800 transition-colors">Save</button>
               </div>
             </form>
           </div>
@@ -251,41 +244,63 @@ export default function Inventory() {
 
       {/* Edit Item Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95">
-            <div className="flex justify-between items-center p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold">Edit Item</h2>
-              <button onClick={() => setShowEditModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X size={20} />
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden modal-enter">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+              <h2 className="text-base font-semibold text-gray-900">Edit item</h2>
+              <button onClick={() => setShowEditModal(false)} className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <X size={18} />
               </button>
             </div>
-            <form onSubmit={handleUpdateItem} className="p-5 space-y-4">
+            <form onSubmit={handleUpdateItem} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Item Name</label>
-                <input required type="text" value={editItemForm.name} onChange={e => setEditItemForm({...editItemForm, name: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Item name</label>
+                <input required type="text" value={editItemForm.name} onChange={e => setEditItemForm({...editItemForm, name: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Price (₹)</label>
-                  <input required type="number" min="0" step="0.01" value={editItemForm.price} onChange={e => setEditItemForm({...editItemForm, price: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Price (₹)</label>
+                  <input required type="number" min="0" step="0.01" value={editItemForm.price} onChange={e => setEditItemForm({...editItemForm, price: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Stock</label>
-                  <input required type="number" min="0" value={editItemForm.stock_quantity} onChange={e => setEditItemForm({...editItemForm, stock_quantity: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Stock</label>
+                  <input required type="number" min="0" value={editItemForm.stock_quantity} onChange={e => setEditItemForm({...editItemForm, stock_quantity: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Category</label>
-                <input type="text" value={editItemForm.category} onChange={e => setEditItemForm({...editItemForm, category: e.target.value})} className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Category</label>
+                <input type="text" value={editItemForm.category} onChange={e => setEditItemForm({...editItemForm, category: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
-              <div className="pt-4 flex justify-end gap-2">
-                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border rounded-md font-semibold text-gray-600 hover:bg-gray-50">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700">Save Changes</button>
+              <div className="pt-3 flex justify-end gap-2">
+                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg font-medium text-sm text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-[#1E40AF] text-white rounded-lg font-medium text-sm hover:bg-blue-800 transition-colors">Save</button>
               </div>
             </form>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+const colorMap: Record<string, string> = {
+  blue: 'border-l-[#1E40AF]',
+  amber: 'border-l-amber-500',
+  rose: 'border-l-rose-500',
+  teal: 'border-l-teal-600',
+};
+const valueColorMap: Record<string, string> = {
+  blue: 'text-[#1E40AF]',
+  amber: 'text-amber-600',
+  rose: 'text-rose-600',
+  teal: 'text-teal-700',
+};
+
+function StatMini({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div className={cn("bg-white p-4 rounded-xl border border-gray-100 border-l-[3px]", colorMap[color])}>
+      <p className="text-xs font-medium text-gray-400 mb-1">{label}</p>
+      <p className={cn("text-2xl font-semibold tabular-nums", valueColorMap[color])}>{value}</p>
     </div>
   );
 }

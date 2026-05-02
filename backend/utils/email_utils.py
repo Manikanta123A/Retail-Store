@@ -11,17 +11,18 @@ from models.item import Item
 from datetime import datetime
 from sqlalchemy import func, desc
 from database import db
+from dotenv import load_dotenv
 
-def send_async_email(app, msg):
+load_dotenv()
+
+def send_async_email(app, msg, sender_email, sender_password):
     with app.app_context():
         try:
             smtp_server = "smtp.gmail.com"
             smtp_port = 587
-            sender_email = os.getenv('SMTP_EMAIL')
-            sender_password = os.getenv('SMTP_PASSWORD')
 
             if not sender_email or not sender_password:
-                print("Email credentials not configured")
+                print("EMAIL ERROR: SMTP credentials not provided to thread")
                 return
 
             server = smtplib.SMTP(smtp_server, smtp_port)
@@ -29,22 +30,30 @@ def send_async_email(app, msg):
             server.login(sender_email, sender_password)
             server.send_message(msg)
             server.quit()
-            print(f"Email sent successfully to {msg['To']}")
+            print(f"EMAIL SUCCESS: Sent to {msg['To']}")
         except Exception as e:
-            print(f"Failed to send email: {str(e)}")
+            print(f"EMAIL FAILURE: Could not send to {msg['To']}. Error: {str(e)}")
 
 def send_email(subject, recipient, html_content):
     if not recipient:
+        print("EMAIL SKIP: No recipient email provided")
         return
     
+    sender_email = os.getenv('SMTP_EMAIL')
+    sender_password = os.getenv('SMTP_PASSWORD')
+
+    if not sender_email or not sender_password:
+        print("EMAIL ERROR: SMTP_EMAIL or SMTP_PASSWORD not set in environment")
+        return
+
     app = current_app._get_current_object()
     msg = MIMEMultipart()
     msg['Subject'] = subject
-    msg['From'] = f"Retail Pro <{os.getenv('SMTP_EMAIL')}>"
+    msg['From'] = f"Retail Pro <{sender_email}>"
     msg['To'] = recipient
     msg.attach(MIMEText(html_content, 'html'))
     
-    Thread(target=send_async_email, args=(app, msg)).start()
+    Thread(target=send_async_email, args=(app, msg, sender_email, sender_password)).start()
 
 # --- Templates ---
 
@@ -167,10 +176,14 @@ MONTHLY_REPORT_TEMPLATE = """
 # --- Functions ---
 
 def send_bill_email(bill_id):
-    bill = Bill.query.get(bill_id)
-    if not bill: return
-    customer = Customer.query.get(bill.customer_id)
-    if not customer or not customer.email: return
+    bill = db.session.get(Bill, bill_id)
+    if not bill: 
+        print(f"EMAIL ERROR: Bill {bill_id} not found")
+        return
+    customer = db.session.get(Customer, bill.customer_id)
+    if not customer or not customer.email:
+        print(f"EMAIL SKIP: Customer {customer.name if customer else 'Unknown'} has no email")
+        return
 
     items = []
     for bi in bill.items:
@@ -198,10 +211,14 @@ def send_bill_email(bill_id):
     send_email(f"Invoice for Bill #{bill.bill_number}", customer.email, html)
 
 def send_payment_email(payment_id):
-    payment = Payment.query.get(payment_id)
-    if not payment: return
-    customer = Customer.query.get(payment.customer_id)
-    if not customer or not customer.email: return
+    payment = db.session.get(Payment, payment_id)
+    if not payment:
+        print(f"EMAIL ERROR: Payment {payment_id} not found")
+        return
+    customer = db.session.get(Customer, payment.customer_id)
+    if not customer or not customer.email:
+        print(f"EMAIL SKIP: Customer {customer.name if customer else 'Unknown'} has no email")
+        return
 
     html = render_template_string(
         RECEIPT_TEMPLATE,
