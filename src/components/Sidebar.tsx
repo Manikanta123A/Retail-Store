@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { 
   LayoutDashboard, 
@@ -22,38 +22,45 @@ const navSections = [
   {
     label: null,
     items: [
-      { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-      { icon: Receipt, label: 'New Bill', path: '/billing' },
+      { icon: LayoutDashboard, label: 'Dashboard', path: '/app' },
+      { icon: Receipt, label: 'New Bill', path: '/app/billing' },
     ]
   },
   {
     label: 'Manage',
     items: [
-      { icon: Users, label: 'Customers', path: '/customers' },
-      { icon: Package, label: 'Inventory', path: '/inventory' },
+      { icon: Users, label: 'Customers', path: '/app/customers' },
+      { icon: Package, label: 'Inventory', path: '/app/inventory' },
     ]
   },
   {
     label: 'Finance',
     items: [
-      { icon: History, label: 'Due Management', path: '/dues' },
-      { icon: CreditCard, label: 'Payments', path: '/payments' },
+      { icon: History, label: 'Due Management', path: '/app/dues' },
+      { icon: CreditCard, label: 'Payments', path: '/app/payments' },
     ]
   },
   {
     label: 'Insights',
     items: [
-      { icon: BarChart3, label: 'Reports', path: '/reports' },
-      { icon: BarChart3, label: 'Analytics', path: '/analytics' },
+      { icon: BarChart3, label: 'Reports', path: '/app/reports' },
+      { icon: BarChart3, label: 'Analytics', path: '/app/analytics' },
     ]
   }
 ];
 
 export function Sidebar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [showAccountDetails, setShowAccountDetails] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+
+  const handleLogout = async () => {
+    await logout();
+    // Replace entire history so back-button cannot re-enter the app
+    navigate('/', { replace: true });
+  };
 
   // Close sidebar on route change (mobile)
   useEffect(() => {
@@ -108,7 +115,7 @@ export function Sidebar() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  end={item.path === '/'}
+                  end={item.path === '/app'}
                   className={({ isActive }) =>
                     cn(
                       'flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
@@ -138,7 +145,7 @@ export function Sidebar() {
                 {user.phone && <p className="text-xs text-gray-500">{user.phone}</p>}
               </div>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md transition-colors text-xs font-medium"
               >
                 <LogOut size={14} />

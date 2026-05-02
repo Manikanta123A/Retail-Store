@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User, Mail, Phone, Loader2, AlertCircle, Store } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Login() {
-  const [isLoginTab, setIsLoginTab] = useState(true);
+  const [searchParams] = useSearchParams();
+  const [isLoginTab, setIsLoginTab] = useState(searchParams.get('tab') !== 'signup');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -27,7 +29,7 @@ export default function Login() {
       } else {
         await signup({ username, full_name: fullName, email, phone, password });
       }
-      navigate('/');
+      navigate('/app');
     } catch (err: any) {
       setError(err.response?.data?.error || (isLoginTab ? 'Invalid username or password' : 'Error signing up'));
     } finally {

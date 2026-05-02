@@ -10,6 +10,7 @@ import Payments from './pages/Payments';
 import Reports from './pages/Reports';
 import Login from './pages/Login';
 import Analytics from './pages/Analytics';
+import Welcome from './pages/Welcome';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { ToastProvider } from './components/Toast';
 import { Loader2 } from 'lucide-react';
@@ -29,7 +30,20 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+// Redirect logged-in users away from public pages
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return null; // wait silently
+
+  if (user) {
+    return <Navigate to="/app" replace />;
   }
 
   return <>{children}</>;
@@ -41,9 +55,13 @@ export default function App() {
       <ToastProvider>
         <Router>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            {/* Public routes — redirect to /app if already logged in */}
+            <Route path="/" element={<PublicRoute><Welcome /></PublicRoute>} />
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+
+            {/* Protected app routes */}
             <Route
-              path="/"
+              path="/app"
               element={
                 <ProtectedRoute>
                   <Layout />
@@ -59,6 +77,9 @@ export default function App() {
               <Route path="reports" element={<Reports />} />
               <Route path="analytics" element={<Analytics />} />
             </Route>
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </ToastProvider>

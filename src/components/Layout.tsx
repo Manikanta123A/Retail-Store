@@ -28,7 +28,7 @@ export function Layout() {
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link
-              to="/billing"
+              to="/app/billing"
               className="flex items-center gap-2 bg-[#1E40AF] text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors active:scale-[0.97] shadow-sm"
             >
               <Plus className="w-4 h-4" />
