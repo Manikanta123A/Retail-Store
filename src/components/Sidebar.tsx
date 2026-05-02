@@ -135,7 +135,7 @@ export function Sidebar() {
       </nav>
 
       {/* User section */}
-      <div className="relative border-t border-gray-100">
+      <div className="relative border-t border-gray-100 mt-auto">
         {showAccountDetails && user && (
           <div className="absolute bottom-full left-0 mb-1 w-full px-3 pb-1">
             <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-lg">
@@ -155,18 +155,36 @@ export function Sidebar() {
           </div>
         )}
         
-        <div 
-          className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors"
-          onClick={() => setShowAccountDetails(!showAccountDetails)}
-        >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
-            {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={14} />}
+        <div className="flex items-center justify-between px-4 py-3">
+          <div 
+            className="flex items-center gap-3 cursor-pointer overflow-hidden flex-1"
+            onClick={() => setShowAccountDetails(!showAccountDetails)}
+          >
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold text-xs shadow-sm flex-shrink-0">
+              {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={14} />}
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-xs font-semibold text-gray-800 truncate">{user?.full_name || user?.username || 'Guest'}</p>
+              <p className="text-[10px] text-gray-400 truncate capitalize">{user?.role || 'User'}</p>
+            </div>
           </div>
-          <div className="overflow-hidden flex-1">
-            <p className="text-xs font-semibold text-gray-800 truncate">{user?.full_name || user?.username || 'Guest'}</p>
-            <p className="text-[10px] text-gray-400 truncate capitalize">{user?.role || 'User'}</p>
+          
+          {/* Direct logout for mobile, chevron for desktop */}
+          <div className="flex items-center">
+            <button
+              onClick={(e) => { e.stopPropagation(); handleLogout(); }}
+              className="lg:hidden p-2 text-gray-400 hover:text-rose-600 transition-colors"
+              title="Sign out"
+            >
+              <LogOut size={18} />
+            </button>
+            <button 
+              onClick={() => setShowAccountDetails(!showAccountDetails)}
+              className="hidden lg:block p-1 text-gray-400 hover:text-gray-600"
+            >
+              <ChevronDown size={14} className={cn("transition-transform", showAccountDetails && "rotate-180")} />
+            </button>
           </div>
-          <ChevronDown size={14} className={cn("text-gray-400 transition-transform", showAccountDetails && "rotate-180")} />
         </div>
       </div>
     </>
@@ -194,7 +212,7 @@ export function Sidebar() {
       {/* Sidebar panel — off-canvas on mobile, fixed on desktop */}
       <div
         className={cn(
-          "h-screen bg-white border-r border-[#E8ECF1] flex flex-col fixed left-0 top-0 z-50 w-60 transition-transform duration-300 ease-in-out",
+          "h-[100dvh] bg-white border-r border-[#E8ECF1] flex flex-col fixed left-0 top-0 z-50 w-60 transition-transform duration-300 ease-in-out",
           // Desktop: always visible
           "lg:translate-x-0",
           // Mobile: slide in/out
