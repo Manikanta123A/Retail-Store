@@ -1,0 +1,1926 @@
+TRAIN_DATA = [
+
+
+    ("bhavya -> petticoat2, -> thermal -> wear -> 2, -> bodysuit3", {'entities': [(0, 6, 'CUSTOMER'), (44, 45, 'QUANTITY')]}),
+
+("100 from sunita", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("HEMA PAID 700 FOR 4 SCRUB", {'entities': [(10, 13, 'AMOUNT'), (18, 19, 'QUANTITY')]}),
+
+("amrutha paid 700", {'entities': [(0, 7, 'CUSTOMER'), (13, 16, 'AMOUNT')]}),
+
+("9240706407, waseema", {'entities': [(0, 10, 'AMOUNT'), (12, 19, 'CUSTOMER')]}),
+
+("lakshmi,paid,300", {'entities': [(0, 7, 'CUSTOMER'), (13, 16, 'AMOUNT')]}),
+
+("DELETE,CUSTOMER,NAME,RADHA,PHONE,9963962596", {'entities': [(33, 43, 'AMOUNT')]}),
+
+("collect 400 from aarthi", {'entities': [(8, 11, 'AMOUNT'), (17, 23, 'CUSTOMER')]}),
+
+("ojaswini - 5 - bridal - saree, - toner - 3 - paid - 500", {'entities': [(0, 8, 'CUSTOMER'), (11, 12, 'QUANTITY'), (33, 38, 'ITEM'), (41, 42, 'QUANTITY'), (52, 55, 'AMOUNT')]}),
+
+("delete customer name isha phone 9741498407", {'entities': [(21, 25, 'CUSTOMER'), (32, 42, 'AMOUNT')]}),
+
+("BILL : TANVI : 3EYESHADOW : PAID : 500", {'entities': [(35, 38, 'AMOUNT')]}),
+
+("delete customer name rekha phone 9963452335", {'entities': [(21, 26, 'CUSTOMER'), (33, 43, 'AMOUNT')]}),
+
+("LALITHA,9176834951,LALITHA96@YAHOO.COM", {'entities': [(8, 18, 'AMOUNT')]}),
+
+("bill amrutha 3toe ring, 5foundation paid 100", {'entities': [(5, 12, 'CUSTOMER'), (41, 44, 'AMOUNT')]}),
+
+("received : 400 : swathi", {'entities': [(11, 14, 'AMOUNT'), (17, 23, 'CUSTOMER')]}),
+
+("deletecustomernameqamarphone9298620213", {'entities': []}),
+
+("create - customer - zeenat40@outlook.com, - zeenat, - 9516741227", {'entities': [(44, 50, 'CUSTOMER'), (54, 64, 'AMOUNT')]}),
+
+("DELETE  CUSTOMER  NAME  DEEKSHA  PHONE  9908031895", {'entities': [(40, 50, 'AMOUNT')]}),
+
+("add customer name yamini phone 9926192125 email yamini95@gmail.com", {'entities': [(18, 24, 'CUSTOMER'), (31, 41, 'AMOUNT')]}),
+
+("remove : zeenat", {'entities': [(9, 15, 'CUSTOMER')]}),
+
+("add padma 9195076835", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("savita : 3 : sunscreen, : 5mangalsutra, : 3serum", {'entities': [(0, 6, 'CUSTOMER'), (9, 10, 'QUANTITY'), (13, 22, 'ITEM')]}),
+
+("DELETE , AARTHI , 9443096533", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("delete ojaswini 9004062160", {'entities': [(7, 15, 'CUSTOMER'), (16, 26, 'AMOUNT')]}),
+
+("9373381909, saraswati", {'entities': [(0, 10, 'AMOUNT'), (12, 21, 'CUSTOMER')]}),
+
+("900 FROM KAMALA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("sowmya paid 1000 for 1 top", {'entities': [(0, 6, 'CUSTOMER'), (12, 16, 'AMOUNT'), (21, 22, 'QUANTITY'), (23, 26, 'ITEM')]}),
+
+("received 1000 jaya", {'entities': [(9, 13, 'AMOUNT'), (14, 18, 'CUSTOMER')]}),
+
+("received 800 archana", {'entities': [(9, 12, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("COLLECT 1000 FROM YASHIKA", {'entities': [(8, 12, 'AMOUNT')]}),
+
+("900 FROM YASHIKA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("create bill for nalini 2 waist belt, 3 bra, top3", {'entities': [(16, 22, 'CUSTOMER'), (23, 24, 'QUANTITY'), (25, 35, 'ITEM'), (37, 38, 'QUANTITY'), (39, 42, 'ITEM')]}),
+
+("priya paid 500", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT')]}),
+
+("nalini hair clip5, bodysuit 3 paid 200", {'entities': [(0, 6, 'CUSTOMER'), (19, 27, 'ITEM'), (28, 29, 'QUANTITY'), (35, 38, 'AMOUNT')]}),
+
+("radha : kundan : necklace3, : 5petticoat", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("YAMINI 2SILVER RING", {'entities': []}),
+
+("received 200 diksha", {'entities': [(9, 12, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("ishita -> silver -> ring3, -> 1cc -> cream, -> shawl4 -> paid -> 1000", {'entities': [(0, 6, 'CUSTOMER'), (65, 69, 'AMOUNT')]}),
+
+("nehatoering2,1rubberband,serum4", {'entities': []}),
+
+("1000,from,grace", {'entities': [(0, 4, 'AMOUNT'), (10, 15, 'CUSTOMER')]}),
+
+("delete diksha 9411381874", {'entities': [(7, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("ADD - SARASWATI - 9599818632", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("800 from shreya", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("lalitha , delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("scarf,5,,3brooch,for,poornima", {'entities': [(0, 5, 'ITEM'), (6, 7, 'QUANTITY'), (21, 29, 'CUSTOMER')]}),
+
+("received , 300 , indu", {'entities': [(11, 14, 'AMOUNT'), (17, 21, 'CUSTOMER')]}),
+
+("bill varsha 3 lounge wear paid 800", {'entities': [(5, 11, 'CUSTOMER'), (12, 13, 'QUANTITY'), (14, 25, 'ITEM'), (31, 34, 'AMOUNT')]}),
+
+("RECEIVED 800 RAMYA", {'entities': [(9, 12, 'AMOUNT')]}),
+
+("9523799081,,LALITHA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("kalpana , delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("PRANAVI : CLUTCH3, : BEAUTY : BLENDER4, : 4 : MAKEUP : REMOVER : PAID : 800", {'entities': [(42, 43, 'QUANTITY'), (72, 75, 'AMOUNT')]}),
+
+("collect 400 from rekha", {'entities': [(8, 11, 'AMOUNT'), (17, 22, 'CUSTOMER')]}),
+
+("yashika : delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("QAMAR : 2HIGHLIGHTER, : RING : 3, : NAIL : POLISH5", {'entities': [(31, 32, 'QUANTITY')]}),
+
+("leela,1non,padded,bra,,2,choker,,4mangalsutra", {'entities': [(0, 5, 'CUSTOMER'), (23, 24, 'QUANTITY'), (25, 31, 'ITEM')]}),
+
+("ISHA -> PRIMER -> 3, -> SALWAR5 -> PAID -> 1000", {'entities': [(18, 19, 'QUANTITY'), (43, 47, 'AMOUNT')]}),
+
+("removetejaswini", {'entities': []}),
+
+("JANAKI,3FACE,POWDER,,2,NOSEPIN,PAID,1000", {'entities': [(21, 22, 'QUANTITY'), (36, 40, 'AMOUNT')]}),
+
+("BILLUSHABEAUTYBLENDER5,3INNERTOP,3ARMLETPAID300", {'entities': []}),
+
+("anjali  paid  300", {'entities': [(0, 6, 'CUSTOMER'), (14, 17, 'AMOUNT')]}),
+
+("DELETEGEETA9872781430", {'entities': []}),
+
+("hair clip1, jacket2, 5ruby pendant for ananya", {'entities': [(39, 45, 'CUSTOMER')]}),
+
+("add,customer,name,janaki,phone,9625008356,email,janaki32@outlook.com", {'entities': [(18, 24, 'CUSTOMER'), (31, 41, 'AMOUNT')]}),
+
+("gayatridelete", {'entities': []}),
+
+("delete - customer - name - priya - phone - 9461490910", {'entities': [(27, 32, 'CUSTOMER'), (43, 53, 'AMOUNT')]}),
+
+("9726210097,  varsha", {'entities': [(0, 10, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("500 - FROM - ARCHANA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("create : bill : for : yamini : 5 : gold : chain, : bb : cream : 2, : 2beauty : blender", {'entities': [(22, 28, 'CUSTOMER'), (31, 32, 'QUANTITY'), (64, 65, 'QUANTITY')]}),
+
+("9050800347,,chandana", {'entities': [(0, 10, 'AMOUNT'), (12, 20, 'CUSTOMER')]}),
+
+("bill radha cc cream3, 3emerald ring, nightwear set3 paid 800", {'entities': [(5, 10, 'CUSTOMER'), (57, 60, 'AMOUNT')]}),
+
+("bill aarthi beauty blender5 paid 800", {'entities': [(5, 11, 'CUSTOMER'), (33, 36, 'AMOUNT')]}),
+
+("AMRUTHAPAID100", {'entities': []}),
+
+("ADD CUSTOMER NAME ZOYA PHONE 9846955982 EMAIL ZOYA69@OUTLOOK.COM", {'entities': [(29, 39, 'AMOUNT')]}),
+
+("bill  yamini  5  jeans,  5polki  set,  bridal  saree  4", {'entities': [(6, 12, 'CUSTOMER'), (14, 15, 'QUANTITY'), (17, 22, 'ITEM'), (54, 55, 'QUANTITY')]}),
+
+("collect 300 from radha", {'entities': [(8, 11, 'AMOUNT'), (17, 22, 'CUSTOMER')]}),
+
+("NAVYA : PAID : 300", {'entities': [(15, 18, 'AMOUNT')]}),
+
+("aishwarya -> paid -> 300 -> for -> 3 -> toner, -> emerald -> ring -> 3", {'entities': [(0, 9, 'CUSTOMER'), (21, 24, 'AMOUNT'), (35, 36, 'QUANTITY'), (40, 45, 'ITEM'), (69, 70, 'QUANTITY')]}),
+
+("REKHA 9692183097 REKHA3@GMAIL.COM", {'entities': [(6, 16, 'AMOUNT')]}),
+
+("janaki 9741648037 janaki4@yahoo.com", {'entities': [(0, 6, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("INDU PAID 400 FOR CC CREAM 2", {'entities': [(10, 13, 'AMOUNT'), (27, 28, 'QUANTITY')]}),
+
+("bill,janaki,pearl,necklace4", {'entities': [(5, 11, 'CUSTOMER')]}),
+
+("delete customer name hemajyothi phone 9386067281", {'entities': [(21, 31, 'CUSTOMER'), (38, 48, 'AMOUNT')]}),
+
+("add  customer  name  yasmin  phone  9874645260  email  yasmin48@yahoo.com", {'entities': [(21, 27, 'CUSTOMER'), (36, 46, 'AMOUNT')]}),
+
+("create  customer  kiran76@yahoo.com,  kiran,  9236142385", {'entities': [(38, 43, 'CUSTOMER'), (46, 56, 'AMOUNT')]}),
+
+("collect 500 from vandana", {'entities': [(8, 11, 'AMOUNT'), (17, 24, 'CUSTOMER')]}),
+
+("SWATHI , 9472376866 , SWATHI39@OUTLOOK.COM", {'entities': [(9, 19, 'AMOUNT')]}),
+
+("create bill for savita 2dupatta, 1non padded bra", {'entities': [(16, 22, 'CUSTOMER')]}),
+
+("LATHA DELETE", {'entities': []}),
+
+("collect 700 from usha", {'entities': [(8, 11, 'AMOUNT'), (17, 21, 'CUSTOMER')]}),
+
+("ADD,RAMYA,9825815575", {'entities': [(10, 20, 'AMOUNT')]}),
+
+("COLLECT : 700 : FROM : KIRAN", {'entities': [(10, 13, 'AMOUNT')]}),
+
+("hema : delete", {'entities': [(0, 4, 'CUSTOMER')]}),
+
+("delete customer name madhuri phone 9075159361", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("KAMALA 1 LAYERED NECKLACE PAID 300", {'entities': [(7, 8, 'QUANTITY'), (31, 34, 'AMOUNT')]}),
+
+("pooja , delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("delete neha 9553605101", {'entities': [(7, 11, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("ojasvi - 5 - bracelet - paid - 500", {'entities': [(0, 6, 'CUSTOMER'), (9, 10, 'QUANTITY'), (13, 21, 'ITEM'), (31, 34, 'AMOUNT')]}),
+
+("BILL , GANGA , 5 , MANGALSUTRA, , 4FACE , WASH, , BLOUSE4 , PAID , 500", {'entities': [(15, 16, 'QUANTITY'), (67, 70, 'AMOUNT')]}),
+
+("add customer name amrutha phone 9807776608 email amrutha81@gmail.com", {'entities': [(18, 25, 'CUSTOMER'), (32, 42, 'AMOUNT')]}),
+
+("DELETE CUSTOMER NAME ELINA PHONE 9736696278", {'entities': [(33, 43, 'AMOUNT')]}),
+
+("received 900 jaya", {'entities': [(9, 12, 'AMOUNT'), (13, 17, 'CUSTOMER')]}),
+
+("add -> pranavi -> 9801918916", {'entities': [(7, 14, 'CUSTOMER'), (18, 28, 'AMOUNT')]}),
+
+("createbillforsowmya2shapewear,3compact", {'entities': []}),
+
+("bill zainab compact 4 paid 500", {'entities': [(5, 11, 'CUSTOMER'), (12, 19, 'ITEM'), (20, 21, 'QUANTITY'), (27, 30, 'AMOUNT')]}),
+
+("ADD CUSTOMER NAME GANGA PHONE 9056499021 EMAIL GANGA7@OUTLOOK.COM", {'entities': [(30, 40, 'AMOUNT')]}),
+
+("800  FROM  VARSHA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("SARASWATI - EARRINGS - 3, - 5FACE - CREAM, - 3LIP - LINER - PAID - 300", {'entities': [(23, 24, 'QUANTITY'), (67, 70, 'AMOUNT')]}),
+
+("bill chitra hair clip4, hipsters 3", {'entities': [(5, 11, 'CUSTOMER'), (24, 32, 'ITEM'), (33, 34, 'QUANTITY')]}),
+
+("ANANYA 2 BANGLES, 5STONE BRACELET, BRIDAL SAREE 5", {'entities': [(7, 8, 'QUANTITY'), (48, 49, 'QUANTITY')]}),
+
+("tanvihipchain1paid700", {'entities': []}),
+
+("delete lalitha 9425669745", {'entities': [(7, 14, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("DELETE : POOJA : 9396719876", {'entities': [(17, 27, 'AMOUNT')]}),
+
+("REMOVE : JYOTHI", {'entities': []}),
+
+("delete customer name vandana phone 9985470543", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("falguni : paid : 200 : for : 5oxidised : earrings, : bra5, : primer3", {'entities': [(0, 7, 'CUSTOMER'), (17, 20, 'AMOUNT')]}),
+
+("kamala , 9808841100 , kamala69@gmail.com", {'entities': [(0, 6, 'CUSTOMER'), (9, 19, 'AMOUNT')]}),
+
+("collect -> 400 -> from -> harini", {'entities': [(11, 14, 'AMOUNT'), (26, 32, 'CUSTOMER')]}),
+
+("bill leela bridal set 1, 1designer saree, 5 clutch", {'entities': [(5, 10, 'CUSTOMER'), (11, 21, 'ITEM'), (22, 23, 'QUANTITY'), (42, 43, 'QUANTITY'), (44, 50, 'ITEM')]}),
+
+("received -> 1000 -> shreya", {'entities': [(12, 16, 'AMOUNT'), (20, 26, 'CUSTOMER')]}),
+
+("CREATEBILLFORLAVANYA5NAILREMOVER,RUBYPENDANT1,MAKEUPREMOVER5", {'entities': []}),
+
+("RANI GOWN 2", {'entities': [(10, 11, 'QUANTITY')]}),
+
+("add - bhavana - 9616775923", {'entities': [(6, 13, 'CUSTOMER'), (16, 26, 'AMOUNT')]}),
+
+("zoya - 5scrub - paid - 400", {'entities': [(0, 4, 'CUSTOMER'), (23, 26, 'AMOUNT')]}),
+
+("delete customer name madhuri phone 9672617810", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("9315174463, bindu", {'entities': [(0, 10, 'AMOUNT'), (12, 17, 'CUSTOMER')]}),
+
+("mounika  paid  1000", {'entities': [(0, 7, 'CUSTOMER'), (15, 19, 'AMOUNT')]}),
+
+("YASMIN 2SCARF, PALAZZO3, 5 HIPSTERS", {'entities': [(25, 26, 'QUANTITY')]}),
+
+("add,urvashi,9785414422", {'entities': [(4, 11, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("300 from savita", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("500 from nalini", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("create bill for ganga scarf 3, 5 dress, bridal saree 3", {'entities': [(16, 21, 'CUSTOMER'), (22, 27, 'ITEM'), (28, 29, 'QUANTITY'), (31, 32, 'QUANTITY'), (33, 38, 'ITEM'), (40, 52, 'ITEM'), (53, 54, 'QUANTITY')]}),
+
+("RECEIVED 100 LATHA", {'entities': [(9, 12, 'AMOUNT')]}),
+
+("DELETE , REKHA , 9841704775", {'entities': [(17, 27, 'AMOUNT')]}),
+
+("hemajyothi paid 100", {'entities': [(0, 10, 'CUSTOMER'), (16, 19, 'AMOUNT')]}),
+
+("DELETE CUSTOMER NAME LALITHA PHONE 9101764470", {'entities': [(35, 45, 'AMOUNT')]}),
+
+("900,from,aarthi", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("hema  paid  100", {'entities': [(0, 4, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("BILL -> BHAVYA -> NECKLACE -> 4, -> 2 -> ETHNIC -> SET, -> 4FACE -> CREAM", {'entities': [(30, 31, 'QUANTITY'), (36, 37, 'QUANTITY')]}),
+
+("9463285111, GEETA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("received 100 lavanya", {'entities': [(9, 12, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("navyajhumka1,serum4paid300", {'entities': []}),
+
+("800 -> from -> shreya", {'entities': [(0, 3, 'AMOUNT'), (15, 21, 'CUSTOMER')]}),
+
+("create , bill , for , zeenat , 1non , padded , bra, , saree , 5", {'entities': [(22, 28, 'CUSTOMER'), (54, 59, 'ITEM'), (62, 63, 'QUANTITY')]}),
+
+("1 -> hipsters, -> 4sports -> bra, -> brush -> set -> 3 -> for -> ananya", {'entities': [(0, 1, 'QUANTITY'), (5, 13, 'ITEM'), (53, 54, 'QUANTITY'), (65, 71, 'CUSTOMER')]}),
+
+("RECEIVED - 300 - DIKSHA", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("vaishnavi delete", {'entities': [(0, 9, 'CUSTOMER')]}),
+
+("bill : kiran : 4designer : saree", {'entities': [(7, 12, 'CUSTOMER')]}),
+
+("create  bill  for  grace  churidar  2", {'entities': [(19, 24, 'CUSTOMER'), (26, 34, 'ITEM'), (36, 37, 'QUANTITY')]}),
+
+("bill , tejaswini , 5bridal , set", {'entities': [(7, 16, 'CUSTOMER')]}),
+
+("create customer madhuri82@yahoo.com, madhuri, 9374895253", {'entities': [(37, 44, 'CUSTOMER'), (46, 56, 'AMOUNT')]}),
+
+("gayatri shawl 2, platinum band4, 3 setting spray paid 300", {'entities': [(0, 7, 'CUSTOMER'), (8, 13, 'ITEM'), (14, 15, 'QUANTITY'), (33, 34, 'QUANTITY'), (35, 48, 'ITEM'), (54, 57, 'AMOUNT')]}),
+
+("nisha - paid - 200 - for - 4leggings", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+("DELETE - CUSTOMER - NAME - ELINA - PHONE - 9130090662", {'entities': [(43, 53, 'AMOUNT')]}),
+
+("add,customer,name,bharti,phone,9129938695,email,bharti92@outlook.com", {'entities': [(18, 24, 'CUSTOMER'), (31, 41, 'AMOUNT')]}),
+
+("2hipsters, hoops5, 4gown for elina", {'entities': [(29, 34, 'CUSTOMER')]}),
+
+("delete , customer , name , kavya , phone , 9938183505", {'entities': [(27, 32, 'CUSTOMER'), (43, 53, 'AMOUNT')]}),
+
+("bill  ganga  cleanser  4,  shapewear4  paid  500", {'entities': [(6, 11, 'CUSTOMER'), (13, 21, 'ITEM'), (23, 24, 'QUANTITY'), (45, 48, 'AMOUNT')]}),
+
+("add , zainab , 9929054712", {'entities': [(6, 12, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("400 from farah", {'entities': [(0, 3, 'AMOUNT'), (9, 14, 'CUSTOMER')]}),
+
+("ananya -> 3polki -> set, -> 5night -> dress, -> makeup -> remover -> 2 -> paid -> 100", {'entities': [(0, 6, 'CUSTOMER'), (69, 70, 'QUANTITY'), (82, 85, 'AMOUNT')]}),
+
+("sindhu -> 9252989586 -> sindhu92@outlook.com", {'entities': [(0, 6, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("create -> customer -> aarthi89@gmail.com, -> aarthi, -> 9013912411", {'entities': [(45, 51, 'CUSTOMER'), (56, 66, 'AMOUNT')]}),
+
+("SUNSCREEN 1, TONER4 FOR RAKSHITA", {'entities': [(10, 11, 'QUANTITY')]}),
+
+("createcustomermadhavi32@outlook.com,madhavi,9827589948", {'entities': [(36, 43, 'CUSTOMER'), (44, 54, 'AMOUNT')]}),
+
+("BILL , MADHURI , BELT , 1", {'entities': [(24, 25, 'QUANTITY')]}),
+
+("collect , 1000 , from , tanvi", {'entities': [(10, 14, 'AMOUNT'), (24, 29, 'CUSTOMER')]}),
+
+("DELETE : ZEENAT : 9514224397", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("DELETE -> HEMA -> 9084993993", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("ADD , YASHIKA , 9059210665", {'entities': [(16, 26, 'AMOUNT')]}),
+
+("bill -> deeksha -> 2cc -> cream, -> 1 -> bb -> cream, -> silver -> ring -> 2", {'entities': [(8, 15, 'CUSTOMER'), (36, 37, 'QUANTITY'), (75, 76, 'QUANTITY')]}),
+
+("create,bill,for,aarthi,1,makeup,remover", {'entities': [(16, 22, 'CUSTOMER'), (23, 24, 'QUANTITY')]}),
+
+("sneha  navratna  ring4  paid  300", {'entities': [(0, 5, 'CUSTOMER'), (30, 33, 'AMOUNT')]}),
+
+("CHANDANA PAID 800 FOR SALWAR2, NECKLACE 3, KADA3", {'entities': [(14, 17, 'AMOUNT'), (40, 41, 'QUANTITY')]}),
+
+("nisha -> 5 -> face -> cream, -> 3 -> blush, -> 5rubber -> band -> paid -> 200", {'entities': [(0, 5, 'CUSTOMER'), (9, 10, 'QUANTITY'), (32, 33, 'QUANTITY'), (37, 42, 'ITEM'), (74, 77, 'AMOUNT')]}),
+
+("deeksha , 9347261905 , deeksha24@yahoo.com", {'entities': [(0, 7, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("GEETA , PAID , 100 , FOR , 1 , BRIDAL , SAREE, , 2LIPSTICK", {'entities': [(15, 18, 'AMOUNT'), (27, 28, 'QUANTITY')]}),
+
+("400 from lalitha", {'entities': [(0, 3, 'AMOUNT'), (9, 16, 'CUSTOMER')]}),
+
+("200 - from - poornima", {'entities': [(0, 3, 'AMOUNT'), (13, 21, 'CUSTOMER')]}),
+
+("REMOVE CHARITHA", {'entities': []}),
+
+("bill -> mounika -> sunglasses -> 3", {'entities': [(8, 15, 'CUSTOMER'), (19, 29, 'ITEM'), (33, 34, 'QUANTITY')]}),
+
+("CREATE -> BILL -> FOR -> DEEKSHA -> PANTY3", {'entities': []}),
+
+("ADD FATHIMA 9268072678", {'entities': [(12, 22, 'AMOUNT')]}),
+
+("delete -> tejaswini -> 9985990984", {'entities': [(10, 19, 'CUSTOMER'), (23, 33, 'AMOUNT')]}),
+
+("create -> bill -> for -> chitra -> 4 -> brooch, -> 5beauty -> blender", {'entities': [(25, 31, 'CUSTOMER'), (35, 36, 'QUANTITY'), (40, 46, 'ITEM')]}),
+
+("sneha,delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("create bill for zoya panty2", {'entities': [(16, 20, 'CUSTOMER')]}),
+
+("delete customer name yashika phone 9634597787", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("HEMA 2 LOCKET, 1 TEMPLE JEWELLERY PAID 700", {'entities': [(5, 6, 'QUANTITY'), (15, 16, 'QUANTITY'), (39, 42, 'AMOUNT')]}),
+
+("ojas delete", {'entities': [(0, 4, 'CUSTOMER')]}),
+
+("NALINI : PAID : 900", {'entities': [(16, 19, 'AMOUNT')]}),
+
+("delete  customer  name  sneha  phone  9660807859", {'entities': [(24, 29, 'CUSTOMER'), (38, 48, 'AMOUNT')]}),
+
+("900 from archana", {'entities': [(0, 3, 'AMOUNT'), (9, 16, 'CUSTOMER')]}),
+
+("remove -> sunita", {'entities': [(10, 16, 'CUSTOMER')]}),
+
+("bill - hamsa - 4 - foundation, - 5 - drop - earrings", {'entities': [(7, 12, 'CUSTOMER'), (15, 16, 'QUANTITY'), (19, 29, 'ITEM'), (33, 34, 'QUANTITY')]}),
+
+("BILLPOOJA4CAMISOLE,HIPCHAIN2", {'entities': []}),
+
+("BILL HEMA SCARF1, MOISTURIZER 4", {'entities': [(30, 31, 'QUANTITY')]}),
+
+("delete -> pallavi -> 9040090749", {'entities': [(10, 17, 'CUSTOMER'), (21, 31, 'AMOUNT')]}),
+
+("fathima 9039407804 fathima40@yahoo.com", {'entities': [(0, 7, 'CUSTOMER'), (8, 18, 'AMOUNT')]}),
+
+("emerald  ring5,  3petticoat,  traditional  wear  4  for  ishita", {'entities': [(49, 50, 'QUANTITY'), (57, 63, 'CUSTOMER')]}),
+
+("chitra paid 700 for diamond ring 4, 3cuff bracelet", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT'), (20, 32, 'ITEM'), (33, 34, 'QUANTITY')]}),
+
+("CLEANSER2 FOR VARSHA", {'entities': []}),
+
+("delete , customer , name , vaishnavi , phone , 9675481730", {'entities': [(27, 36, 'CUSTOMER'), (47, 57, 'AMOUNT')]}),
+
+("create  bill  for  janaki  3  makeup  remover,  4kurti", {'entities': [(19, 25, 'CUSTOMER'), (27, 28, 'QUANTITY')]}),
+
+("800 , from , manasa", {'entities': [(0, 3, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("collect 200 from ananya", {'entities': [(8, 11, 'AMOUNT'), (17, 23, 'CUSTOMER')]}),
+
+("indu , 5 , wallet, , armlet , 1, , nail , remover5 , paid , 100", {'entities': [(0, 4, 'CUSTOMER'), (7, 8, 'QUANTITY'), (11, 17, 'ITEM'), (21, 27, 'ITEM'), (30, 31, 'QUANTITY'), (60, 63, 'AMOUNT')]}),
+
+("add -> customer -> name -> darshini -> phone -> 9165172516 -> email -> darshini54@gmail.com", {'entities': [(27, 35, 'CUSTOMER'), (48, 58, 'AMOUNT')]}),
+
+("COLLECT 200 FROM OJASVI", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("RANI PAID 1000", {'entities': [(10, 14, 'AMOUNT')]}),
+
+("create : bill : for : elina : 3designer : saree, : face : powder : 5", {'entities': [(22, 27, 'CUSTOMER'), (67, 68, 'QUANTITY')]}),
+
+("delete  ojas  9537568104", {'entities': [(8, 12, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("REMOVE , DEEPIKA", {'entities': []}),
+
+("BILL : KOUSALYA : 2PALAZZO : PAID : 800", {'entities': [(36, 39, 'AMOUNT')]}),
+
+("nisha delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("create,customer,deeksha54@outlook.com,,deeksha,,9371024392", {'entities': [(39, 46, 'CUSTOMER'), (48, 58, 'AMOUNT')]}),
+
+("add customer name sneha phone 9711266800 email sneha26@outlook.com", {'entities': [(18, 23, 'CUSTOMER'), (30, 40, 'AMOUNT')]}),
+
+("bill janaki nightwear set 5, eyeliner 3 paid 500", {'entities': [(5, 11, 'CUSTOMER'), (12, 25, 'ITEM'), (26, 27, 'QUANTITY'), (29, 37, 'ITEM'), (38, 39, 'QUANTITY'), (45, 48, 'AMOUNT')]}),
+
+("2 : COTTON : SAREE, : 1 : INNER : TOP : FOR : LALITHA", {'entities': [(0, 1, 'QUANTITY'), (22, 23, 'QUANTITY')]}),
+
+("BILL , YASMIN , 1 , EARRINGS, , FOUNDATION , 4, , SLIP5", {'entities': [(16, 17, 'QUANTITY'), (45, 46, 'QUANTITY')]}),
+
+("SINDHU PAID 1000", {'entities': [(12, 16, 'AMOUNT')]}),
+
+("bill  geeta  leggings3  paid  500", {'entities': [(6, 11, 'CUSTOMER'), (30, 33, 'AMOUNT')]}),
+
+("create customer lalitha90@yahoo.com, lalitha, 9286278336", {'entities': [(37, 44, 'CUSTOMER'), (46, 56, 'AMOUNT')]}),
+
+("received,700,meena", {'entities': [(9, 12, 'AMOUNT'), (13, 18, 'CUSTOMER')]}),
+
+("RECEIVED , 400 , CHANDANA", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("anjali paid 400", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("madhavi - oxidised - earrings1, - navratna - ring - 1 - paid - 900", {'entities': [(0, 7, 'CUSTOMER'), (52, 53, 'QUANTITY'), (63, 66, 'AMOUNT')]}),
+
+("400 : from : padma", {'entities': [(0, 3, 'AMOUNT'), (13, 18, 'CUSTOMER')]}),
+
+("anjali delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("COLLECT 200 FROM LAKSHMI", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("delete -> customer -> name -> ganga -> phone -> 9133401685", {'entities': [(30, 35, 'CUSTOMER'), (48, 58, 'AMOUNT')]}),
+
+("addcustomernamesunitaphone9520157333emailsunita51@gmail.com", {'entities': []}),
+
+("kavya -> paid -> 800 -> for -> 1petticoat, -> 2 -> panty, -> face -> powder -> 5", {'entities': [(0, 5, 'CUSTOMER'), (17, 20, 'AMOUNT'), (46, 47, 'QUANTITY'), (51, 56, 'ITEM'), (79, 80, 'QUANTITY')]}),
+
+("QAMAR - 9634044901 - QAMAR14@YAHOO.COM", {'entities': [(8, 18, 'AMOUNT')]}),
+
+("delete  lalitha  9238141124", {'entities': [(8, 15, 'CUSTOMER'), (17, 27, 'AMOUNT')]}),
+
+("SNEHA 3CAMISOLE, TEMPLE JEWELLERY 5", {'entities': [(34, 35, 'QUANTITY')]}),
+
+("collect , 100 , from , qamar", {'entities': [(10, 13, 'AMOUNT'), (23, 28, 'CUSTOMER')]}),
+
+("DELETE CUSTOMER NAME AISHWARYA PHONE 9662665719", {'entities': [(37, 47, 'AMOUNT')]}),
+
+("bill tejaswini 1 lip liner, saree 5 paid 400", {'entities': [(5, 14, 'CUSTOMER'), (15, 16, 'QUANTITY'), (17, 26, 'ITEM'), (28, 33, 'ITEM'), (34, 35, 'QUANTITY'), (41, 44, 'AMOUNT')]}),
+
+("latha gown4, ethnic set 1 paid 500", {'entities': [(0, 5, 'CUSTOMER'), (13, 23, 'ITEM'), (24, 25, 'QUANTITY'), (31, 34, 'AMOUNT')]}),
+
+("ishita 9941104754 ishita43@outlook.com", {'entities': [(0, 6, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("add radha 9988936830", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("bill - hema - 2 - night - dress, - 4silk - saree, - 5 - pendant", {'entities': [(7, 11, 'CUSTOMER'), (14, 15, 'QUANTITY'), (52, 53, 'QUANTITY'), (56, 63, 'ITEM')]}),
+
+("DELETE LALITHA 9110739302", {'entities': [(15, 25, 'AMOUNT')]}),
+
+("INDU,PAID,900", {'entities': [(10, 13, 'AMOUNT')]}),
+
+("bill , hemajyothi , anklet1 , paid , 1000", {'entities': [(7, 17, 'CUSTOMER'), (37, 41, 'AMOUNT')]}),
+
+("GAYATRI PAID 300", {'entities': [(13, 16, 'AMOUNT')]}),
+
+("add jyothi 9431695867", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("DELETE,CUSTOMER,NAME,SWATHI,PHONE,9015963652", {'entities': [(34, 44, 'AMOUNT')]}),
+
+("bill pooja kajal1, 3 mascara", {'entities': [(5, 10, 'CUSTOMER'), (19, 20, 'QUANTITY'), (21, 28, 'ITEM')]}),
+
+("add customer name hamsa phone 9785378550 email hamsa27@outlook.com", {'entities': [(18, 23, 'CUSTOMER'), (30, 40, 'AMOUNT')]}),
+
+("savita concealer3, cotton saree2 paid 100", {'entities': [(0, 6, 'CUSTOMER'), (38, 41, 'AMOUNT')]}),
+
+("9083582116, gayatri", {'entities': [(0, 10, 'AMOUNT'), (12, 19, 'CUSTOMER')]}),
+
+("grace , 1sleepwear", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("COLLECT,500,FROM,PADMA", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("add sneha 9804758524", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("SCRUB5, , 2 , GOWN , FOR , LEELA", {'entities': [(10, 11, 'QUANTITY')]}),
+
+("received 700 madhuri", {'entities': [(9, 12, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("collect 1000 from lavanya", {'entities': [(8, 12, 'AMOUNT'), (18, 25, 'CUSTOMER')]}),
+
+("LATHA DELETE", {'entities': []}),
+
+("janaki,9729927911,janaki90@yahoo.com", {'entities': [(0, 6, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("DELETE DIKSHA 9760550835", {'entities': [(14, 24, 'AMOUNT')]}),
+
+("remove ekta", {'entities': [(7, 11, 'CUSTOMER')]}),
+
+("BILLKAMALA1HIPSTERS", {'entities': []}),
+
+("create bill for urvashi 2nightwear set, 1 lingerie, 4maang tikka", {'entities': [(16, 23, 'CUSTOMER'), (40, 41, 'QUANTITY'), (42, 50, 'ITEM')]}),
+
+("add radha 9531600787", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("hemajyothi  9249423619  hemajyothi35@outlook.com", {'entities': [(0, 10, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("DELETE CUSTOMER NAME MADHAVI PHONE 9942424118", {'entities': [(35, 45, 'AMOUNT')]}),
+
+("trisha  5  hair  clip,  armlet  3,  emerald  ring  2", {'entities': [(0, 6, 'CUSTOMER'), (8, 9, 'QUANTITY'), (24, 30, 'ITEM'), (32, 33, 'QUANTITY'), (51, 52, 'QUANTITY')]}),
+
+("KAMALA - 4MASCARA, - GOLD - CHAIN2, - 5EMERALD - RING - PAID - 800", {'entities': [(63, 66, 'AMOUNT')]}),
+
+("200 from leela", {'entities': [(0, 3, 'AMOUNT'), (9, 14, 'CUSTOMER')]}),
+
+("bill -> kamala -> 4ethnic -> set, -> drop -> earrings3", {'entities': [(8, 14, 'CUSTOMER')]}),
+
+("remove zainab", {'entities': [(7, 13, 'CUSTOMER')]}),
+
+("hemajyothi primer2, sleepwear3", {'entities': [(0, 10, 'CUSTOMER')]}),
+
+("bill , isha , 1 , bodysuit, , studs , 4, , 3 , moisturizer", {'entities': [(7, 11, 'CUSTOMER'), (14, 15, 'QUANTITY'), (18, 26, 'ITEM'), (30, 35, 'ITEM'), (38, 39, 'QUANTITY'), (43, 44, 'QUANTITY'), (47, 58, 'ITEM')]}),
+
+("DELETE HEMAJYOTHI 9145371309", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("bill , vandana , designer , saree2, , shapewear2, , scrub1 , paid , 500", {'entities': [(7, 14, 'CUSTOMER'), (68, 71, 'AMOUNT')]}),
+
+("kousalya , churidar4 , paid , 100", {'entities': [(0, 8, 'CUSTOMER'), (30, 33, 'AMOUNT')]}),
+
+("300  FROM  TRISHA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("VANDANA5TOERING,BRIEFS4", {'entities': []}),
+
+("SINDHU 1 NIGHTWEAR SET, 5SETTING SPRAY", {'entities': [(7, 8, 'QUANTITY')]}),
+
+("urvashi 2sunscreen, brooch4", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("bill geeta 4watch, 1 concealer, face wash1 paid 1000", {'entities': [(5, 10, 'CUSTOMER'), (19, 20, 'QUANTITY'), (21, 30, 'ITEM'), (48, 52, 'AMOUNT')]}),
+
+("remove ekta", {'entities': [(7, 11, 'CUSTOMER')]}),
+
+("gayatri 9394555995 gayatri98@gmail.com", {'entities': [(0, 7, 'CUSTOMER'), (8, 18, 'AMOUNT')]}),
+
+("leela paid 800 for primer 3", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT'), (19, 25, 'ITEM'), (26, 27, 'QUANTITY')]}),
+
+("remove  farah", {'entities': [(8, 13, 'CUSTOMER')]}),
+
+("create -> bill -> for -> rekha -> 2 -> silver -> ring, -> hair -> clip -> 4", {'entities': [(25, 30, 'CUSTOMER'), (34, 35, 'QUANTITY'), (74, 75, 'QUANTITY')]}),
+
+("pooja - paid - 200", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+("zoya - delete", {'entities': [(0, 4, 'CUSTOMER')]}),
+
+("remove : kalpana", {'entities': [(9, 16, 'CUSTOMER')]}),
+
+("DELETE , BHAVYA , 9852330428", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("POOJA PAID 700", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("bill - priya - inner - skirt - 2, - lingerie - 4 - paid - 400", {'entities': [(7, 12, 'CUSTOMER'), (31, 32, 'QUANTITY'), (36, 44, 'ITEM'), (47, 48, 'QUANTITY'), (58, 61, 'AMOUNT')]}),
+
+("bill nalini 2 face powder, sunglasses3 paid 100", {'entities': [(5, 11, 'CUSTOMER'), (12, 13, 'QUANTITY'), (14, 25, 'ITEM'), (44, 47, 'AMOUNT')]}),
+
+("9647987745, -> REKHA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("YASMIN  9057939382  YASMIN36@YAHOO.COM", {'entities': [(8, 18, 'AMOUNT')]}),
+
+("compact1, , nighty , 2, , leggings , 5 , for , waseema", {'entities': [(12, 18, 'ITEM'), (21, 22, 'QUANTITY'), (26, 34, 'ITEM'), (37, 38, 'QUANTITY'), (47, 54, 'CUSTOMER')]}),
+
+("HARINI PAID 700 FOR EARRINGS4, BODYSUIT 3, CUFF BRACELET 1", {'entities': [(12, 15, 'AMOUNT'), (40, 41, 'QUANTITY'), (57, 58, 'QUANTITY')]}),
+
+("delete , customer , name , kamala , phone , 9250781857", {'entities': [(27, 33, 'CUSTOMER'), (44, 54, 'AMOUNT')]}),
+
+("UMA : HAIR : BAND : 3, : 1 : PETTICOAT : PAID : 1000", {'entities': [(20, 21, 'QUANTITY'), (25, 26, 'QUANTITY'), (48, 52, 'AMOUNT')]}),
+
+("create bill for aishwarya brush set4", {'entities': [(16, 25, 'CUSTOMER')]}),
+
+("kajal1, : 4 : shawl : for : archana", {'entities': [(10, 11, 'QUANTITY'), (14, 19, 'ITEM'), (28, 35, 'CUSTOMER')]}),
+
+("bill hamsa inner skirt4 paid 500", {'entities': [(5, 10, 'CUSTOMER'), (29, 32, 'AMOUNT')]}),
+
+("urvashi 5 toner", {'entities': [(0, 7, 'CUSTOMER'), (8, 9, 'QUANTITY'), (10, 15, 'ITEM')]}),
+
+("bill -> madhuri -> ethnic -> set -> 4, -> 1 -> bridal -> set, -> 3 -> designer -> saree -> paid -> 700", {'entities': [(8, 15, 'CUSTOMER'), (36, 37, 'QUANTITY'), (42, 43, 'QUANTITY'), (65, 66, 'QUANTITY'), (99, 102, 'AMOUNT')]}),
+
+("rani 1 ring, 2leggings paid 900", {'entities': [(0, 4, 'CUSTOMER'), (5, 6, 'QUANTITY'), (7, 11, 'ITEM'), (28, 31, 'AMOUNT')]}),
+
+("ojas paid 500", {'entities': [(0, 4, 'CUSTOMER'), (10, 13, 'AMOUNT')]}),
+
+("9250702121, indira", {'entities': [(0, 10, 'AMOUNT'), (12, 18, 'CUSTOMER')]}),
+
+("9280876819, , jyothi", {'entities': [(0, 10, 'AMOUNT'), (14, 20, 'CUSTOMER')]}),
+
+("ekta - anklet4, - 1clutch, - jacket4", {'entities': [(0, 4, 'CUSTOMER')]}),
+
+("4 SETTING SPRAY, 2 CLEANSER, BIKINI1 FOR MOUNIKA", {'entities': [(0, 1, 'QUANTITY'), (17, 18, 'QUANTITY')]}),
+
+("delete rakshita 9145920081", {'entities': [(7, 15, 'CUSTOMER'), (16, 26, 'AMOUNT')]}),
+
+("bill : trisha : 1 : watch, : 4lehenga, : belt : 2 : paid : 900", {'entities': [(7, 13, 'CUSTOMER'), (16, 17, 'QUANTITY'), (20, 25, 'ITEM'), (41, 45, 'ITEM'), (48, 49, 'QUANTITY'), (59, 62, 'AMOUNT')]}),
+
+("RECEIVED - 400 - CHARITHA", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("PENDANT1, MAKEUP REMOVER3 FOR LAKSHMI", {'entities': []}),
+
+("remove , tanvi", {'entities': [(9, 14, 'CUSTOMER')]}),
+
+("addcustomernamesowmyaphone9608974918emailsowmya47@yahoo.com", {'entities': []}),
+
+("latha , paid , 800", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+("9374256290,  OJASVI", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("kavya , paid , 1000", {'entities': [(0, 5, 'CUSTOMER'), (15, 19, 'AMOUNT')]}),
+
+("MOUNIKA,WATCH,2,,INNER,TOP,5,,3HOOPS,PAID,400", {'entities': [(14, 15, 'QUANTITY'), (27, 28, 'QUANTITY'), (42, 45, 'AMOUNT')]}),
+
+("add aishwarya 9161739626", {'entities': [(4, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("navya2sunscreen,compact2paid300", {'entities': []}),
+
+("create bill for lavanya 2 oxidised earrings, 2 drop earrings, 3 locket", {'entities': [(16, 23, 'CUSTOMER'), (24, 25, 'QUANTITY'), (26, 43, 'ITEM'), (45, 46, 'QUANTITY'), (47, 60, 'ITEM'), (62, 63, 'QUANTITY'), (64, 70, 'ITEM')]}),
+
+("900,FROM,ZAINAB", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("collect 400 from rani", {'entities': [(8, 11, 'AMOUNT'), (17, 21, 'CUSTOMER')]}),
+
+("billjanani5thermalwear,bangles3paid1000", {'entities': []}),
+
+("silverring2,sunscreen5forradha", {'entities': []}),
+
+("DELETE YAMINI 9810207985", {'entities': [(14, 24, 'AMOUNT')]}),
+
+("RECEIVED 100 LATHA", {'entities': [(9, 12, 'AMOUNT')]}),
+
+("create,customer,janaki5@yahoo.com,,janaki,,9919387533", {'entities': [(35, 41, 'CUSTOMER'), (43, 53, 'AMOUNT')]}),
+
+("bill,hemajyothi,armlet5,paid,400", {'entities': [(5, 15, 'CUSTOMER'), (29, 32, 'AMOUNT')]}),
+
+("add yashika 9017581650", {'entities': [(4, 11, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("JANANI 5 NECKLACE", {'entities': [(7, 8, 'QUANTITY')]}),
+
+("BILL , CHITRA , SETTING , SPRAY1, , INNER , SKIRT4 , PAID , 500", {'entities': [(60, 63, 'AMOUNT')]}),
+
+("remove -> vijaya", {'entities': [(10, 16, 'CUSTOMER')]}),
+
+("kavya paid 700 for bracelet3", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT')]}),
+
+("remove : amrutha", {'entities': [(9, 16, 'CUSTOMER')]}),
+
+("RECEIVED - 900 - SOWMYA", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("BILL HARINI PALAZZO 4, PEARL NECKLACE4 PAID 100", {'entities': [(20, 21, 'QUANTITY'), (44, 47, 'AMOUNT')]}),
+
+("received,700,amrutha", {'entities': [(9, 12, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("9267871675, qamar", {'entities': [(0, 10, 'AMOUNT'), (12, 17, 'CUSTOMER')]}),
+
+("HEMAJYOTHI LIP LINER 3, TONER 4, 2 DIAMOND RING PAID 100", {'entities': [(21, 22, 'QUANTITY'), (30, 31, 'QUANTITY'), (33, 34, 'QUANTITY'), (53, 56, 'AMOUNT')]}),
+
+("bill , poornima , 2 , nail , polish, , handbag1", {'entities': [(7, 15, 'CUSTOMER'), (18, 19, 'QUANTITY')]}),
+
+("9621474152, uma", {'entities': [(0, 10, 'AMOUNT'), (12, 15, 'CUSTOMER')]}),
+
+("nisha : paid : 800 : for : anklet4, : 3jhumka", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+("kundan - necklace - 1, - 3non - padded - bra, - 4 - temple - jewellery - for - meena", {'entities': [(20, 21, 'QUANTITY'), (48, 49, 'QUANTITY'), (79, 84, 'CUSTOMER')]}),
+
+("bindu 4 chain paid 100", {'entities': [(0, 5, 'CUSTOMER'), (6, 7, 'QUANTITY'), (8, 13, 'ITEM'), (19, 22, 'AMOUNT')]}),
+
+("ojas  4foundation,  choker3,  jhumka5  paid  100", {'entities': [(0, 4, 'CUSTOMER'), (45, 48, 'AMOUNT')]}),
+
+("YASMIN : DELETE", {'entities': []}),
+
+("rekha : inner : skirt5, : 2pearl : necklace, : 4face : powder", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("BILL ANJALI NIGHT DRESS3, GOLD CHAIN5", {'entities': []}),
+
+("create : customer : zoya94@gmail.com, : zoya, : 9401876633", {'entities': [(40, 44, 'CUSTOMER'), (48, 58, 'AMOUNT')]}),
+
+("AISHWARYA , PAID , 1000 , FOR , 5 , FACE , POWDER, , 1PARTY , SAREE, , FOUNDATION , 2", {'entities': [(19, 23, 'AMOUNT'), (32, 33, 'QUANTITY'), (84, 85, 'QUANTITY')]}),
+
+("ADD CUSTOMER NAME DEEPIKA PHONE 9204818292 EMAIL DEEPIKA59@YAHOO.COM", {'entities': [(32, 42, 'AMOUNT')]}),
+
+("varsha delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("add,customer,name,yasmin,phone,9912207496,email,yasmin95@outlook.com", {'entities': [(18, 24, 'CUSTOMER'), (31, 41, 'AMOUNT')]}),
+
+("collect 800 from rani", {'entities': [(8, 11, 'AMOUNT'), (17, 21, 'CUSTOMER')]}),
+
+("3scrub,  makeup  remover  5,  shapewear3  for  pallavi", {'entities': [(26, 27, 'QUANTITY'), (47, 54, 'CUSTOMER')]}),
+
+("remove mounika", {'entities': [(7, 14, 'CUSTOMER')]}),
+
+("CREATE  CUSTOMER  INDIRA4@YAHOO.COM,  INDIRA,  9037767983", {'entities': [(47, 57, 'AMOUNT')]}),
+
+("nalini paid 500", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("ADD CUSTOMER NAME KOUSALYA PHONE 9035315590 EMAIL KOUSALYA75@OUTLOOK.COM", {'entities': [(33, 43, 'AMOUNT')]}),
+
+("bill varsha mangalsutra 4, dupatta1, 2maang tikka paid 200", {'entities': [(5, 11, 'CUSTOMER'), (12, 23, 'ITEM'), (24, 25, 'QUANTITY'), (55, 58, 'AMOUNT')]}),
+
+("INDIRA PAID 200", {'entities': [(12, 15, 'AMOUNT')]}),
+
+("ADD CUSTOMER NAME OJASWINI PHONE 9110992880 EMAIL OJASWINI69@OUTLOOK.COM", {'entities': [(33, 43, 'AMOUNT')]}),
+
+("delete indira 9111630511", {'entities': [(7, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("create -> bill -> for -> jaya -> moisturizer4", {'entities': [(25, 29, 'CUSTOMER')]}),
+
+("900FROMWASEEMA", {'entities': []}),
+
+("deletemadhuri9415829981", {'entities': []}),
+
+("CLEANSER3,2DROPEARRINGSFORPRANAVI", {'entities': []}),
+
+("bharti : silver : ring : 2, : kundan : necklace3, : necklace : 3 : paid : 100", {'entities': [(0, 6, 'CUSTOMER'), (25, 26, 'QUANTITY'), (52, 60, 'ITEM'), (63, 64, 'QUANTITY'), (74, 77, 'AMOUNT')]}),
+
+("CHANDANA -> HAIR -> CLIP5, -> JEANS5 -> PAID -> 1000", {'entities': [(48, 52, 'AMOUNT')]}),
+
+("BILL , HARINI , 3LOCKET, , 5 , SUNSCREEN, , 5PADDED , BRA , PAID , 1000", {'entities': [(27, 28, 'QUANTITY'), (67, 71, 'AMOUNT')]}),
+
+("1nail remover, 1panty, cc cream 5 for anjali", {'entities': [(23, 31, 'ITEM'), (32, 33, 'QUANTITY'), (38, 44, 'CUSTOMER')]}),
+
+("remove saraswati", {'entities': [(7, 16, 'CUSTOMER')]}),
+
+("add nandini 9340446939", {'entities': [(4, 11, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("REMOVE UMA", {'entities': []}),
+
+("200FROMKOUSALYA", {'entities': []}),
+
+("POORNIMA,3,INNER,TOP,,LIP,LINER3,,5,EARRINGS", {'entities': [(9, 10, 'QUANTITY'), (34, 35, 'QUANTITY')]}),
+
+("grace , delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("vijaya -> skirt2, -> choker5, -> slip5", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("9064821923, -> fathima", {'entities': [(0, 10, 'AMOUNT'), (15, 22, 'CUSTOMER')]}),
+
+("900 - from - bharti", {'entities': [(0, 3, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("swathi5jhumkapaid400", {'entities': []}),
+
+("900 from zeenat", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("add bindu 9651997672", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("kousalya,delete", {'entities': [(0, 8, 'CUSTOMER')]}),
+
+("CREATE , BILL , FOR , SHREYA , 5 , SKIRT, , LOUNGE , WEAR4", {'entities': [(31, 32, 'QUANTITY')]}),
+
+("800 from grace", {'entities': [(0, 3, 'AMOUNT'), (9, 14, 'CUSTOMER')]}),
+
+("500  FROM  JANANI", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("RECEIVED 100 JANAKI", {'entities': [(9, 12, 'AMOUNT')]}),
+
+("addcustomernameyashikaphone9964488311emailyashika69@outlook.com", {'entities': []}),
+
+("CREATE BILL FOR SOWMYA HIP CHAIN4, 4 CLEANSER", {'entities': [(35, 36, 'QUANTITY')]}),
+
+("elina,paid,800,for,sunscreen,5", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT'), (19, 28, 'ITEM'), (29, 30, 'QUANTITY')]}),
+
+("BILL  DARSHINI  4  BRIEFS,  5OXIDISED  EARRINGS,  2PALAZZO  PAID  1000", {'entities': [(16, 17, 'QUANTITY'), (66, 70, 'AMOUNT')]}),
+
+("add leela 9817758561", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("ojaswini,paid,100,for,beauty,blender2,,2top,,highlighter5", {'entities': [(0, 8, 'CUSTOMER'), (14, 17, 'AMOUNT')]}),
+
+("tejaswini1cccream,stonebracelet3,lingerie5", {'entities': []}),
+
+("ishita , 5 , face , cream, , platinum , band , 2", {'entities': [(0, 6, 'CUSTOMER'), (9, 10, 'QUANTITY'), (47, 48, 'QUANTITY')]}),
+
+("KALPANA 2TOE RING, ETHNIC SET 1, STATEMENT NECKLACE 3", {'entities': [(30, 31, 'QUANTITY'), (52, 53, 'QUANTITY')]}),
+
+("add  poornima  9166625007", {'entities': [(5, 13, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("mounika , paid , 400", {'entities': [(0, 7, 'CUSTOMER'), (17, 20, 'AMOUNT')]}),
+
+("create : customer : aarthi86@outlook.com, : aarthi, : 9084811381", {'entities': [(44, 50, 'CUSTOMER'), (54, 64, 'AMOUNT')]}),
+
+("CREATE BILL FOR FARAH 1 FACE POWDER, 5 PADDED BRA, TOP1", {'entities': [(22, 23, 'QUANTITY'), (37, 38, 'QUANTITY')]}),
+
+("add customer name gayatri phone 9516837993 email gayatri70@outlook.com", {'entities': [(18, 25, 'CUSTOMER'), (32, 42, 'AMOUNT')]}),
+
+("900 from nandini", {'entities': [(0, 3, 'AMOUNT'), (9, 16, 'CUSTOMER')]}),
+
+("SHREYA , 9251908166 , SHREYA8@GMAIL.COM", {'entities': [(9, 19, 'AMOUNT')]}),
+
+("bill pooja 4 inner top paid 200", {'entities': [(5, 10, 'CUSTOMER'), (11, 12, 'QUANTITY'), (13, 22, 'ITEM'), (28, 31, 'AMOUNT')]}),
+
+("9679171181, - varsha", {'entities': [(0, 10, 'AMOUNT'), (14, 20, 'CUSTOMER')]}),
+
+("meena,5,navratna,ring", {'entities': [(0, 5, 'CUSTOMER'), (6, 7, 'QUANTITY')]}),
+
+("delete -> bindu -> 9951153725", {'entities': [(10, 15, 'CUSTOMER'), (19, 29, 'AMOUNT')]}),
+
+("bhavana  paid  500", {'entities': [(0, 7, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+("delete - uma - 9265134136", {'entities': [(9, 12, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("pendant 5 for rekha", {'entities': [(0, 7, 'ITEM'), (8, 9, 'QUANTITY'), (14, 19, 'CUSTOMER')]}),
+
+("received 1000 elina", {'entities': [(9, 13, 'AMOUNT'), (14, 19, 'CUSTOMER')]}),
+
+("latha - 5 - jeans, - toe - ring3 - paid - 700", {'entities': [(0, 5, 'CUSTOMER'), (8, 9, 'QUANTITY'), (12, 17, 'ITEM'), (42, 45, 'AMOUNT')]}),
+
+("REMOVE WASEEMA", {'entities': []}),
+
+("300 FROM KIRAN", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("REMOVE BHARTI", {'entities': []}),
+
+("9339902773, uma", {'entities': [(0, 10, 'AMOUNT'), (12, 15, 'CUSTOMER')]}),
+
+("bill sowmya lipstick3 paid 500", {'entities': [(5, 11, 'CUSTOMER'), (27, 30, 'AMOUNT')]}),
+
+("pooja1lipstick", {'entities': []}),
+
+("1000 from hema", {'entities': [(0, 4, 'AMOUNT'), (10, 14, 'CUSTOMER')]}),
+
+("9673540833, KAMALA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("OJASWINI PAID 300", {'entities': [(14, 17, 'AMOUNT')]}),
+
+("delete : kousalya : 9321990210", {'entities': [(9, 17, 'CUSTOMER'), (20, 30, 'AMOUNT')]}),
+
+("add grace 9133501167", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("HEMAJYOTHI - CHURIDAR2 - PAID - 400", {'entities': [(32, 35, 'AMOUNT')]}),
+
+("create , customer , meena70@gmail.com, , meena, , 9312042126", {'entities': [(41, 46, 'CUSTOMER'), (50, 60, 'AMOUNT')]}),
+
+("9867127604, USHA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("remove neha", {'entities': [(7, 11, 'CUSTOMER')]}),
+
+("create bill for sindhu cotton saree 5, nightwear set5, dress3", {'entities': [(16, 22, 'CUSTOMER'), (23, 35, 'ITEM'), (36, 37, 'QUANTITY')]}),
+
+("9917583456, -> pranavi", {'entities': [(0, 10, 'AMOUNT'), (15, 22, 'CUSTOMER')]}),
+
+("create - bill - for - nalini - lehenga - 5, - nosepin - 5, - bangles - 4", {'entities': [(22, 28, 'CUSTOMER'), (31, 38, 'ITEM'), (41, 42, 'QUANTITY'), (46, 53, 'ITEM'), (56, 57, 'QUANTITY'), (61, 68, 'ITEM'), (71, 72, 'QUANTITY')]}),
+
+("LIPSTICK 5 FOR ESHA", {'entities': [(9, 10, 'QUANTITY')]}),
+
+("waseema - delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("zoya 5 nighty, 5jhumka, 1 bridal saree paid 100", {'entities': [(0, 4, 'CUSTOMER'), (5, 6, 'QUANTITY'), (7, 13, 'ITEM'), (24, 25, 'QUANTITY'), (26, 38, 'ITEM'), (44, 47, 'AMOUNT')]}),
+
+("add grace 9925645681", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("REMOVE : ISHITA", {'entities': []}),
+
+("chandana 1bikini, drop earrings3 paid 200", {'entities': [(0, 8, 'CUSTOMER'), (38, 41, 'AMOUNT')]}),
+
+("ADD -> MOUNIKA -> 9326721053", {'entities': [(18, 28, 'AMOUNT')]}),
+
+("LATHA -> PAID -> 800 -> FOR -> SUNGLASSES2, -> JHUMKA5", {'entities': [(17, 20, 'AMOUNT')]}),
+
+("delete - deepika - 9370376321", {'entities': [(9, 16, 'CUSTOMER'), (19, 29, 'AMOUNT')]}),
+
+("ganga pendant 2, sunglasses 1 paid 800", {'entities': [(0, 5, 'CUSTOMER'), (6, 13, 'ITEM'), (14, 15, 'QUANTITY'), (17, 27, 'ITEM'), (28, 29, 'QUANTITY'), (35, 38, 'AMOUNT')]}),
+
+("REMOVE SARASWATI", {'entities': []}),
+
+("remove,leela", {'entities': [(7, 12, 'CUSTOMER')]}),
+
+("ganga,delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("200 -> FROM -> DEEPIKA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("ishita,delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("9938343872,  OJASVI", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("create  bill  for  gayatri  setting  spray1,  choker  5,  1shapewear", {'entities': [(19, 26, 'CUSTOMER'), (46, 52, 'ITEM'), (54, 55, 'QUANTITY')]}),
+
+("add - amrutha - 9422556062", {'entities': [(6, 13, 'CUSTOMER'), (16, 26, 'AMOUNT')]}),
+
+("sindhu : 1 : foundation, : toner : 5", {'entities': [(0, 6, 'CUSTOMER'), (9, 10, 'QUANTITY'), (13, 23, 'ITEM'), (27, 32, 'ITEM'), (35, 36, 'QUANTITY')]}),
+
+("BILL KAMALA SLEEPWEAR3, CHOKER 4, KURTI 4", {'entities': [(31, 32, 'QUANTITY'), (40, 41, 'QUANTITY')]}),
+
+("BILL - ISHA - 1 - FACE - CREAM, - SAREE2", {'entities': [(14, 15, 'QUANTITY')]}),
+
+("add - varsha - 9579500068", {'entities': [(6, 12, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("yashika -> delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("aarthi 9318030301 aarthi6@gmail.com", {'entities': [(0, 6, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("poornima , delete", {'entities': [(0, 8, 'CUSTOMER')]}),
+
+("esha , locket , 2", {'entities': [(0, 4, 'CUSTOMER'), (7, 13, 'ITEM'), (16, 17, 'QUANTITY')]}),
+
+("remove , fathima", {'entities': [(9, 16, 'CUSTOMER')]}),
+
+("COLLECT,900,FROM,YASMIN", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("rani  rubber  band5,  5bridal  saree,  ethnic  set3  paid  200", {'entities': [(0, 4, 'CUSTOMER'), (59, 62, 'AMOUNT')]}),
+
+("delete customer name harini phone 9461105500", {'entities': [(21, 27, 'CUSTOMER'), (34, 44, 'AMOUNT')]}),
+
+("sindhu  paid  100", {'entities': [(0, 6, 'CUSTOMER'), (14, 17, 'AMOUNT')]}),
+
+("charitha delete", {'entities': [(0, 8, 'CUSTOMER')]}),
+
+("COLLECT 800 FROM KALPANA", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("DIVYA,2SUNGLASSES,,5,SILVER,RING,,FACE,POWDER2,PAID,800", {'entities': [(19, 20, 'QUANTITY'), (52, 55, 'AMOUNT')]}),
+
+("received , 100 , archana", {'entities': [(11, 14, 'AMOUNT'), (17, 24, 'CUSTOMER')]}),
+
+("lalitha -> 9996454542 -> lalitha49@gmail.com", {'entities': [(0, 7, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("CREATE  CUSTOMER  RADHA8@OUTLOOK.COM,  RADHA,  9238843137", {'entities': [(47, 57, 'AMOUNT')]}),
+
+("ISHA -> CHURIDAR -> 3", {'entities': [(20, 21, 'QUANTITY')]}),
+
+("add padma 9380947118", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("received  200  ramya", {'entities': [(10, 13, 'AMOUNT'), (15, 20, 'CUSTOMER')]}),
+
+("YASHIKA PAID 100", {'entities': [(13, 16, 'AMOUNT')]}),
+
+("PADMA 4 EYELINER, 3SUNSCREEN PAID 1000", {'entities': [(6, 7, 'QUANTITY'), (34, 38, 'AMOUNT')]}),
+
+("DEEKSHA,RING,4,,4CLUTCH,,NECKLACE1,PAID,500", {'entities': [(13, 14, 'QUANTITY'), (40, 43, 'AMOUNT')]}),
+
+("pranavi , delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("RECEIVED : 400 : LAVANYA", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("received 400 tejaswini", {'entities': [(9, 12, 'AMOUNT'), (13, 22, 'CUSTOMER')]}),
+
+("URVASHI  PAID  700", {'entities': [(15, 18, 'AMOUNT')]}),
+
+("rekha : delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("9092241204, - sowmya", {'entities': [(0, 10, 'AMOUNT'), (14, 20, 'CUSTOMER')]}),
+
+("CREATE BILL FOR BHARTI MASCARA 5, 1NAVRATNA RING, PADDED BRA3", {'entities': [(31, 32, 'QUANTITY')]}),
+
+("500,from,indu", {'entities': [(0, 3, 'AMOUNT'), (9, 13, 'CUSTOMER')]}),
+
+("kamala paid 1000", {'entities': [(0, 6, 'CUSTOMER'), (12, 16, 'AMOUNT')]}),
+
+("delete  poornima  9436765027", {'entities': [(8, 16, 'CUSTOMER'), (18, 28, 'AMOUNT')]}),
+
+("zainab , paid , 1000 , for , 5 , inner , skirt, , 2 , padded , bra, , 3 , sunglasses", {'entities': [(0, 6, 'CUSTOMER'), (16, 20, 'AMOUNT'), (29, 30, 'QUANTITY'), (50, 51, 'QUANTITY'), (70, 71, 'QUANTITY'), (74, 84, 'ITEM')]}),
+
+("bindu - paid - 800", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+
+("ADDAMBIKA9616455805", {'entities': []}),
+
+("RECEIVED 1000 ANUSHKA", {'entities': [(9, 13, 'AMOUNT')]}),
+
+("create : customer : chetana22@gmail.com, : chetana, : 9829379398", {'entities': [(43, 50, 'CUSTOMER'), (54, 64, 'AMOUNT')]}),
+
+("CREATE BILL FOR ANSHIKA 3 BRALETTE, 3LACE BRA", {'entities': [(24, 25, 'QUANTITY')]}),
+
+("9648962162, : anagha", {'entities': [(0, 10, 'AMOUNT'), (14, 20, 'CUSTOMER')]}),
+
+("collect 800 from aaradhya", {'entities': [(8, 11, 'AMOUNT'), (17, 25, 'CUSTOMER')]}),
+
+("bill devika 4lace bra, ruby earrings 1, 3 pearl studs", {'entities': [(5, 11, 'CUSTOMER'), (23, 36, 'ITEM'), (37, 38, 'QUANTITY'), (40, 41, 'QUANTITY'), (42, 53, 'ITEM')]}),
+
+("ADITI 9879504628 ADITI39@GMAIL.COM", {'entities': [(6, 16, 'AMOUNT')]}),
+
+("DELETE CUSTOMER NAME AHANA PHONE 9302818518", {'entities': [(33, 43, 'AMOUNT')]}),
+
+("ABHILASHAPAID900", {'entities': []}),
+
+("delete : charu : 9366673677", {'entities': [(9, 14, 'CUSTOMER'), (17, 27, 'AMOUNT')]}),
+
+("bill disha linen saree 2, glitter eyeshadow 4", {'entities': [(5, 10, 'CUSTOMER'), (11, 22, 'ITEM'), (23, 24, 'QUANTITY'), (26, 43, 'ITEM'), (44, 45, 'QUANTITY')]}),
+
+("300fromidika", {'entities': []}),
+
+("received,900,falak", {'entities': [(9, 12, 'AMOUNT'), (13, 18, 'CUSTOMER')]}),
+
+("ISHAANI : MATTE : LIPSTICK : 3, : INNER : CAMISOLE4, : 3 : GEORGETTE : SAREE : PAID : 200", {'entities': [(29, 30, 'QUANTITY'), (55, 56, 'QUANTITY'), (86, 89, 'AMOUNT')]}),
+
+("9243866244, DAMINI", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("CREATE CUSTOMER HANSIKA39@YAHOO.COM, HANSIKA, 9898320522", {'entities': [(46, 56, 'AMOUNT')]}),
+
+("anisha : paid : 900", {'entities': [(0, 6, 'CUSTOMER'), (16, 19, 'AMOUNT')]}),
+
+("RECEIVED , 500 , KIRTI", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("create,bill,for,anjana,anklet,chain,2,,makeup,kit,1", {'entities': [(16, 22, 'CUSTOMER'), (36, 37, 'QUANTITY'), (50, 51, 'QUANTITY')]}),
+
+("bill aadya 4 temple chain, party wear dress1, 4 emerald necklace", {'entities': [(5, 10, 'CUSTOMER'), (11, 12, 'QUANTITY'), (13, 25, 'ITEM'), (46, 47, 'QUANTITY'), (48, 64, 'ITEM')]}),
+
+("DURGAT-SHIRTBRA2PAID800", {'entities': []}),
+
+("DESIGNER BLOUSE3 FOR AISHANI", {'entities': []}),
+
+("kanmani,paid,800,for,2bralette,,bridal,choker5", {'entities': [(0, 7, 'CUSTOMER'), (13, 16, 'AMOUNT')]}),
+
+("anika9701440372anika15@outlook.com", {'entities': []}),
+
+("chandrika paid 900 for 1 eye primer, linen saree 2", {'entities': [(0, 9, 'CUSTOMER'), (15, 18, 'AMOUNT'), (23, 24, 'QUANTITY'), (25, 35, 'ITEM'), (37, 48, 'ITEM'), (49, 50, 'QUANTITY')]}),
+
+("bhuvana delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("200 from afreen", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("collect , 800 , from , asha", {'entities': [(10, 13, 'AMOUNT'), (23, 27, 'CUSTOMER')]}),
+
+("remove,chaitali", {'entities': [(7, 15, 'CUSTOMER')]}),
+
+("AHANA : GOLD : BRACELET1, : 4 : COTTON : BRA, : KANJEEVARAM : SAREE3", {'entities': [(28, 29, 'QUANTITY')]}),
+
+("ADVIKA,DELETE", {'entities': []}),
+
+("create customer anika34@outlook.com, anika, 9879267148", {'entities': [(37, 42, 'CUSTOMER'), (44, 54, 'AMOUNT')]}),
+
+("received 500 amaya", {'entities': [(9, 12, 'AMOUNT'), (13, 18, 'CUSTOMER')]}),
+
+("ADVIKA 3LOOSE POWDER, 1 STONE NECKLACE PAID 900", {'entities': [(22, 23, 'QUANTITY'), (44, 47, 'AMOUNT')]}),
+
+("bill : dakshita : pushup : bra1, : high : waist : panty : 1, : 4 : silver : chain", {'entities': [(7, 15, 'CUSTOMER'), (58, 59, 'QUANTITY'), (63, 64, 'QUANTITY')]}),
+
+("remove  ambika", {'entities': [(8, 14, 'CUSTOMER')]}),
+
+("jyotsna,2,long,skirt", {'entities': [(0, 7, 'CUSTOMER'), (8, 9, 'QUANTITY')]}),
+
+("KAVERI 2 READY BLOUSE, 3T-SHIRT BRA PAID 800", {'entities': [(7, 8, 'QUANTITY'), (41, 44, 'AMOUNT')]}),
+
+("create -> bill -> for -> durga -> 3ready -> blouse, -> emerald -> necklace -> 1, -> ruby -> earrings -> 1", {'entities': [(25, 30, 'CUSTOMER'), (78, 79, 'QUANTITY'), (104, 105, 'QUANTITY')]}),
+
+("REMOVE , BELA", {'entities': []}),
+
+("khyatipaid100forseamlesspanties4,pushupbra1", {'entities': []}),
+
+("ADD - DARSHANA - 9878335061", {'entities': [(17, 27, 'AMOUNT')]}),
+
+("bela paid 300 for 2bronzer", {'entities': [(0, 4, 'CUSTOMER'), (10, 13, 'AMOUNT')]}),
+
+("100 -> from -> anisha", {'entities': [(0, 3, 'AMOUNT'), (15, 21, 'CUSTOMER')]}),
+
+("kaajal,inner,camisole5,,long,skirt,1,paid,400", {'entities': [(0, 6, 'CUSTOMER'), (35, 36, 'QUANTITY'), (42, 45, 'AMOUNT')]}),
+
+("ASHA  WATERPROOF  MASCARA  2,  4BRONZER  PAID  1000", {'entities': [(27, 28, 'QUANTITY'), (47, 51, 'AMOUNT')]}),
+
+("anusha , paid , 100 , for , 1 , ethnic , gown", {'entities': [(0, 6, 'CUSTOMER'), (16, 19, 'AMOUNT'), (28, 29, 'QUANTITY')]}),
+
+("akanksha paid 700 for 5lace bra, anklet chain2, strapless bra1", {'entities': [(0, 8, 'CUSTOMER'), (14, 17, 'AMOUNT')]}),
+
+("haritha 5 night bra, 5cream foundation, pushup bra5", {'entities': [(0, 7, 'CUSTOMER'), (8, 9, 'QUANTITY'), (10, 19, 'ITEM')]}),
+
+("aditi - bralette - 2", {'entities': [(0, 5, 'CUSTOMER'), (8, 16, 'ITEM'), (19, 20, 'QUANTITY')]}),
+
+("bill anusha banarasi saree5", {'entities': [(5, 11, 'CUSTOMER')]}),
+
+("bill aaradhya ready blouse2 paid 100", {'entities': [(5, 13, 'CUSTOMER'), (33, 36, 'AMOUNT')]}),
+
+("CREATE CUSTOMER GEETANJALI35@GMAIL.COM, GEETANJALI, 9761288200", {'entities': [(52, 62, 'AMOUNT')]}),
+
+("400,from,ambika", {'entities': [(0, 3, 'AMOUNT'), (9, 15, 'CUSTOMER')]}),
+
+("bill avantika lip balm 4, 1kanjeevaram saree", {'entities': [(5, 13, 'CUSTOMER'), (14, 22, 'ITEM'), (23, 24, 'QUANTITY')]}),
+
+("janvi  paid  300  for  antique  bangles4,  bronzer1,  kanjeevaram  saree  3", {'entities': [(0, 5, 'CUSTOMER'), (13, 16, 'AMOUNT'), (74, 75, 'QUANTITY')]}),
+
+("add aishani 9624122886", {'entities': [(4, 11, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("aahana 4polki necklace, stone necklace2, 2ready blouse paid 700", {'entities': [(0, 6, 'CUSTOMER'), (60, 63, 'AMOUNT')]}),
+
+("devika delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("9659583299, anisha", {'entities': [(0, 10, 'AMOUNT'), (12, 18, 'CUSTOMER')]}),
+
+("bill dakshita 5 designer jhumka, net saree4", {'entities': [(5, 13, 'CUSTOMER'), (14, 15, 'QUANTITY'), (16, 31, 'ITEM')]}),
+
+("bill kavitha 1 tinted moisturizer, matte lipstick 4", {'entities': [(5, 12, 'CUSTOMER'), (13, 14, 'QUANTITY'), (15, 33, 'ITEM'), (35, 49, 'ITEM'), (50, 51, 'QUANTITY')]}),
+
+("archipaid500for5straplessbra", {'entities': []}),
+
+("ADVIKA RUBY EARRINGS 4, 3 POLKI NECKLACE, NET SAREE 5", {'entities': [(21, 22, 'QUANTITY'), (24, 25, 'QUANTITY'), (52, 53, 'QUANTITY')]}),
+
+("collect 1000 from kanmani", {'entities': [(8, 12, 'AMOUNT'), (18, 25, 'CUSTOMER')]}),
+
+("add ashmita 9302018368", {'entities': [(4, 11, 'CUSTOMER'), (12, 22, 'AMOUNT')]}),
+
+("REMOVE CHAITALI", {'entities': []}),
+
+("add bina 9433729199", {'entities': [(4, 8, 'CUSTOMER'), (9, 19, 'AMOUNT')]}),
+
+("3bralette, -> stone -> necklace -> 1, -> 2bridal -> choker -> for -> amisha", {'entities': [(35, 36, 'QUANTITY'), (69, 75, 'CUSTOMER')]}),
+
+("aahana , paid , 1000 , for , 5net , saree, , 1 , bralette", {'entities': [(0, 6, 'CUSTOMER'), (16, 20, 'AMOUNT'), (45, 46, 'QUANTITY'), (49, 57, 'ITEM')]}),
+
+("kaajal  2night  bra  paid  1000", {'entities': [(0, 6, 'CUSTOMER'), (27, 31, 'AMOUNT')]}),
+
+("collect 500 from ishaani", {'entities': [(8, 11, 'AMOUNT'), (17, 24, 'CUSTOMER')]}),
+
+("DELETE AAYUSHI 9326971803", {'entities': [(15, 25, 'AMOUNT')]}),
+
+("RECEIVED 200 APARNA", {'entities': [(9, 12, 'AMOUNT')]}),
+
+("9525082563, darshana", {'entities': [(0, 10, 'AMOUNT'), (12, 20, 'CUSTOMER')]}),
+
+("HARITHA  4  CZ  RING,  1  LIP  BALM,  5LONG  SKIRT  PAID  400", {'entities': [(9, 10, 'QUANTITY'), (23, 24, 'QUANTITY'), (58, 61, 'AMOUNT')]}),
+
+("addcustomernameaparnaphone9647516813emailaparna45@outlook.com", {'entities': []}),
+
+("remove , anu", {'entities': [(9, 12, 'CUSTOMER')]}),
+
+("9342342551, : aadya", {'entities': [(0, 10, 'AMOUNT'), (14, 19, 'CUSTOMER')]}),
+
+("3lace bra, glitter eyeshadow1 for juhi", {'entities': [(34, 38, 'CUSTOMER')]}),
+
+("900 from indrani", {'entities': [(0, 3, 'AMOUNT'), (9, 16, 'CUSTOMER')]}),
+
+("bill , deepthi , 2 , printed , kurti, , 5ruby , earrings , paid , 300", {'entities': [(7, 14, 'CUSTOMER'), (17, 18, 'QUANTITY'), (66, 69, 'AMOUNT')]}),
+
+("9907310181,,alisha", {'entities': [(0, 10, 'AMOUNT'), (12, 18, 'CUSTOMER')]}),
+
+("received 200 kaajal", {'entities': [(9, 12, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("anushapaid800forlongskirt5,3lipbalm,ethnicgown5", {'entities': []}),
+
+("create customer abhilasha21@yahoo.com, abhilasha, 9483453316", {'entities': [(39, 48, 'CUSTOMER'), (50, 60, 'AMOUNT')]}),
+
+("AFREEN PAID 400", {'entities': [(12, 15, 'AMOUNT')]}),
+
+("create bill for afreen 5face palette", {'entities': [(16, 22, 'CUSTOMER')]}),
+
+("create bill for ashmita 5 banarasi saree, face palette 3, 3 designer blouse", {'entities': [(16, 23, 'CUSTOMER'), (24, 25, 'QUANTITY'), (26, 40, 'ITEM'), (42, 54, 'ITEM'), (55, 56, 'QUANTITY'), (58, 59, 'QUANTITY'), (60, 75, 'ITEM')]}),
+
+("amala,paid,1000,for,4,georgette,saree,,3,night,bra,,3,antique,bangles", {'entities': [(0, 5, 'CUSTOMER'), (11, 15, 'AMOUNT'), (20, 21, 'QUANTITY'), (39, 40, 'QUANTITY'), (52, 53, 'QUANTITY')]}),
+
+("bill - anika - 1georgette - saree, - 3 - inner - camisole, - cz - ring - 1 - paid - 900", {'entities': [(7, 12, 'CUSTOMER'), (37, 38, 'QUANTITY'), (73, 74, 'QUANTITY'), (84, 87, 'AMOUNT')]}),
+
+("REMOVEDEVIKA", {'entities': []}),
+
+("1000 from kanmani", {'entities': [(0, 4, 'AMOUNT'), (10, 17, 'CUSTOMER')]}),
+
+("BILL : ANTRA : GEL : EYELINER : 4", {'entities': [(32, 33, 'QUANTITY')]}),
+
+("3 strapless bra for aakriti", {'entities': [(0, 1, 'QUANTITY'), (2, 15, 'ITEM'), (20, 27, 'CUSTOMER')]}),
+
+("akanksha - paid - 500 - for - 2 - long - skirt, - 2georgette - saree", {'entities': [(0, 8, 'CUSTOMER'), (18, 21, 'AMOUNT'), (30, 31, 'QUANTITY')]}),
+
+("ashita 1 cotton bra, ruby earrings3, glitter eyeshadow 4 paid 700", {'entities': [(0, 6, 'CUSTOMER'), (7, 8, 'QUANTITY'), (9, 19, 'ITEM'), (37, 54, 'ITEM'), (55, 56, 'QUANTITY'), (62, 65, 'AMOUNT')]}),
+
+("9967983674, devika", {'entities': [(0, 10, 'AMOUNT'), (12, 18, 'CUSTOMER')]}),
+
+("1000 from juhi", {'entities': [(0, 4, 'AMOUNT'), (10, 14, 'CUSTOMER')]}),
+
+("ambika 3 ruby earrings, 4 designer jhumka, 5stone necklace paid 300", {'entities': [(0, 6, 'CUSTOMER'), (7, 8, 'QUANTITY'), (9, 22, 'ITEM'), (24, 25, 'QUANTITY'), (26, 41, 'ITEM'), (64, 67, 'AMOUNT')]}),
+
+("CREATE , BILL , FOR , ABHA , 1 , DIAMOND , PENDANT, , 4PARTY , WEAR , DRESS, , STONE , NECKLACE , 1", {'entities': [(29, 30, 'QUANTITY'), (98, 99, 'QUANTITY')]}),
+
+("delete kashish 9655304264", {'entities': [(7, 14, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("aahananetsaree3,3creamfoundation,rubyearrings5", {'entities': []}),
+
+("remove alisha", {'entities': [(7, 13, 'CUSTOMER')]}),
+
+("anika , paid , 900 , for , compact , powder3, , 3 , cotton , bra, , 2antique , bangles", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT'), (48, 49, 'QUANTITY')]}),
+
+("remove kalyani", {'entities': [(7, 14, 'CUSTOMER')]}),
+
+("DELETE,CUSTOMER,NAME,DRISHTI,PHONE,9976546666", {'entities': [(35, 45, 'AMOUNT')]}),
+
+("dhriti : paid : 800 : for : kundan : earrings2, : tinted : moisturizer : 4, : glitter : eyeshadow2", {'entities': [(0, 6, 'CUSTOMER'), (16, 19, 'AMOUNT'), (73, 74, 'QUANTITY')]}),
+
+("silverchain5,2seamlesspanties,polkinecklace2forjhanvi", {'entities': []}),
+
+("9738743313, jyotsna", {'entities': [(0, 10, 'AMOUNT'), (12, 19, 'CUSTOMER')]}),
+
+("COLLECT 200 FROM ANITA", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("9233068397, charu", {'entities': [(0, 10, 'AMOUNT'), (12, 17, 'CUSTOMER')]}),
+
+("gitanjali  4  night  bra,  loose  powder4  paid  500", {'entities': [(0, 9, 'CUSTOMER'), (11, 12, 'QUANTITY'), (49, 52, 'AMOUNT')]}),
+
+("BILL  AHANA  PEARL  STUDS  4", {'entities': [(27, 28, 'QUANTITY')]}),
+
+("ANSHIKA  ANTIQUE  BANGLES3,  2FACE  PALETTE,  2  PUSHUP  BRA", {'entities': [(46, 47, 'QUANTITY')]}),
+
+("bill devanshi 4 t-shirt bra, designer blouse1", {'entities': [(5, 13, 'CUSTOMER'), (14, 15, 'QUANTITY'), (16, 27, 'ITEM')]}),
+
+("BILL ADITI 3GEL EYELINER, 2LIP BALM PAID 300", {'entities': [(41, 44, 'AMOUNT')]}),
+
+("ASHA,5,OFFICE,WEAR,SAREE,,NIGHT,BRA,4,PAID,300", {'entities': [(5, 6, 'QUANTITY'), (36, 37, 'QUANTITY'), (43, 46, 'AMOUNT')]}),
+
+("deletegargi9181854110", {'entities': []}),
+
+("avantika 5 silver chain, printed kurti 3, 1lace bra paid 300", {'entities': [(0, 8, 'CUSTOMER'), (9, 10, 'QUANTITY'), (11, 23, 'ITEM'), (25, 38, 'ITEM'), (39, 40, 'QUANTITY'), (57, 60, 'AMOUNT')]}),
+
+("900 - FROM - KHYATI", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("CREATE BILL FOR JAGRUTI 3TINTED MOISTURIZER, 2 KANJEEVARAM SAREE, 1PUSHUP BRA", {'entities': [(45, 46, 'QUANTITY')]}),
+
+("HIMANI PAID 700 FOR GEL EYELINER5", {'entities': [(12, 15, 'AMOUNT')]}),
+
+("delete , customer , name , janvi , phone , 9115096190", {'entities': [(27, 32, 'CUSTOMER'), (43, 53, 'AMOUNT')]}),
+
+("collect  400  from  abhilasha", {'entities': [(9, 12, 'AMOUNT'), (20, 29, 'CUSTOMER')]}),
+
+("astha  paid  100", {'entities': [(0, 5, 'CUSTOMER'), (13, 16, 'AMOUNT')]}),
+
+("kanika 9564684733 kanika10@outlook.com", {'entities': [(0, 6, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("COLLECT 500 FROM AISHANI", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("create : bill : for : deepa : 5night : bra", {'entities': [(22, 27, 'CUSTOMER')]}),
+
+("create customer abha22@outlook.com, abha, 9818597242", {'entities': [(36, 40, 'CUSTOMER'), (42, 52, 'AMOUNT')]}),
+
+("devika casual kurti4, 1 contour kit, party wear dress 1", {'entities': [(0, 6, 'CUSTOMER'), (22, 23, 'QUANTITY'), (24, 35, 'ITEM'), (37, 53, 'ITEM'), (54, 55, 'QUANTITY')]}),
+
+("BILL -> GOPIKA -> 2WATERPROOF -> MASCARA, -> 3GEORGETTE -> SAREE, -> RUBY -> EARRINGS5 -> PAID -> 300", {'entities': [(98, 101, 'AMOUNT')]}),
+
+("create customer idika64@gmail.com, idika, 9681292647", {'entities': [(35, 40, 'CUSTOMER'), (42, 52, 'AMOUNT')]}),
+
+("kanikapaid400", {'entities': []}),
+
+("500 -> from -> aadya", {'entities': [(0, 3, 'AMOUNT'), (15, 20, 'CUSTOMER')]}),
+
+("akshara cream foundation 4 paid 800", {'entities': [(0, 7, 'CUSTOMER'), (8, 24, 'ITEM'), (25, 26, 'QUANTITY'), (32, 35, 'AMOUNT')]}),
+
+("DELETE JYOTSNA 9639268327", {'entities': [(15, 25, 'AMOUNT')]}),
+
+("aahana delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("BILL , BINA , BANARASI , SAREE , 1 , PAID , 100", {'entities': [(33, 34, 'QUANTITY'), (44, 47, 'AMOUNT')]}),
+
+("akshita  9664237097  akshita60@gmail.com", {'entities': [(0, 7, 'CUSTOMER'), (9, 19, 'AMOUNT')]}),
+
+("bill ayesha 1 glitter eyeshadow", {'entities': [(5, 11, 'CUSTOMER'), (12, 13, 'QUANTITY'), (14, 31, 'ITEM')]}),
+
+("BILL,INAAYA,3,STRAPLESS,BRA,PAID,700", {'entities': [(12, 13, 'QUANTITY'), (33, 36, 'AMOUNT')]}),
+
+("create , bill , for , devanshi , 3antique , bangles", {'entities': [(22, 30, 'CUSTOMER')]}),
+
+("bill  ahana  1  emerald  necklace  paid  200", {'entities': [(6, 11, 'CUSTOMER'), (13, 14, 'QUANTITY'), (41, 44, 'AMOUNT')]}),
+
+("CREATE  BILL  FOR  DAKSHITA  5  BANARASI  SAREE,  FACE  PALETTE  4", {'entities': [(29, 30, 'QUANTITY'), (65, 66, 'QUANTITY')]}),
+
+("bill chetana 1 pearl studs", {'entities': [(5, 12, 'CUSTOMER'), (13, 14, 'QUANTITY'), (15, 26, 'ITEM')]}),
+
+("add ambika 9353938948", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("aditi loose powder 3, tinted moisturizer 3, 5 matte lipstick paid 200", {'entities': [(0, 5, 'CUSTOMER'), (6, 18, 'ITEM'), (19, 20, 'QUANTITY'), (22, 40, 'ITEM'), (41, 42, 'QUANTITY'), (44, 45, 'QUANTITY'), (46, 60, 'ITEM'), (66, 69, 'AMOUNT')]}),
+
+("ADITI 9204028694 ADITI4@OUTLOOK.COM", {'entities': [(6, 16, 'AMOUNT')]}),
+
+("collect 100 from anushka", {'entities': [(8, 11, 'AMOUNT'), (17, 24, 'CUSTOMER')]}),
+
+("BILL,AADYA,2,WATERPROOF,MASCARA", {'entities': [(11, 12, 'QUANTITY')]}),
+
+("akanksha 9493361398 akanksha57@yahoo.com", {'entities': [(0, 8, 'CUSTOMER'), (9, 19, 'AMOUNT')]}),
+
+("DAKSHA  DELETE", {'entities': []}),
+
+("adddhara9863176894", {'entities': []}),
+
+("delete -> jagruti -> 9904892184", {'entities': [(10, 17, 'CUSTOMER'), (21, 31, 'AMOUNT')]}),
+
+("400 -> from -> chandrika", {'entities': [(0, 3, 'AMOUNT'), (15, 24, 'CUSTOMER')]}),
+
+("ADD ARYA 9387535689", {'entities': [(9, 19, 'AMOUNT')]}),
+
+("ashmita ruby earrings3", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("delete -> customer -> name -> aakriti -> phone -> 9261157865", {'entities': [(30, 37, 'CUSTOMER'), (50, 60, 'AMOUNT')]}),
+
+("dhriti  9506999611  dhriti99@outlook.com", {'entities': [(0, 6, 'CUSTOMER'), (8, 18, 'AMOUNT')]}),
+
+("amrita,paid,500,for,antique,bangles3,,1festive,saree,,casual,kurti,3", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT'), (67, 68, 'QUANTITY')]}),
+
+("create customer falak47@outlook.com, falak, 9510199041", {'entities': [(37, 42, 'CUSTOMER'), (44, 54, 'AMOUNT')]}),
+
+("9179383359, gauri", {'entities': [(0, 10, 'AMOUNT'), (12, 17, 'CUSTOMER')]}),
+
+("BILL ANUSHKA 2 KANJEEVARAM SAREE, TINTED MOISTURIZER 1 PAID 100", {'entities': [(13, 14, 'QUANTITY'), (53, 54, 'QUANTITY'), (60, 63, 'AMOUNT')]}),
+
+("BILLKIRTI5T-SHIRTBRAPAID800", {'entities': []}),
+
+("add ahilya 9237635284", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("collect  200  from  ambika", {'entities': [(9, 12, 'AMOUNT'), (20, 26, 'CUSTOMER')]}),
+
+("bill -> gitanjali -> 4seamless -> panties, -> 1casual -> kurti, -> waterproof -> mascara -> 2", {'entities': [(8, 17, 'CUSTOMER'), (92, 93, 'QUANTITY')]}),
+
+("DELETECUSTOMERNAMEAKSHITAPHONE9005509549", {'entities': []}),
+
+("delete , gitanjali , 9690944159", {'entities': [(9, 18, 'CUSTOMER'), (21, 31, 'AMOUNT')]}),
+
+("CREATE : CUSTOMER : DEVIKA7@GMAIL.COM, : DEVIKA, : 9046115123", {'entities': [(51, 61, 'AMOUNT')]}),
+
+("add darshana 9636676196", {'entities': [(4, 12, 'CUSTOMER'), (13, 23, 'AMOUNT')]}),
+
+("CREATE -> BILL -> FOR -> ADVIKA -> 3 -> LACE -> BRA, -> FESTIVE -> SAREE -> 3, -> DESIGNER -> BLOUSE2", {'entities': [(35, 36, 'QUANTITY'), (76, 77, 'QUANTITY')]}),
+
+("add ashita 9692869361", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("BINA  DELETE", {'entities': []}),
+
+("delete : customer : name : komal : phone : 9109505398", {'entities': [(27, 32, 'CUSTOMER'), (43, 53, 'AMOUNT')]}),
+
+("DAKSHITA - PAID - 900 - FOR - 3BANARASI - SAREE, - 5 - CROP - TOP, - DESIGNER - JHUMKA - 5", {'entities': [(18, 21, 'AMOUNT'), (51, 52, 'QUANTITY'), (89, 90, 'QUANTITY')]}),
+
+("addcustomernamekashishphone9828319609emailkashish7@yahoo.com", {'entities': []}),
+
+("remove , aayushi", {'entities': [(9, 16, 'CUSTOMER')]}),
+
+("delete customer name ambika phone 9023210623", {'entities': [(21, 27, 'CUSTOMER'), (34, 44, 'AMOUNT')]}),
+
+("amisha - delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("BHUMI DELETE", {'entities': []}),
+
+("delete,customer,name,akshita,phone,9281664620", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("ILA PAID 200 FOR 2 WATERPROOF MASCARA, MATTE LIPSTICK2", {'entities': [(9, 12, 'AMOUNT'), (17, 18, 'QUANTITY')]}),
+
+("REMOVE - AMBIKA", {'entities': []}),
+
+("collect 300 from chandrika", {'entities': [(8, 11, 'AMOUNT'), (17, 26, 'CUSTOMER')]}),
+
+("kanmanihighwaistpanty3", {'entities': []}),
+
+("delete amaya 9446233576", {'entities': [(7, 12, 'CUSTOMER'), (13, 23, 'AMOUNT')]}),
+
+("collect - 900 - from - deepthi", {'entities': [(10, 13, 'AMOUNT'), (23, 30, 'CUSTOMER')]}),
+
+("COLLECT 200 FROM JYOTSNA", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("received400durga", {'entities': []}),
+
+("aarti : paid : 400", {'entities': [(0, 5, 'CUSTOMER'), (15, 18, 'AMOUNT')]}),
+
+("aditi bralette2, 3gel eyeliner, 4 bronzer paid 800", {'entities': [(0, 5, 'CUSTOMER'), (32, 33, 'QUANTITY'), (34, 41, 'ITEM'), (47, 50, 'AMOUNT')]}),
+
+("deepthi - banarasi - saree - 3, - 1temple - chain - paid - 300", {'entities': [(0, 7, 'CUSTOMER'), (29, 30, 'QUANTITY'), (59, 62, 'AMOUNT')]}),
+
+("bill -> kashish -> compact -> powder4", {'entities': [(8, 15, 'CUSTOMER')]}),
+
+("1kanjeevaramsaree,geleyeliner4,1croptopforkaveri", {'entities': []}),
+
+("bill ambika makeup kit1", {'entities': [(5, 11, 'CUSTOMER')]}),
+
+("inaaya : 2kanjeevaram : saree, : 3loose : powder, : glitter : eyeshadow3 : paid : 700", {'entities': [(0, 6, 'CUSTOMER'), (82, 85, 'AMOUNT')]}),
+
+("100,FROM,JYOTSNA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("create , bill , for , kirti , 3 , glitter , eyeshadow", {'entities': [(22, 27, 'CUSTOMER'), (30, 31, 'QUANTITY')]}),
+
+("create - customer - dakshita27@outlook.com, - dakshita, - 9838655994", {'entities': [(46, 54, 'CUSTOMER'), (58, 68, 'AMOUNT')]}),
+
+("remove chetana", {'entities': [(7, 14, 'CUSTOMER')]}),
+
+("ADD  APARNA  9428190035", {'entities': [(13, 23, 'AMOUNT')]}),
+
+("delete -> customer -> name -> hrithika -> phone -> 9734448319", {'entities': [(30, 38, 'CUSTOMER'), (51, 61, 'AMOUNT')]}),
+
+("ADITI  PAID  300  FOR  2CREAM  FOUNDATION,  2  MAKEUP  KIT", {'entities': [(13, 16, 'AMOUNT'), (44, 45, 'QUANTITY')]}),
+
+("collect , 1000 , from , antra", {'entities': [(10, 14, 'AMOUNT'), (24, 29, 'CUSTOMER')]}),
+
+("kaveri delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("add - customer - name - haritha - phone - 9576297473 - email - haritha20@outlook.com", {'entities': [(24, 31, 'CUSTOMER'), (42, 52, 'AMOUNT')]}),
+
+("2 CASUAL KURTI, KANJEEVARAM SAREE5 FOR AHILYA", {'entities': [(0, 1, 'QUANTITY')]}),
+
+("indrani - paid - 500 - for - 3 - pushup - bra", {'entities': [(0, 7, 'CUSTOMER'), (17, 20, 'AMOUNT'), (29, 30, 'QUANTITY')]}),
+
+("delete deepthi 9732818569", {'entities': [(7, 14, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("5loose powder, inner camisole1, 1 georgette saree for drishti", {'entities': [(32, 33, 'QUANTITY'), (34, 49, 'ITEM'), (54, 61, 'CUSTOMER')]}),
+
+("ADITI 4ETHNIC GOWN, DESIGNER BLOUSE 5, GOLD BRACELET2 PAID 800", {'entities': [(36, 37, 'QUANTITY'), (59, 62, 'AMOUNT')]}),
+
+("AMISHA : PAID : 100 : FOR : 1LIQUID : LIPSTICK, : TINTED : MOISTURIZER2", {'entities': [(16, 19, 'AMOUNT')]}),
+
+("ahilya : printed : kurti : 2, : t-shirt : bra5, : 2 : gold : bracelet : paid : 200", {'entities': [(0, 6, 'CUSTOMER'), (27, 28, 'QUANTITY'), (50, 51, 'QUANTITY'), (79, 82, 'AMOUNT')]}),
+
+("received,400,aayushi", {'entities': [(9, 12, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("devanshi  9364762208  devanshi81@yahoo.com", {'entities': [(0, 8, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("CREATE CUSTOMER KANIKA19@OUTLOOK.COM, KANIKA, 9964974353", {'entities': [(46, 56, 'AMOUNT')]}),
+
+("delete kirti 9627208079", {'entities': [(7, 12, 'CUSTOMER'), (13, 23, 'AMOUNT')]}),
+
+("DEVIKA 2 NET SAREE, 2 PRINTED KURTI, 4DIAMOND PENDANT", {'entities': [(7, 8, 'QUANTITY'), (20, 21, 'QUANTITY')]}),
+
+("collect 400 from inaaya", {'entities': [(8, 11, 'AMOUNT'), (17, 23, 'CUSTOMER')]}),
+
+("100,from,geetanjali", {'entities': [(0, 3, 'AMOUNT'), (9, 19, 'CUSTOMER')]}),
+
+("create,customer,devika63@outlook.com,,devika,,9356995753", {'entities': [(38, 44, 'CUSTOMER'), (46, 56, 'AMOUNT')]}),
+
+("bela - paid - 200 - for - night - bra3, - matte - lipstick - 1", {'entities': [(0, 4, 'CUSTOMER'), (14, 17, 'AMOUNT'), (61, 62, 'QUANTITY')]}),
+
+("9146632809, ahana", {'entities': [(0, 10, 'AMOUNT'), (12, 17, 'CUSTOMER')]}),
+
+("9958916647, , ADITI", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("add customer name damini phone 9571762757 email damini12@outlook.com", {'entities': [(18, 24, 'CUSTOMER'), (31, 41, 'AMOUNT')]}),
+
+("add hemaja 9876430404", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("received700ayesha", {'entities': []}),
+
+("delete customer name amaya phone 9341928773", {'entities': [(21, 26, 'CUSTOMER'), (33, 43, 'AMOUNT')]}),
+
+("amisha 9787721290 amisha98@gmail.com", {'entities': [(0, 6, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("bill baani 5long skirt, 2eye primer, linen saree3", {'entities': [(5, 10, 'CUSTOMER')]}),
+
+("AHILYA PAID 500", {'entities': [(12, 15, 'AMOUNT')]}),
+
+("bill dhanya compact powder4", {'entities': [(5, 11, 'CUSTOMER')]}),
+
+("athira paid 400", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("remove : chandrika", {'entities': [(9, 18, 'CUSTOMER')]}),
+
+("bill : baani : 1party : wear : dress, : 5 : ready : blouse : paid : 800", {'entities': [(7, 12, 'CUSTOMER'), (40, 41, 'QUANTITY'), (68, 71, 'AMOUNT')]}),
+
+("deletecustomernamejyotsnaphone9499131036", {'entities': []}),
+
+("aakriti : ruby : earrings : 5, : makeup : kit2, : designer : jhumka4 : paid : 1000", {'entities': [(0, 7, 'CUSTOMER'), (28, 29, 'QUANTITY'), (78, 82, 'AMOUNT')]}),
+
+("gitanjali , paid , 900 , for , 3matte , lipstick, , 2diamond , pendant, , 4 , office , wear , saree", {'entities': [(0, 9, 'CUSTOMER'), (19, 22, 'AMOUNT'), (74, 75, 'QUANTITY')]}),
+
+("idika  printed  kurti2  paid  100", {'entities': [(0, 5, 'CUSTOMER'), (30, 33, 'AMOUNT')]}),
+
+("remove ashita", {'entities': [(7, 13, 'CUSTOMER')]}),
+
+("collect1000fromeshaani", {'entities': []}),
+
+("collect 700 from akshara", {'entities': [(8, 11, 'AMOUNT'), (17, 24, 'CUSTOMER')]}),
+
+("CREATE,BILL,FOR,KANMANI,OFFICE,WEAR,SAREE,2,,LIP,BALM,1,,LINEN,SAREE,1", {'entities': [(42, 43, 'QUANTITY'), (54, 55, 'QUANTITY'), (69, 70, 'QUANTITY')]}),
+
+("afreen paid 200", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("aditi -> 9205803500 -> aditi45@outlook.com", {'entities': [(0, 5, 'CUSTOMER'), (9, 19, 'AMOUNT')]}),
+
+("received 400 aaliya", {'entities': [(9, 12, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("add kaajal 9003426273", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("ADVIKAGLITTEREYESHADOW5,ANTIQUEBANGLES2PAID1000", {'entities': []}),
+
+("AYESHA EYE PRIMER5, PRINTED KURTI 2 PAID 100", {'entities': [(34, 35, 'QUANTITY'), (41, 44, 'AMOUNT')]}),
+
+("delete,customer,name,bina,phone,9129212370", {'entities': [(21, 25, 'CUSTOMER'), (32, 42, 'AMOUNT')]}),
+
+("bill - jyotsna - 5 - glitter - eyeshadow", {'entities': [(7, 14, 'CUSTOMER'), (17, 18, 'QUANTITY')]}),
+
+("BILL ANUSHA 2 RUBY EARRINGS, 1ANKLET CHAIN PAID 800", {'entities': [(12, 13, 'QUANTITY'), (48, 51, 'AMOUNT')]}),
+
+("delete , customer , name , drishti , phone , 9171506924", {'entities': [(27, 34, 'CUSTOMER'), (45, 55, 'AMOUNT')]}),
+
+("bhuvanawaterproofmascara4,2czring,3croptop", {'entities': []}),
+
+("ANAGHA PAID 300 FOR 1 GLITTER EYESHADOW", {'entities': [(12, 15, 'AMOUNT'), (20, 21, 'QUANTITY')]}),
+
+("create bill for hrithika pushup bra5, gold bracelet 5", {'entities': [(16, 24, 'CUSTOMER'), (38, 51, 'ITEM'), (52, 53, 'QUANTITY')]}),
+
+("ANUSHKA 3 BANARASI SAREE, NIGHT BRA2 PAID 400", {'entities': [(8, 9, 'QUANTITY'), (42, 45, 'AMOUNT')]}),
+
+("EMERALD , NECKLACE , 5, , 4COTTON , BRA, , NET , SAREE , 5 , FOR , ESHWARI", {'entities': [(21, 22, 'QUANTITY'), (57, 58, 'QUANTITY')]}),
+
+("aadya paid 1000 for 5strapless bra", {'entities': [(0, 5, 'CUSTOMER'), (11, 15, 'AMOUNT')]}),
+
+("ADVIKA PAID 200 FOR 2OFFICE WEAR SAREE", {'entities': [(12, 15, 'AMOUNT')]}),
+
+("COLLECT 100 FROM ARPITA", {'entities': [(8, 11, 'AMOUNT')]}),
+
+("antra cotton bra1", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("ADD ANTRA 9458330476", {'entities': [(10, 20, 'AMOUNT')]}),
+
+("anika , 9859949654 , anika46@yahoo.com", {'entities': [(0, 5, 'CUSTOMER'), (8, 18, 'AMOUNT')]}),
+
+("delete,customer,name,amala,phone,9305709025", {'entities': [(21, 26, 'CUSTOMER'), (33, 43, 'AMOUNT')]}),
+
+("divyanshi,cream,foundation3,,3,ethnic,gown,,4,high,waist,panty,paid,200", {'entities': [(0, 9, 'CUSTOMER'), (29, 30, 'QUANTITY'), (44, 45, 'QUANTITY'), (68, 71, 'AMOUNT')]}),
+
+("STRAPLESS - BRA - 1, - 5CREAM - FOUNDATION, - 4 - WATERPROOF - MASCARA - FOR - JUHI", {'entities': [(18, 19, 'QUANTITY'), (46, 47, 'QUANTITY')]}),
+
+("JHANVICREAMFOUNDATION2,KUNDANEARRINGS1PAID300", {'entities': []}),
+
+("DELETE CUSTOMER NAME ANUSHA PHONE 9158135825", {'entities': [(34, 44, 'AMOUNT')]}),
+
+("AMISHA,2NIGHT,BRA,PAID,800", {'entities': [(23, 26, 'AMOUNT')]}),
+
+("remove alisha", {'entities': [(7, 13, 'CUSTOMER')]}),
+
+("ADDAMISHA9208520333", {'entities': []}),
+
+("RECEIVED 900 AAHANA", {'entities': [(9, 12, 'AMOUNT')]}),
+
+("DELETE,ARCHI,9894310633", {'entities': [(13, 23, 'AMOUNT')]}),
+
+("500 FROM DEEPTHI", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("drishti  2  diamond  pendant  paid  800", {'entities': [(0, 7, 'CUSTOMER'), (9, 10, 'QUANTITY'), (36, 39, 'AMOUNT')]}),
+
+("INAAYA : PAID : 300 : FOR : LACE : BRA : 2", {'entities': [(16, 19, 'AMOUNT'), (41, 42, 'QUANTITY')]}),
+
+("aparna - 9432736310 - aparna85@gmail.com", {'entities': [(0, 6, 'CUSTOMER'), (9, 19, 'AMOUNT')]}),
+
+("bhuvana , paid , 200 , for , 2designer , jhumka, , t-shirt , bra , 5, , 1 , contour , kit", {'entities': [(0, 7, 'CUSTOMER'), (17, 20, 'AMOUNT'), (67, 68, 'QUANTITY'), (72, 73, 'QUANTITY')]}),
+
+("deletecustomernamekaveriphone9046490291", {'entities': []}),
+
+("DELETE CUSTOMER NAME HARSHIKA PHONE 9694555533", {'entities': [(36, 46, 'AMOUNT')]}),
+
+("contour kit 2, ready blouse 3 for dhanya", {'entities': [(0, 11, 'ITEM'), (12, 13, 'QUANTITY'), (15, 27, 'ITEM'), (28, 29, 'QUANTITY'), (34, 40, 'CUSTOMER')]}),
+
+("deepa paid 800", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT')]}),
+
+("hrithika,eye,primer,5,,2,bralette,paid,1000", {'entities': [(0, 8, 'CUSTOMER'), (20, 21, 'QUANTITY'), (23, 24, 'QUANTITY'), (25, 33, 'ITEM'), (39, 43, 'AMOUNT')]}),
+
+("cream : foundation1, : 1loose : powder, : 4 : stone : necklace : for : anita", {'entities': [(42, 43, 'QUANTITY'), (71, 76, 'CUSTOMER')]}),
+
+("remove amaya", {'entities': [(7, 12, 'CUSTOMER')]}),
+
+("hrithika delete", {'entities': [(0, 8, 'CUSTOMER')]}),
+
+("ANAGHA DESIGNER JHUMKA 1 PAID 300", {'entities': [(23, 24, 'QUANTITY'), (30, 33, 'AMOUNT')]}),
+
+("bill anita casual kurti 4, temple chain5 paid 800", {'entities': [(5, 10, 'CUSTOMER'), (11, 23, 'ITEM'), (24, 25, 'QUANTITY'), (46, 49, 'AMOUNT')]}),
+
+("BILL , AARADHYA , 2GLITTER , EYESHADOW, , FACE , PALETTE2", {'entities': []}),
+
+("BILLHEMAJALIQUIDLIPSTICK2,2HIGHWAISTPANTY,FESTIVESAREE5PAID700", {'entities': []}),
+
+("delete,customer,name,aarti,phone,9453256546", {'entities': [(21, 26, 'CUSTOMER'), (33, 43, 'AMOUNT')]}),
+
+("AHANA9660664309AHANA67@GMAIL.COM", {'entities': []}),
+
+("kaveri 4pearl studs, bridal choker 2", {'entities': [(0, 6, 'CUSTOMER'), (21, 34, 'ITEM'), (35, 36, 'QUANTITY')]}),
+
+("delete advika 9669712434", {'entities': [(7, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("eshaani pearl studs4 paid 800", {'entities': [(0, 7, 'CUSTOMER'), (26, 29, 'AMOUNT')]}),
+
+("HIGH : WAIST : PANTY : 3 : FOR : ANUSHKA", {'entities': [(23, 24, 'QUANTITY')]}),
+
+("komal 2kundan earrings, t-shirt bra1", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("aparna,paid,300,for,designer,jhumka4,,high,waist,panty,2", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT'), (55, 56, 'QUANTITY')]}),
+
+("chandrika delete", {'entities': [(0, 9, 'CUSTOMER')]}),
+
+("ANITA - DELETE", {'entities': []}),
+
+("bill abha 3 stone necklace, 1 contour kit paid 1000", {'entities': [(5, 9, 'CUSTOMER'), (10, 11, 'QUANTITY'), (12, 26, 'ITEM'), (28, 29, 'QUANTITY'), (30, 41, 'ITEM'), (47, 51, 'AMOUNT')]}),
+
+("delete : customer : name : advika : phone : 9481409440", {'entities': [(27, 33, 'CUSTOMER'), (44, 54, 'AMOUNT')]}),
+
+("received -> 900 -> bela", {'entities': [(12, 15, 'AMOUNT'), (19, 23, 'CUSTOMER')]}),
+
+("createbillforhimani5creamfoundation,ankletchain4,4nightbra", {'entities': []}),
+
+("bill gitanjali 1linen saree, pearl studs 5, 4high waist panty", {'entities': [(5, 14, 'CUSTOMER'), (29, 40, 'ITEM'), (41, 42, 'QUANTITY')]}),
+
+("300 , from , aayushi", {'entities': [(0, 3, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("CREATE , BILL , FOR , GOPIKA , BANARASI , SAREE , 5, , CREAM , FOUNDATION5", {'entities': [(50, 51, 'QUANTITY')]}),
+
+("aarti makeup kit3, pushup bra 4", {'entities': [(0, 5, 'CUSTOMER'), (19, 29, 'ITEM'), (30, 31, 'QUANTITY')]}),
+
+("inaaya emerald necklace5, 2 kundan earrings, ruby earrings1 paid 900", {'entities': [(0, 6, 'CUSTOMER'), (26, 27, 'QUANTITY'), (28, 43, 'ITEM'), (65, 68, 'AMOUNT')]}),
+
+("5 lace bra for dhanya", {'entities': [(0, 1, 'QUANTITY'), (2, 10, 'ITEM'), (15, 21, 'CUSTOMER')]}),
+
+("eshwari  1  emerald  necklace,  3  pushup  bra  paid  100", {'entities': [(0, 7, 'CUSTOMER'), (9, 10, 'QUANTITY'), (32, 33, 'QUANTITY'), (54, 57, 'AMOUNT')]}),
+
+("inaaya  paid  800  for  compact  powder  3,  2contour  kit,  net  saree  3", {'entities': [(0, 6, 'CUSTOMER'), (14, 17, 'AMOUNT'), (41, 42, 'QUANTITY'), (73, 74, 'QUANTITY')]}),
+
+("aaradhya  paid  700  for  1  cotton  bra,  glitter  eyeshadow5,  5crop  top", {'entities': [(0, 8, 'CUSTOMER'), (16, 19, 'AMOUNT'), (26, 27, 'QUANTITY')]}),
+
+("BILL - HRITHIKA - 5 - NET - SAREE", {'entities': [(18, 19, 'QUANTITY')]}),
+
+("amrita paid 500", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("abha , 9640739528 , abha42@gmail.com", {'entities': [(0, 4, 'CUSTOMER'), (7, 17, 'AMOUNT')]}),
+
+("delete customer name anjana phone 9578785212", {'entities': [(21, 27, 'CUSTOMER'), (34, 44, 'AMOUNT')]}),
+
+("delete,customer,name,aashna,phone,9542662366", {'entities': [(21, 27, 'CUSTOMER'), (34, 44, 'AMOUNT')]}),
+
+("bill  himani  1  lace  bra  paid  800", {'entities': [(6, 12, 'CUSTOMER'), (14, 15, 'QUANTITY'), (34, 37, 'AMOUNT')]}),
+
+("9533467134, charu", {'entities': [(0, 10, 'AMOUNT'), (12, 17, 'CUSTOMER')]}),
+
+("CHAITALI 1 BRIDAL CHOKER, 3PEARL STUDS, LOOSE POWDER4", {'entities': [(9, 10, 'QUANTITY')]}),
+
+("2face palette for bhumi", {'entities': [(18, 23, 'CUSTOMER')]}),
+
+("aashna 2 inner camisole", {'entities': [(0, 6, 'CUSTOMER'), (7, 8, 'QUANTITY'), (9, 23, 'ITEM')]}),
+
+("add , customer , name , eshaani , phone , 9467602266 , email , eshaani40@outlook.com", {'entities': [(24, 31, 'CUSTOMER'), (42, 52, 'AMOUNT')]}),
+
+("kanika paid 1000 for 4 designer jhumka, 1 night bra, 4 inner camisole", {'entities': [(0, 6, 'CUSTOMER'), (12, 16, 'AMOUNT'), (21, 22, 'QUANTITY'), (23, 38, 'ITEM'), (40, 41, 'QUANTITY'), (42, 51, 'ITEM'), (53, 54, 'QUANTITY'), (55, 69, 'ITEM')]}),
+
+("APARNA -> HIGH -> WAIST -> PANTY3, -> TINTED -> MOISTURIZER5, -> 4 -> CREAM -> FOUNDATION -> PAID -> 300", {'entities': [(65, 66, 'QUANTITY'), (101, 104, 'AMOUNT')]}),
+
+("advika : paid : 700 : for : 3pushup : bra", {'entities': [(0, 6, 'CUSTOMER'), (16, 19, 'AMOUNT')]}),
+
+("bill astha cz ring3 paid 900", {'entities': [(5, 10, 'CUSTOMER'), (25, 28, 'AMOUNT')]}),
+
+("add,customer,name,archi,phone,9489316350,email,archi33@yahoo.com", {'entities': [(18, 23, 'CUSTOMER'), (30, 40, 'AMOUNT')]}),
+
+("ADD CUSTOMER NAME GAURI PHONE 9290917961 EMAIL GAURI92@GMAIL.COM", {'entities': [(30, 40, 'AMOUNT')]}),
+
+("AYESHA,LIP,BALM,1,,CZ,RING,4,,2,TINTED,MOISTURIZER,PAID,900", {'entities': [(16, 17, 'QUANTITY'), (27, 28, 'QUANTITY'), (30, 31, 'QUANTITY'), (56, 59, 'AMOUNT')]}),
+
+("akshita  1gel  eyeliner", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("9722575007,,ayesha", {'entities': [(0, 10, 'AMOUNT'), (12, 18, 'CUSTOMER')]}),
+
+("received,100,kaveri", {'entities': [(9, 12, 'AMOUNT'), (13, 19, 'CUSTOMER')]}),
+
+("delete akanksha 9610047440", {'entities': [(7, 15, 'CUSTOMER'), (16, 26, 'AMOUNT')]}),
+
+("eshaani 9448596371 eshaani97@yahoo.com", {'entities': [(0, 7, 'CUSTOMER'), (8, 18, 'AMOUNT')]}),
+
+("9688633584, : keerthi", {'entities': [(0, 10, 'AMOUNT'), (14, 21, 'CUSTOMER')]}),
+
+("REMOVE DISHA", {'entities': []}),
+
+("delete customer name indrani phone 9909938472", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("5makeup kit for ayesha", {'entities': [(16, 22, 'CUSTOMER')]}),
+
+("collect,200,from,charu", {'entities': [(8, 11, 'AMOUNT'), (17, 22, 'CUSTOMER')]}),
+
+("deletekanika9970651002", {'entities': []}),
+
+("eshwari,delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("add deepa 9090994380", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("AMISHA PAID 800 FOR 4HIGH WAIST PANTY, CZ RING3", {'entities': [(12, 15, 'AMOUNT')]}),
+
+("aparna paid 900", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("aishani  designer  jhumka3,  5  night  bra", {'entities': [(0, 7, 'CUSTOMER'), (29, 30, 'QUANTITY')]}),
+
+("delete chetana 9423833945", {'entities': [(7, 14, 'CUSTOMER'), (15, 25, 'AMOUNT')]}),
+
+("create , bill , for , anagha , eye , primer4", {'entities': [(22, 28, 'CUSTOMER')]}),
+
+("bill : daksha : crop : top : 4, : 2 : liquid : lipstick, : 2 : silver : chain : paid : 100", {'entities': [(7, 13, 'CUSTOMER'), (29, 30, 'QUANTITY'), (34, 35, 'QUANTITY'), (59, 60, 'QUANTITY'), (87, 90, 'AMOUNT')]}),
+
+("aruna delete", {'entities': [(0, 5, 'CUSTOMER')]}),
+
+("remove disha", {'entities': [(7, 12, 'CUSTOMER')]}),
+
+("bill , harshika , bronzer , 1, , 4 , bralette , paid , 100", {'entities': [(7, 15, 'CUSTOMER'), (18, 25, 'ITEM'), (28, 29, 'QUANTITY'), (33, 34, 'QUANTITY'), (37, 45, 'ITEM'), (55, 58, 'AMOUNT')]}),
+
+("ANIKA : DELETE", {'entities': []}),
+
+("800 FROM ANTRA", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("add aashna 9078829067", {'entities': [(4, 10, 'CUSTOMER'), (11, 21, 'AMOUNT')]}),
+
+("bill abha 2polki necklace, seamless panties5", {'entities': [(5, 9, 'CUSTOMER')]}),
+
+("collect 300 from gitanjali", {'entities': [(8, 11, 'AMOUNT'), (17, 26, 'CUSTOMER')]}),
+
+("create - bill - for - aparna - 3 - night - bra, - matte - lipstick1, - 4waterproof - mascara", {'entities': [(22, 28, 'CUSTOMER'), (31, 32, 'QUANTITY')]}),
+
+("AMRITA PAID 1000 FOR KUNDAN EARRINGS2", {'entities': [(12, 16, 'AMOUNT')]}),
+
+("9261590059, - HRITHIKA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("khyati delete", {'entities': [(0, 6, 'CUSTOMER')]}),
+
+("aparna - paid - 700", {'entities': [(0, 6, 'CUSTOMER'), (16, 19, 'AMOUNT')]}),
+
+("COLLECT , 200 , FROM , DIVYANSHI", {'entities': [(10, 13, 'AMOUNT')]}),
+
+("CREATE  CUSTOMER  JANVI89@GMAIL.COM,  JANVI,  9189304276", {'entities': [(46, 56, 'AMOUNT')]}),
+
+("gargi paid 700", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT')]}),
+
+("akshita  paid  500  for  3crop  top,  face  palette  5,  4  printed  kurti", {'entities': [(0, 7, 'CUSTOMER'), (15, 18, 'AMOUNT'), (53, 54, 'QUANTITY'), (57, 58, 'QUANTITY')]}),
+
+("collect 100 from keerthi", {'entities': [(8, 11, 'AMOUNT'), (17, 24, 'CUSTOMER')]}),
+
+("ESHAANI , PAID , 700 , FOR , T-SHIRT , BRA3, , NIGHT , BRA , 1", {'entities': [(17, 20, 'AMOUNT'), (61, 62, 'QUANTITY')]}),
+
+("9170134158,  kashish", {'entities': [(0, 10, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("aruna,paid,400", {'entities': [(0, 5, 'CUSTOMER'), (11, 14, 'AMOUNT')]}),
+
+("amisha paid 700 for 5 waterproof mascara, 5 gel eyeliner, bronzer3", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT'), (20, 21, 'QUANTITY'), (22, 40, 'ITEM'), (42, 43, 'QUANTITY'), (44, 56, 'ITEM')]}),
+
+("anjana : paid : 300 : for : 4face : palette, : glitter : eyeshadow : 1", {'entities': [(0, 6, 'CUSTOMER'), (16, 19, 'AMOUNT'), (69, 70, 'QUANTITY')]}),
+
+("received , 500 , anita", {'entities': [(11, 14, 'AMOUNT'), (17, 22, 'CUSTOMER')]}),
+
+("delete,customer,name,himani,phone,9916848492", {'entities': [(21, 27, 'CUSTOMER'), (34, 44, 'AMOUNT')]}),
+
+("DELETE CUSTOMER NAME AHANA PHONE 9899856754", {'entities': [(33, 43, 'AMOUNT')]}),
+
+("COLLECT , 400 , FROM , DIVYANSHI", {'entities': [(10, 13, 'AMOUNT')]}),
+
+("ESHAANI - PAID - 200 - FOR - 1LACE - BRA, - ETHNIC - GOWN5, - 1CONTOUR - KIT", {'entities': [(17, 20, 'AMOUNT')]}),
+
+("REMOVE -> AFREEN", {'entities': []}),
+
+("AISHANIBRIDALCHOKER5,2READYBLOUSE,LACEBRA2PAID1000", {'entities': []}),
+
+("eshaani seamless panties4, 5cotton bra", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("dakshita 2 georgette saree, seamless panties 5", {'entities': [(0, 8, 'CUSTOMER'), (9, 10, 'QUANTITY'), (11, 26, 'ITEM'), (28, 44, 'ITEM'), (45, 46, 'QUANTITY')]}),
+
+("REMOVE DHANYA", {'entities': []}),
+
+("kaajal  paid  200", {'entities': [(0, 6, 'CUSTOMER'), (14, 17, 'AMOUNT')]}),
+
+("CREATE - BILL - FOR - AVANTIKA - LACE - BRA - 2", {'entities': [(46, 47, 'QUANTITY')]}),
+
+("100 from aruna", {'entities': [(0, 3, 'AMOUNT'), (9, 14, 'CUSTOMER')]}),
+
+("kalyani : paid : 200 : for : emerald : necklace3, : 3eye : primer", {'entities': [(0, 7, 'CUSTOMER'), (17, 20, 'AMOUNT')]}),
+
+("delete customer name falak phone 9478242422", {'entities': [(21, 26, 'CUSTOMER'), (33, 43, 'AMOUNT')]}),
+
+("createbillforalishanetsaree5,3makeupkit,waterproofmascara5", {'entities': []}),
+
+("abhilasha - 5compact - powder, - 3 - crop - top", {'entities': [(0, 9, 'CUSTOMER'), (33, 34, 'QUANTITY')]}),
+
+("add abhilasha 9976626077", {'entities': [(4, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("CHETANA PAID 700", {'entities': [(13, 16, 'AMOUNT')]}),
+
+("add customer name jhanvi phone 9737624516 email jhanvi49@outlook.com", {'entities': [(18, 24, 'CUSTOMER'), (31, 41, 'AMOUNT')]}),
+
+("ayesha,5,kanjeevaram,saree,,5gel,eyeliner,paid,900", {'entities': [(0, 6, 'CUSTOMER'), (7, 8, 'QUANTITY'), (47, 50, 'AMOUNT')]}),
+
+("addcustomernameaadyaphone9428027253emailaadya59@yahoo.com", {'entities': []}),
+
+("harshika designer blouse 5, eye primer 5 paid 300", {'entities': [(0, 8, 'CUSTOMER'), (9, 24, 'ITEM'), (25, 26, 'QUANTITY'), (28, 38, 'ITEM'), (39, 40, 'QUANTITY'), (46, 49, 'AMOUNT')]}),
+
+("AAHANA DELETE", {'entities': []}),
+
+("damini paid 200 for 5ethnic gown", {'entities': [(0, 6, 'CUSTOMER'), (12, 15, 'AMOUNT')]}),
+
+("collect  400  from  chaitali", {'entities': [(9, 12, 'AMOUNT'), (20, 28, 'CUSTOMER')]}),
+
+("collect 200 from gopika", {'entities': [(8, 11, 'AMOUNT'), (17, 23, 'CUSTOMER')]}),
+
+("bhuvanadelete", {'entities': []}),
+
+("DELETE CUSTOMER NAME AKSHARA PHONE 9367600510", {'entities': [(35, 45, 'AMOUNT')]}),
+
+("BAANIDELETE", {'entities': []}),
+
+("9644109127, ARPITA", {'entities': [(0, 10, 'AMOUNT')]}),
+
+("ADD  GARGI  9517796970", {'entities': [(12, 22, 'AMOUNT')]}),
+
+("collect 800 from anusha", {'entities': [(8, 11, 'AMOUNT'), (17, 23, 'CUSTOMER')]}),
+
+("create customer kavitha89@outlook.com, kavitha, 9227069420", {'entities': [(39, 46, 'CUSTOMER'), (48, 58, 'AMOUNT')]}),
+
+("addcustomernameanaghaphone9603159458emailanagha13@yahoo.com", {'entities': []}),
+
+("create bill for janvi 3 liquid lipstick", {'entities': [(16, 21, 'CUSTOMER'), (22, 23, 'QUANTITY'), (24, 39, 'ITEM')]}),
+
+("ashitaprintedkurti4", {'entities': []}),
+
+("add,janvi,9261848139", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("aayushi delete", {'entities': [(0, 7, 'CUSTOMER')]}),
+
+("add customer name dakshita phone 9283144827 email dakshita26@outlook.com", {'entities': [(18, 26, 'CUSTOMER'), (33, 43, 'AMOUNT')]}),
+
+("received 800 ahana", {'entities': [(9, 12, 'AMOUNT'), (13, 18, 'CUSTOMER')]}),
+
+("create,customer,jhanvi52@yahoo.com,,jhanvi,,9918142613", {'entities': [(36, 42, 'CUSTOMER'), (44, 54, 'AMOUNT')]}),
+
+("RECEIVED - 200 - AALIYA", {'entities': [(11, 14, 'AMOUNT')]}),
+
+("delete ambika 9024739770", {'entities': [(7, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("anisha - cz - ring4, - 1pearl - studs, - 1 - ready - blouse", {'entities': [(0, 6, 'CUSTOMER'), (41, 42, 'QUANTITY')]}),
+
+("BILL  BINA  SEAMLESS  PANTIES  2,  FESTIVE  SAREE5,  GOLD  BRACELET3", {'entities': [(31, 32, 'QUANTITY')]}),
+
+("bhumi 9113930188 bhumi3@outlook.com", {'entities': [(0, 5, 'CUSTOMER'), (6, 16, 'AMOUNT')]}),
+
+("add falak 9971050491", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("remove , hansika", {'entities': [(9, 16, 'CUSTOMER')]}),
+
+("BILLAASHNA5COTTONBRA,LINENSAREE1,MATTELIPSTICK2PAID100", {'entities': []}),
+
+("delete customer name amrita phone 9310950870", {'entities': [(21, 27, 'CUSTOMER'), (34, 44, 'AMOUNT')]}),
+
+("create -> bill -> for -> hrithika -> 3 -> high -> waist -> panty", {'entities': [(25, 33, 'CUSTOMER'), (37, 38, 'QUANTITY')]}),
+
+("CREATECUSTOMERDURGA59@OUTLOOK.COM,DURGA,9487113769", {'entities': [(40, 50, 'AMOUNT')]}),
+
+("delete komal 9152917315", {'entities': [(7, 12, 'CUSTOMER'), (13, 23, 'AMOUNT')]}),
+
+("DAKSHITA : 5 : WATERPROOF : MASCARA : PAID : 400", {'entities': [(11, 12, 'QUANTITY'), (45, 48, 'AMOUNT')]}),
+
+("anagha -> 2 -> emerald -> necklace, -> 5 -> polki -> necklace -> paid -> 1000", {'entities': [(0, 6, 'CUSTOMER'), (10, 11, 'QUANTITY'), (39, 40, 'QUANTITY'), (73, 77, 'AMOUNT')]}),
+
+("create , customer , athira55@yahoo.com, , athira, , 9666524122", {'entities': [(42, 48, 'CUSTOMER'), (52, 62, 'AMOUNT')]}),
+
+("KANIKALACEBRA1PAID1000", {'entities': []}),
+
+("received 200 avantika", {'entities': [(9, 12, 'AMOUNT'), (13, 21, 'CUSTOMER')]}),
+
+("chetana , banarasi , saree , 2, , 2 , cotton , bra , paid , 800", {'entities': [(0, 7, 'CUSTOMER'), (29, 30, 'QUANTITY'), (34, 35, 'QUANTITY'), (60, 63, 'AMOUNT')]}),
+
+("DEVANSHI  PAID  1000", {'entities': [(16, 20, 'AMOUNT')]}),
+
+("DELETE,DURGA,9633430444", {'entities': [(13, 23, 'AMOUNT')]}),
+
+("collect  800  from  drishti", {'entities': [(9, 12, 'AMOUNT'), (20, 27, 'CUSTOMER')]}),
+
+("4 contour kit for keerthi", {'entities': [(0, 1, 'QUANTITY'), (2, 13, 'ITEM'), (18, 25, 'CUSTOMER')]}),
+
+("INAAYA 3LOOSE POWDER, 4COMPACT POWDER PAID 700", {'entities': [(43, 46, 'AMOUNT')]}),
+
+("delete,customer,name,chetana,phone,9482260009", {'entities': [(21, 28, 'CUSTOMER'), (35, 45, 'AMOUNT')]}),
+
+("add -> customer -> name -> inaaya -> phone -> 9565227983 -> email -> inaaya55@outlook.com", {'entities': [(27, 33, 'CUSTOMER'), (46, 56, 'AMOUNT')]}),
+
+("100 FROM DEVANSHI", {'entities': [(0, 3, 'AMOUNT')]}),
+
+("georgette -> saree1, -> bralette -> 1, -> makeup -> kit -> 1 -> for -> ayesha", {'entities': [(24, 32, 'ITEM'), (36, 37, 'QUANTITY'), (59, 60, 'QUANTITY'), (71, 77, 'CUSTOMER')]}),
+
+("900 - from - haritha", {'entities': [(0, 3, 'AMOUNT'), (13, 20, 'CUSTOMER')]}),
+
+("DELETE,CUSTOMER,NAME,ANISHA,PHONE,9271161826", {'entities': [(34, 44, 'AMOUNT')]}),
+
+("delete aahana 9801644074", {'entities': [(7, 13, 'CUSTOMER'), (14, 24, 'AMOUNT')]}),
+
+("bill hansika kundan earrings 3 paid 700", {'entities': [(5, 12, 'CUSTOMER'), (13, 28, 'ITEM'), (29, 30, 'QUANTITY'), (36, 39, 'AMOUNT')]}),
+
+("DAKSHITA PAID 800", {'entities': [(14, 17, 'AMOUNT')]}),
+
+("delete : amrita : 9138130333", {'entities': [(9, 15, 'CUSTOMER'), (18, 28, 'AMOUNT')]}),
+
+("gopika  paid  700", {'entities': [(0, 6, 'CUSTOMER'), (14, 17, 'AMOUNT')]}),
+
+("delete -> aruna -> 9585241469", {'entities': [(10, 15, 'CUSTOMER'), (19, 29, 'AMOUNT')]}),
+
+("BILL DHANYA INNER CAMISOLE3 PAID 300", {'entities': [(33, 36, 'AMOUNT')]}),
+
+("CREATE CUSTOMER DARSHANA29@GMAIL.COM, DARSHANA, 9069197008", {'entities': [(48, 58, 'AMOUNT')]}),
+
+("add ahana 9780577399", {'entities': [(4, 9, 'CUSTOMER'), (10, 20, 'AMOUNT')]}),
+
+("2,liquid,lipstick,,temple,chain3,,4,anklet,chain,for,devika", {'entities': [(0, 1, 'QUANTITY'), (34, 35, 'QUANTITY'), (53, 59, 'CUSTOMER')]}),
+
+("create customer jagruti55@gmail.com, jagruti, 9041379951", {'entities': [(37, 44, 'CUSTOMER'), (46, 56, 'AMOUNT')]}),
+
+("ASTHA SILVER CHAIN 3", {'entities': [(19, 20, 'QUANTITY')]}),
+
+("antra  paid  200  for  tinted  moisturizer1", {'entities': [(0, 5, 'CUSTOMER'), (13, 16, 'AMOUNT')]}),
+
+("DELETE -> KOMAL -> 9516746900", {'entities': [(19, 29, 'AMOUNT')]}),
+
+("create - customer - ambika44@yahoo.com, - ambika, - 9991410838", {'entities': [(42, 48, 'CUSTOMER'), (52, 62, 'AMOUNT')]}),
+
+("KAVITHA - PAID - 200 - FOR - HIGH - WAIST - PANTY - 1", {'entities': [(17, 20, 'AMOUNT'), (52, 53, 'QUANTITY')]}),
+
+("BILL DHANYA 5 LIP BALM, 1SEAMLESS PANTIES, POLKI NECKLACE4 PAID 700", {'entities': [(12, 13, 'QUANTITY'), (64, 67, 'AMOUNT')]}),
+
+("200 from darshana", {'entities': [(0, 3, 'AMOUNT'), (9, 17, 'CUSTOMER')]}),
+
+("create bill for kanika 2 ruby earrings, 2bridal choker, 5 t-shirt bra", {'entities': [(16, 22, 'CUSTOMER'), (23, 24, 'QUANTITY'), (25, 38, 'ITEM'), (56, 57, 'QUANTITY'), (58, 69, 'ITEM')]}),
+
+("received300advika", {'entities': []}),
+
+("remove daksha", {'entities': [(7, 13, 'CUSTOMER')]}),
+
+("arya -> 4pushup -> bra, -> night -> bra5, -> 1 -> antique -> bangles -> paid -> 800", {'entities': [(0, 4, 'CUSTOMER'), (45, 46, 'QUANTITY'), (80, 83, 'AMOUNT')]}),
+
+
+]
