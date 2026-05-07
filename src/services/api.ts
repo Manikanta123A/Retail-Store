@@ -59,4 +59,8 @@ export const analyticsService = {
     api.get('/analytics/', { params: { filter, start_date: startDate, end_date: endDate } }),
 };
 
+export const chatService = {
+  sendMessage: (message: string, history: any[] = []) => api.post('/chat/', { message, history }),
+};
+
 export default api;

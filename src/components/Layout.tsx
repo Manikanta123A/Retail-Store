@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
+import ChatAssistant from './ChatAssistant';
 
 export function Layout() {
   const today = new Date();
@@ -43,6 +44,7 @@ export function Layout() {
           </div>
         </main>
       </div>
+      <ChatAssistant />
     </div>
   );
 }
