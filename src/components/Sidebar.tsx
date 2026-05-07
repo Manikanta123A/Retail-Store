@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { 
   LayoutDashboard, 
@@ -22,38 +22,45 @@ const navSections = [
   {
     label: null,
     items: [
-      { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-      { icon: Receipt, label: 'New Bill', path: '/billing' },
+      { icon: LayoutDashboard, label: 'Dashboard', path: '/app' },
+      { icon: Receipt, label: 'New Bill', path: '/app/billing' },
     ]
   },
   {
     label: 'Manage',
     items: [
-      { icon: Users, label: 'Customers', path: '/customers' },
-      { icon: Package, label: 'Inventory', path: '/inventory' },
+      { icon: Users, label: 'Customers', path: '/app/customers' },
+      { icon: Package, label: 'Inventory', path: '/app/inventory' },
     ]
   },
   {
     label: 'Finance',
     items: [
-      { icon: History, label: 'Due Management', path: '/dues' },
-      { icon: CreditCard, label: 'Payments', path: '/payments' },
+      { icon: History, label: 'Due Management', path: '/app/dues' },
+      { icon: CreditCard, label: 'Payments', path: '/app/payments' },
     ]
   },
   {
     label: 'Insights',
     items: [
-      { icon: BarChart3, label: 'Reports', path: '/reports' },
-      { icon: BarChart3, label: 'Analytics', path: '/analytics' },
+      { icon: BarChart3, label: 'Reports', path: '/app/reports' },
+      { icon: BarChart3, label: 'Analytics', path: '/app/analytics' },
     ]
   }
 ];
 
 export function Sidebar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [showAccountDetails, setShowAccountDetails] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+
+  const handleLogout = async () => {
+    await logout();
+    // Replace entire history so back-button cannot re-enter the app
+    navigate('/', { replace: true });
+  };
 
   // Close sidebar on route change (mobile)
   useEffect(() => {
@@ -108,7 +115,7 @@ export function Sidebar() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  end={item.path === '/'}
+                  end={item.path === '/app'}
                   className={({ isActive }) =>
                     cn(
                       'flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
@@ -128,7 +135,7 @@ export function Sidebar() {
       </nav>
 
       {/* User section */}
-      <div className="relative border-t border-gray-100">
+      <div className="relative border-t border-gray-100 mt-auto">
         {showAccountDetails && user && (
           <div className="absolute bottom-full left-0 mb-1 w-full px-3 pb-1">
             <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-lg">
@@ -138,7 +145,7 @@ export function Sidebar() {
                 {user.phone && <p className="text-xs text-gray-500">{user.phone}</p>}
               </div>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md transition-colors text-xs font-medium"
               >
                 <LogOut size={14} />
@@ -148,18 +155,36 @@ export function Sidebar() {
           </div>
         )}
         
-        <div 
-          className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors"
-          onClick={() => setShowAccountDetails(!showAccountDetails)}
-        >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
-            {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={14} />}
+        <div className="flex items-center justify-between px-4 py-3">
+          <div 
+            className="flex items-center gap-3 cursor-pointer overflow-hidden flex-1"
+            onClick={() => setShowAccountDetails(!showAccountDetails)}
+          >
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-semibold text-xs shadow-sm flex-shrink-0">
+              {user?.full_name?.substring(0, 2).toUpperCase() || user?.username?.substring(0, 2).toUpperCase() || <UserIcon size={14} />}
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-xs font-semibold text-gray-800 truncate">{user?.full_name || user?.username || 'Guest'}</p>
+              <p className="text-[10px] text-gray-400 truncate capitalize">{user?.role || 'User'}</p>
+            </div>
           </div>
-          <div className="overflow-hidden flex-1">
-            <p className="text-xs font-semibold text-gray-800 truncate">{user?.full_name || user?.username || 'Guest'}</p>
-            <p className="text-[10px] text-gray-400 truncate capitalize">{user?.role || 'User'}</p>
+          
+          {/* Direct logout for mobile, chevron for desktop */}
+          <div className="flex items-center">
+            <button
+              onClick={(e) => { e.stopPropagation(); handleLogout(); }}
+              className="lg:hidden p-2 text-gray-400 hover:text-rose-600 transition-colors"
+              title="Sign out"
+            >
+              <LogOut size={18} />
+            </button>
+            <button 
+              onClick={() => setShowAccountDetails(!showAccountDetails)}
+              className="hidden lg:block p-1 text-gray-400 hover:text-gray-600"
+            >
+              <ChevronDown size={14} className={cn("transition-transform", showAccountDetails && "rotate-180")} />
+            </button>
           </div>
-          <ChevronDown size={14} className={cn("text-gray-400 transition-transform", showAccountDetails && "rotate-180")} />
         </div>
       </div>
     </>
@@ -187,7 +212,7 @@ export function Sidebar() {
       {/* Sidebar panel — off-canvas on mobile, fixed on desktop */}
       <div
         className={cn(
-          "h-screen bg-white border-r border-[#E8ECF1] flex flex-col fixed left-0 top-0 z-50 w-60 transition-transform duration-300 ease-in-out",
+          "h-[100dvh] bg-white border-r border-[#E8ECF1] flex flex-col fixed left-0 top-0 z-50 w-60 transition-transform duration-300 ease-in-out",
           // Desktop: always visible
           "lg:translate-x-0",
           // Mobile: slide in/out
