@@ -447,7 +447,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
             >
               <option value="">All</option>
               <option value="paid">Paid</option>
-              <option value="unpaid">Due</option>
+              <option value="due">Due</option>
               <option value="partial">Partial</option>
             </select>
           </div>

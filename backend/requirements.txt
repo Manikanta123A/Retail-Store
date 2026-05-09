@@ -7,3 +7,6 @@ flask-sqlalchemy
 marshmallow
 flask-marshmallow
 google-generativeai
+spacy
+scikit-learn
+joblib
