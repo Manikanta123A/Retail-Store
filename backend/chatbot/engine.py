@@ -21,7 +21,8 @@ from chatbot.actions   import (
     action_query_customer,
     action_query_product,
     action_delete_customer,
-    action_add_due
+    action_add_due,
+    action_undo
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -35,6 +36,7 @@ _ROUTER = {
     "QUERY_PRODUCT":    action_query_product,
     "DELETE_CUSTOMER":  action_delete_customer,
     "ADD_DUE":          action_add_due,
+    "UNDO":             action_undo,
 }
 
 # Minimum confidence below which we ask for clarification
@@ -126,6 +128,9 @@ def _process_single_query(text: str, user_id: str) -> dict:
         confidence = 1.0
     elif "due" in lower_text and any(c.isdigit() for c in text) and "paid" not in lower_text and "bill" not in lower_text:
         intent = "ADD_DUE"
+        confidence = 1.0
+    elif lower_text.strip() == "undo":
+        intent = "UNDO"
         confidence = 1.0
 
     if confidence < _MIN_CONFIDENCE:

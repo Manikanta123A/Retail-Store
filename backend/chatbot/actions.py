@@ -171,7 +171,8 @@ def action_create_bill(entities: dict, user_id: str) -> str:
     warn = f" (Items not found: {', '.join(not_found)})" if not_found else ""
     return (
         f"Bill #{new_bill.bill_number} created and marked as PAID for {customer.name} "
-        f"— {item_summary} — Total: Rs.{total_amount:.0f}{warn}."
+        f"— {item_summary} — Total: Rs.{total_amount:.0f}{warn}. "
+        f"You can say 'undo' to erase this bill if it was a mistake."
     )
 
 
@@ -408,4 +409,65 @@ def action_add_due(entities: dict, user_id: str) -> str:
     db.session.add(new_bill)
     db.session.commit()
 
-    return f"Added Rs.{amount:.0f} to {customer.name}'s dues. Total outstanding: Rs.{float(customer.outstanding_due):.0f}."
+    return f"Added Rs.{amount:.0f} to {customer.name}'s dues. Total outstanding: Rs.{float(customer.outstanding_due):.0f}. Say 'undo' to revert this."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# UNDO LAST ACTION
+# ─────────────────────────────────────────────────────────────────────────────
+def action_undo(entities: dict, user_id: str) -> str:
+    """
+    Finds the most recent bill created by this user and reverts its effects.
+    """
+    from datetime import datetime, timedelta
+    
+    # 1. Find the latest bill for this user
+    bill = Bill.query.filter_by(user_id=user_id).order_by(Bill.created_at.desc()).first()
+    if not bill:
+        return "I couldn't find any recent bills to undo."
+
+    # 2. Check if it's very recent (within 5 minutes)
+    now = datetime.utcnow()
+    # Handle potentially aware datetime from DB
+    bill_time = bill.created_at.replace(tzinfo=None) if bill.created_at.tzinfo else bill.created_at
+    if (now - bill_time) > timedelta(minutes=5):
+        return "The last action was too long ago to be undone. Please manage it manually from the Bills section."
+
+    customer = Customer.query.get(bill.customer_id)
+    if not customer:
+        return "Associated customer for the last bill not found. Cannot undo."
+
+    try:
+        # Restore stock for each item in the bill
+        for bi in bill.items:
+            item = Item.query.get(bi.item_id)
+            if item:
+                item.stock_quantity += bi.quantity
+                
+        # Revert customer totals
+        customer.total_purchases -= bill.final_amount
+        customer.outstanding_due -= bill.due_amount
+        
+        # If outstanding_due becomes negative (rounding issues), reset to zero
+        if customer.outstanding_due < 0:
+            customer.outstanding_due = 0
+
+        # Revert last_purchase_date to the previous bill's date
+        prev_bill = Bill.query.filter(
+            Bill.customer_id == customer.id, 
+            Bill.id != bill.id
+        ).order_by(Bill.created_at.desc()).first()
+        
+        customer.last_purchase_date = prev_bill.created_at if prev_bill else None
+
+        bill_num = bill.bill_number
+        cust_name = customer.name
+        
+        # 3. Delete the bill (cascades to BillItems and Payment)
+        db.session.delete(bill)
+        db.session.commit()
+        
+        return f"Undo successful! Bill #{bill_num} for {cust_name} has been deleted and all records (stock, dues, payments) have been reverted."
+
+    except Exception as e:
+        db.session.rollback()
+        return f"An error occurred while undoing: {str(e)}"
