@@ -61,35 +61,44 @@ def extract_entities(doc, raw_text: str) -> dict:
     
     # ── Fallback for Customer Name (If NER fails or misclassifies) ───────────
     if not customer:
-        # Check if a QUANTITY entity is actually a name (non-numeric)
-        for q in raw.get("QUANTITY", []):
-            if not re.search(r'\d', q):
-                customer = q
-                break
+        # Check if a QUANTITY, ITEM, or AMOUNT entity is actually a name (matches fallback pattern)
+        all_potential_names = raw.get("QUANTITY", []) + raw.get("ITEM", []) + raw.get("AMOUNT", [])
         
         # Pattern-based fallback (e.g., "for Ashwin", "bill for Kanta")
-        if not customer:
-            # First remove email and phone from raw text to avoid extracting parts of them as name
-            cleaned_text = raw_text
-            if email:
-                cleaned_text = cleaned_text.replace(email, "")
-            if phone:
-                cleaned_text = cleaned_text.replace(phone, "")
+        # First remove email and phone from raw text to avoid extracting parts of them as name
+        cleaned_text = raw_text
+        if email:
+            cleaned_text = cleaned_text.replace(email, "")
+        if phone:
+            cleaned_text = cleaned_text.replace(phone, "")
 
-            patterns = [
-                r"for\s+([a-zA-Z]+)",
-                r"bill\s+for\s+([a-zA-Z]+)",
-                r"invoice\s+for\s+([a-zA-Z]+)",
-                r"about\s+([a-zA-Z]+)",
-                r"add\s+(?:customer\s+)?([a-zA-Z]+)",
-                r"details\s+of\s+([a-zA-Z]+)",
-                r"^([a-zA-Z]+)\s+paid",
-                r"delete\s+([a-zA-Z]+)"
-            ]
-            for p in patterns:
-                m = re.search(p, cleaned_text, re.IGNORECASE)
-                if m:
-                    customer = m.group(1).capitalize()
+        patterns = [
+            r"for\s+([a-zA-Z]+)",
+            r"bill\s+for\s+([a-zA-Z]+)",
+            r"invoice\s+for\s+([a-zA-Z]+)",
+            r"about\s+([a-zA-Z]+)",
+            r"add\s+(?:customer\s+)?([a-zA-Z]+)",
+            r"details\s+of\s+([a-zA-Z]+)",
+            r"info\s+of\s+([a-zA-Z]+)",
+            r"show\s+(?:details\s+of\s+|info\s+of\s+|customer\s+)?([a-zA-Z]+)",
+            r"^([a-zA-Z]+)\s+paid",
+            r"delete\s+(?:customer\s+)?([a-zA-Z]+)(?:\s+and\s+\d{10})?",
+            r"remove\s+(?:customer\s+)?([a-zA-Z]+)",
+            r"due\s+(?:for|of|from)\s+(?:customer\s+)?([a-zA-Z]+)",
+            r"(?:customer\s+)?([a-zA-Z]+)\s+(?:has|have)\s+.*due"
+        ]
+        for p in patterns:
+            m = re.search(p, cleaned_text, re.IGNORECASE)
+            if m:
+                customer = m.group(1).title()
+                # Clean up if group captured common words
+                customer = re.sub(r'^(Customer|Details|Info|Of|From|About|Remove|Delete)\s+', '', customer, flags=re.IGNORECASE)
+                break
+        
+        if not customer:
+            for q in all_potential_names:
+                if isinstance(q, str) and not re.search(r'\d', q) and len(q) > 2:
+                    customer = q
                     break
 
     items_raw = raw.get("ITEM", [])
@@ -103,10 +112,21 @@ def extract_entities(doc, raw_text: str) -> dict:
     # Only treat QUANTITY entities that actually contain digits as quantities
     quant_ents = [ent for ent in doc.ents if ent.label_ == "QUANTITY" and re.search(r'\d', ent.text)]
     
+    # Also consider AMOUNT as quantity if it's small (e.g. "2" mislabeled as AMOUNT)
+    for ent in doc.ents:
+        if ent.label_ == "AMOUNT" and re.fullmatch(r'\d+', ent.text):
+            if int(ent.text) < 100: # Heuristic: small amounts might be quantities
+                quant_ents.append(ent)
+
     used_quants = set()
     
     for item_ent in item_ents:
         item_name = _clean(item_ent.text)
+        
+        # Skip if this "item" is actually the customer name
+        if customer and item_name.lower() == customer.lower():
+            continue
+
         best_qty = 1
         best_dist = float('inf')
         best_q_idx = -1
@@ -129,7 +149,9 @@ def extract_entities(doc, raw_text: str) -> dict:
         # If the closest quantity is within a reasonable distance (e.g. 5 tokens)
         if best_q_idx != -1 and best_dist <= 5:
             try:
-                best_qty = int(float(quant_ents[best_q_idx].text))
+                # Clean quantity text (remove commas etc)
+                q_text = re.sub(r'[^\d.]', '', quant_ents[best_q_idx].text)
+                best_qty = int(float(q_text))
                 used_quants.add(best_q_idx)
             except:
                 pass
@@ -143,7 +165,8 @@ def extract_entities(doc, raw_text: str) -> dict:
         if key in deduped_items:
             deduped_items[key]["qty"] += i["qty"]
         else:
-            deduped_items[key] = {"item": i["item"], "qty": i["qty"]}
+            # Standardize to Title Case for consistency
+            deduped_items[key] = {"item": i["item"].title(), "qty": i["qty"]}
     items = list(deduped_items.values())
 
     # ── Remove customer from items if misclassified ───────────────────────────
@@ -178,11 +201,18 @@ def extract_entities(doc, raw_text: str) -> dict:
             except ValueError:
                 pass
 
+    # ── Specific "due" amount extraction ──────────────────────────────────────
+    due_amount = None
+    due_match = re.search(r"(\d+(?:\.\d{1,2})?)\s*(?:due|pending)", raw_text, re.IGNORECASE)
+    if due_match:
+        due_amount = float(due_match.group(1))
+
     return {
-        "customer": customer,
-        "items":    items,
-        "amount":   amount,
-        "phone":    phone,
-        "email":    email,
-        "raw":      raw,
+        "customer":   customer,
+        "items":      items,
+        "amount":     amount,
+        "due_amount": due_amount,
+        "phone":      phone,
+        "email":      email,
+        "raw":        raw,
     }

@@ -69,10 +69,23 @@ dataset = [
     {"text": "find customer abhinav details", "label": "QUERY_CUSTOMER"},
     {"text": "customer history of vishnu", "label": "QUERY_CUSTOMER"},
     {"text": "details of ravi", "label": "QUERY_CUSTOMER"},
+    {"text": "show details of kanta", "label": "QUERY_CUSTOMER"},
     {"text": "show full info of pandu including phone", "label": "QUERY_CUSTOMER"},
     {"text": "display customer data for sneha", "label": "QUERY_CUSTOMER"},
     {"text": "who is yamini", "label": "QUERY_CUSTOMER"},
     {"text": "get customer profile karthik", "label": "QUERY_CUSTOMER"},
+
+    # -------- DELETE_CUSTOMER --------
+    {"text": "delete ravi and 9876543210", "label": "DELETE_CUSTOMER"},
+    {"text": "remove customer kanta 9000012345", "label": "DELETE_CUSTOMER"},
+    {"text": "delete ashwin 9876543210", "label": "DELETE_CUSTOMER"},
+    {"text": "delete customer manikanta 9123456780", "label": "DELETE_CUSTOMER"},
+    {"text": "remove ravi 9011223344 from database", "label": "DELETE_CUSTOMER"},
+    {"text": "delete pandu and 9090909090", "label": "DELETE_CUSTOMER"},
+    {"text": "remove user karthik 9345678123", "label": "DELETE_CUSTOMER"},
+    {"text": "delete profile of sneha 9876501234", "label": "DELETE_CUSTOMER"},
+    {"text": "remove client yamini 9012345678", "label": "DELETE_CUSTOMER"},
+    {"text": "delete ravi and 9123456789", "label": "DELETE_CUSTOMER"},
 
     # -------- QUERY_PRODUCT --------
     {"text": "tell about the shoe", "label": "QUERY_PRODUCT"},

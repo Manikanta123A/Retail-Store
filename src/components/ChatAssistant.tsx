@@ -15,6 +15,7 @@ const INTENT_META: Record<string, { label: string; color: string; Icon: React.El
   COLLECT_PAYMENT:  { label: 'Collect Payment',  color: 'bg-amber-100 text-amber-700',    Icon: Banknote },
   QUERY_CUSTOMER:   { label: 'Customer Info',    color: 'bg-sky-100 text-sky-700',        Icon: Search },
   QUERY_PRODUCT:    { label: 'Product Info',     color: 'bg-pink-100 text-pink-700',      Icon: Package },
+  DELETE_CUSTOMER:  { label: 'Delete Customer',  color: 'bg-red-100 text-red-700',        Icon: X },
   GREETING:         { label: 'Small Talk',       color: 'bg-blue-100 text-blue-700',      Icon: Sparkles },
   UNKNOWN:          { label: 'Unknown',          color: 'bg-gray-100 text-gray-500',      Icon: HelpCircle },
 };
@@ -25,7 +26,7 @@ const QUICK_CHIPS = [
   { text: 'Add Vaishu 9398432494 vaishu@gmail.com', icon: UserPlus },
   { text: 'Ravi paid 500', icon: Banknote },
   { text: 'Show details of Ravi', icon: Search },
-  { text: 'Price of jeans', icon: Package },
+  { text: 'Delete Ravi and 9876543210', icon: X },
 ];
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -151,7 +152,7 @@ export default function ChatAssistant() {
                     </div>
                     <h4 className="text-indigo-900 font-semibold text-sm">Hello! What can I do for you?</h4>
                     <p className="text-indigo-400 text-xs">
-                      I can create bills, add customers, collect payments, and look up info.
+                      I can create bills, add/delete customers, collect payments, and look up info.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2 justify-center">

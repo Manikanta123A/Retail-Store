@@ -115,37 +115,44 @@ def action_create_bill(entities: dict, user_id: str) -> str:
         missing = ", ".join(not_found)
         return f"None of the items were found in inventory: {missing}. Please check item names."
 
+    due_amt = float(entities.get("due_amount") or 0.0)
+    if due_amt > total_amount:
+        due_amt = total_amount
+    paid_amt = total_amount - due_amt
+
     new_bill = Bill(
         id=bill_id,
         customer_id=customer.id,
         total_amount=total_amount,
         discount_amount=0,
         final_amount=total_amount,
-        paid_amount=total_amount,   # Fully paid
-        due_amount=0,               # No dues
-        status="paid",
+        paid_amount=paid_amt,
+        due_amount=due_amt,
+        status="paid" if due_amt == 0 else ("partial" if paid_amt > 0 else "due"),
         user_id=user_id,
     )
 
     customer.total_purchases += Decimal(str(total_amount))
-    # We do NOT increase outstanding_due since it's fully paid.
+    customer.outstanding_due += Decimal(str(due_amt))
+    customer.last_purchase_date = db.func.now()
 
     db.session.add(new_bill)
     for bi in bill_items:
         db.session.add(bi)
         
-    # Create the payment record so it shows up in the Payments section
-    payment = Payment(
-        id=str(uuid.uuid4()),
-        bill_id=bill_id,
-        customer_id=customer.id,
-        amount=total_amount,
-        balance_before=total_amount,
-        balance_after=0,
-        user_id=user_id,
-        payment_mode="Cash"
-    )
-    db.session.add(payment)
+    # Create the payment record if some amount was paid
+    if paid_amt > 0:
+        payment = Payment(
+            id=str(uuid.uuid4()),
+            bill_id=bill_id,
+            customer_id=customer.id,
+            amount=paid_amt,
+            balance_before=total_amount,
+            balance_after=due_amt,
+            user_id=user_id,
+            payment_mode="Cash"
+        )
+        db.session.add(payment)
     
     db.session.commit()
     db.session.refresh(new_bill)
@@ -321,3 +328,84 @@ def action_query_product(entities: dict, user_id: str) -> str:
         return f"No products found matching '{', '.join(keywords)}'."
 
     return "Product details:\n" + "\n".join(results)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DELETE_CUSTOMER
+# ─────────────────────────────────────────────────────────────────────────────
+def action_delete_customer(entities: dict, user_id: str) -> str:
+    customer_name = entities.get("customer")
+    phone         = entities.get("phone")
+
+    if not customer_name or not phone:
+        return "Please provide both the customer name and their 10-digit phone number to delete. E.g. 'delete Ravi and 9876543210'."
+
+    customer = Customer.query.filter_by(
+        user_id=user_id,
+        name=customer_name,
+        phone=phone
+    ).first()
+
+    if not customer:
+        # Try fuzzy match if exact fails
+        customer = Customer.query.filter(
+            Customer.user_id == user_id,
+            Customer.name.ilike(f"%{customer_name}%"),
+            Customer.phone == phone
+        ).first()
+
+    if not customer:
+        return f"No customer found with name '{customer_name}' and phone {phone}."
+
+    try:
+        db.session.delete(customer)
+        db.session.commit()
+        return f"Customer '{customer_name}' (Phone: {phone}) has been deleted successfully."
+    except Exception as e:
+        db.session.rollback()
+        # Common failure: integrity error due to existing bills
+        return f"Could not delete customer '{customer_name}'. They might have existing bills or transaction history."
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ADD_DUE
+# ─────────────────────────────────────────────────────────────────────────────
+def action_add_due(entities: dict, user_id: str) -> str:
+    customer_name = entities.get("customer")
+    amount        = entities.get("amount")
+
+    if not customer_name:
+        return "Please specify the customer name. E.g. 'add 500 due for Ravi'."
+    if amount is None or amount <= 0:
+        return "Please specify a valid due amount."
+
+    customer = Customer.query.filter(
+        Customer.user_id == user_id,
+        Customer.name.ilike(f"%{customer_name}%")
+    ).first()
+
+    if not customer:
+        return f"Customer '{customer_name}' not found."
+
+    # Create a dummy bill to record this manual due entry
+    bill_id = str(uuid.uuid4())
+    new_bill = Bill(
+        id=bill_id,
+        customer_id=customer.id,
+        total_amount=amount,
+        discount_amount=0,
+        final_amount=amount,
+        paid_amount=0,
+        due_amount=amount,
+        status="due",
+        user_id=user_id,
+    )
+    
+    customer.outstanding_due += Decimal(str(amount))
+    customer.total_purchases += Decimal(str(amount))
+    customer.last_purchase_date = db.func.now()
+
+    db.session.add(new_bill)
+    db.session.commit()
+
+    return f"Added Rs.{amount:.0f} to {customer.name}'s dues. Total outstanding: Rs.{float(customer.outstanding_due):.0f}."

@@ -244,6 +244,13 @@ def delete_bill(id):
         customer.total_purchases -= Decimal(str(bill.final_amount))
         customer.outstanding_due -= Decimal(str(bill.due_amount))
         
+        # Recalculate last purchase date
+        latest_bill = Bill.query.filter(
+            Bill.customer_id == customer.id,
+            Bill.id != id
+        ).order_by(Bill.created_at.desc()).first()
+        customer.last_purchase_date = latest_bill.created_at if latest_bill else None
+        
     db.session.delete(bill)
     db.session.commit()
     
