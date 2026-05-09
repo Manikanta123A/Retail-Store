@@ -22,7 +22,7 @@ const INTENT_META: Record<string, { label: string; color: string; Icon: React.El
 // ─── Quick-action chips shown before first message ────────────────────────────
 const QUICK_CHIPS = [
   { text: 'Create bill for Ravi 2 shoes', icon: ShoppingCart },
-  { text: 'Add customer Priya 9876543210', icon: UserPlus },
+  { text: 'Add Vaishu 9398432494 vaishu@gmail.com', icon: UserPlus },
   { text: 'Ravi paid 500', icon: Banknote },
   { text: 'Show details of Ravi', icon: Search },
   { text: 'Price of jeans', icon: Package },

@@ -44,7 +44,20 @@ def extract_entities(doc, raw_text: str) -> dict:
     for ent in doc.ents:
         raw.setdefault(ent.label_, []).append(_clean(ent.text))
 
+    # ── Email (always via regex on raw text) ─────────────────────────────────
+    email_match = _EMAIL_RE.search(raw_text)
+    email = email_match.group() if email_match else None
+
+    # ── Phone (always via regex on raw text) ─────────────────────────────────
+    phone_match = _PHONE_RE.search(raw_text)
+    phone = phone_match.group() if phone_match else None
+
     customer = raw.get("CUSTOMER", [None])[0]
+    
+    # Invalidate customer if NER incorrectly captured email or phone as customer
+    if customer:
+        if _EMAIL_RE.fullmatch(customer) or _PHONE_RE.fullmatch(re.sub(r"[^\d]", "", customer)):
+            customer = None
     
     # ── Fallback for Customer Name (If NER fails or misclassifies) ───────────
     if not customer:
@@ -56,15 +69,25 @@ def extract_entities(doc, raw_text: str) -> dict:
         
         # Pattern-based fallback (e.g., "for Ashwin", "bill for Kanta")
         if not customer:
+            # First remove email and phone from raw text to avoid extracting parts of them as name
+            cleaned_text = raw_text
+            if email:
+                cleaned_text = cleaned_text.replace(email, "")
+            if phone:
+                cleaned_text = cleaned_text.replace(phone, "")
+
             patterns = [
-                r"for\s+([A-Z][a-z]+)",
-                r"bill\s+for\s+(\w+)",
-                r"invoice\s+for\s+(\w+)",
-                r"about\s+(\w+)",
-                r"add\s+(\w+)"
+                r"for\s+([a-zA-Z]+)",
+                r"bill\s+for\s+([a-zA-Z]+)",
+                r"invoice\s+for\s+([a-zA-Z]+)",
+                r"about\s+([a-zA-Z]+)",
+                r"add\s+(?:customer\s+)?([a-zA-Z]+)",
+                r"details\s+of\s+([a-zA-Z]+)",
+                r"^([a-zA-Z]+)\s+paid",
+                r"delete\s+([a-zA-Z]+)"
             ]
             for p in patterns:
-                m = re.search(p, raw_text, re.IGNORECASE)
+                m = re.search(p, cleaned_text, re.IGNORECASE)
                 if m:
                     customer = m.group(1).capitalize()
                     break
@@ -113,9 +136,23 @@ def extract_entities(doc, raw_text: str) -> dict:
                 
         items.append({"item": item_name, "qty": best_qty})
 
+    # ── Deduplicate items case-insensitively ──────────────────────────────────
+    deduped_items = {}
+    for i in items:
+        key = i["item"].lower()
+        if key in deduped_items:
+            deduped_items[key]["qty"] += i["qty"]
+        else:
+            deduped_items[key] = {"item": i["item"], "qty": i["qty"]}
+    items = list(deduped_items.values())
+
+    # ── Remove customer from items if misclassified ───────────────────────────
+    if customer:
+        items = [i for i in items if i["item"].lower() != customer.lower()]
+
     # ── Amount / Phone separation ─────────────────────────────────────────────
+    # Phone is already extracted, but we check if amount captured it
     amount = None
-    phone = None
 
     for val in amounts_raw:
         digits = re.sub(r"[^\d.]", "", val)
@@ -129,16 +166,6 @@ def extract_entities(doc, raw_text: str) -> dict:
                 amount = float(digits)
             except ValueError:
                 pass
-
-    # Fallback: scan raw text for phone if NER missed it
-    if phone is None:
-        m = _PHONE_RE.search(raw_text)
-        if m:
-            phone = m.group()
-
-    # ── Email (always via regex on raw text) ─────────────────────────────────
-    email_match = _EMAIL_RE.search(raw_text)
-    email = email_match.group() if email_match else None
 
     # ── Fallback: amount from raw text digits if NER missed it ──────────────
     if amount is None:

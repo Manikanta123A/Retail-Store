@@ -1,0 +1,28 @@
+Text: 'Show details of Kanta'
+Customer: Kanta
+Items: []
+----------------------------------------
+Text: 'Show details of Ravi'
+Customer: Ravi
+Items: []
+----------------------------------------
+Text: 'bill for Priya 2 shoes'
+Customer: Priya
+Items: [{'item': 'shoes', 'qty': 2}]
+----------------------------------------
+Text: 'Add Vaishu 9398432494 vaishu@gmail.com'
+Customer: Vaishu
+Items: []
+----------------------------------------
+Text: 'Kanta paid 500'
+Customer: Kanta
+Items: []
+----------------------------------------
+Text: '2 bangles and 3 BANGLES for Ravi'
+Customer: Ravi
+Items: [{'item': 'bangles', 'qty': 5}]
+----------------------------------------
+Text: 'Delete Kanta and 9398432494'
+Customer: Kanta
+Items: []
+----------------------------------------
