@@ -10,3 +10,6 @@ google-generativeai
 spacy
 scikit-learn
 joblib
+sentence-transformers
+numpy
+torch

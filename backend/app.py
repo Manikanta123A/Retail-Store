@@ -25,6 +25,7 @@ def create_app():
     from routes.dashboard import dashboard_bp
     from routes.analytics import analytics_bp
     from routes.chat import chat_bp
+    from routes.search import search_bp
 
     app.register_blueprint(customers_bp, url_prefix='/api/customers')
     app.register_blueprint(items_bp, url_prefix='/api/items')
@@ -33,6 +34,7 @@ def create_app():
     app.register_blueprint(dashboard_bp, url_prefix='/api/dashboard')
     app.register_blueprint(analytics_bp, url_prefix='/api/analytics')
     app.register_blueprint(chat_bp, url_prefix='/api/chat')
+    app.register_blueprint(search_bp, url_prefix='/api/search')
 
     @app.route('/api/ping', methods=['GET'])
     def ping():
