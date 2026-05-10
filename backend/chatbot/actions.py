@@ -14,6 +14,9 @@ from models.item import Item
 from models.bill import Bill, BillItem
 from models.payment import Payment
 
+# State for pending bills waiting for customer details
+PENDING_BILLS = {}
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CREATE_CUSTOMER
@@ -68,9 +71,13 @@ def action_create_bill(entities: dict, user_id: str) -> str:
     ).first()
 
     if not customer:
+        PENDING_BILLS[user_id] = {
+            "customer_name": customer_name,
+            "entities": entities
+        }
         return (
             f"Customer '{customer_name}' not found. "
-            f"Add them first: 'add customer {customer_name} <phone>'"
+            f"Please enter mobile number and email of {customer_name} to create their profile and proceed."
         )
 
     bill_id     = str(uuid.uuid4())
