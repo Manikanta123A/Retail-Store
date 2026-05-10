@@ -235,6 +235,16 @@ dataset = [
     {"text": "add 300 belts to inventory", "label": "ADD_STOCK"},
     {"text": "refill 400 pens", "label": "ADD_STOCK"},
     {"text": "add stock items 50 tables", "label": "ADD_STOCK"},
+    {"text": "add Stock HeadPhones 20", "label": "ADD_STOCK"},
+    {"text": "add stocks laptops 5", "label": "ADD_STOCK"},
+    {"text": "new stock 10 books", "label": "ADD_STOCK"},
+    {"text": "add stock Mobile 15", "label": "ADD_STOCK"},
+    {"text": "add 20 headphones in stock", "label": "ADD_STOCK"},
+    {"text": "please add stock Keyboard 50", "label": "ADD_STOCK"},
+    {"text": "stock up 30 monitors", "label": "ADD_STOCK"},
+    {"text": "add stock Mouse 100", "label": "ADD_STOCK"},
+    {"text": "update stock 25 chargers", "label": "ADD_STOCK"},
+    {"text": "add stocks watch 12", "label": "ADD_STOCK"}
 ]
 
 texts  = [d["text"]  for d in dataset]

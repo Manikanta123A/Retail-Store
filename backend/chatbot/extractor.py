@@ -185,6 +185,27 @@ def extract_entities(doc, raw_text: str) -> dict:
     if customer:
         items = [i for i in items if i["item"].lower() != customer.lower()]
 
+    # ── Fallback for Add Stock if NER missed the item/qty entirely ────────────
+    if not items and re.search(r'\bstock\b', raw_text, re.IGNORECASE):
+        tokens = raw_text.split()
+        fallback_qty = None
+        item_parts = []
+        
+        for tok in tokens:
+            tok_clean = re.sub(r'[^a-zA-Z0-9]', '', tok)
+            if not tok_clean: continue
+            
+            if tok_clean.lower() in {"add", "stock", "for", "in", "to", "increase", "by", "restock", "items"}:
+                continue
+            
+            if tok_clean.isdigit():
+                fallback_qty = int(tok_clean)
+            else:
+                item_parts.append(tok)
+                
+        if fallback_qty is not None and item_parts:
+            items = [{"item": " ".join(item_parts).title(), "qty": fallback_qty}]
+            customer = None  # Clear customer if it wrongly captured 'Stock'
     # ── Amount / Phone separation ─────────────────────────────────────────────
     # Phone is already extracted, but we check if amount captured it
     amount = None

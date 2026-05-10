@@ -423,38 +423,85 @@ def action_delete_customer(entities: dict, user_id: str) -> str:
 # ADD_STOCK
 # ─────────────────────────────────────────────────────────────────────────────
 def action_add_stock(entities: dict, user_id: str) -> str:
-    items_list = entities.get("items", [])
+    raw_text = entities.get("raw_text", "")
+    items_list = []
     
+    import re
+    # 1. Custom Regex Extraction requested by user:
+    # "take the word next to the Stock or stock or stocks as the item name and add the given number"
+    stock_match = re.search(r'\b(?:stock|stocks)\s+([a-zA-Z]+(?:-[a-zA-Z]+)?)\b', raw_text, re.IGNORECASE)
+    num_match = re.search(r'\b\d+\b', raw_text)
+    
+    if stock_match and num_match:
+        # Ignore if the "next word" is a common stopword like 'for', 'in', 'to', 'items'
+        next_word = stock_match.group(1)
+        if next_word.lower() not in {"for", "in", "to", "items", "the", "a", "an"}:
+            item_name = next_word
+            qty = int(num_match.group(0))
+            items_list = [{"item": item_name, "qty": qty}]
+            
+    # 2. Fallback to NLP/Extractor results
     if not items_list:
-        # Check if amount was captured instead of quantity for "add stock for 1000 shoes"
-        # Often NER puts large numbers in AMOUNT
-        amount = entities.get("amount")
-        customer_as_item = entities.get("customer") # Sometimes NER mislabels item as customer
-        
-        if amount and customer_as_item:
-            items_list = [{"item": customer_as_item, "qty": int(amount)}]
-        else:
-            return "Please specify the item and quantity to add. E.g. 'add stock for 100 shoes'."
+        items_list = entities.get("items", [])
+        if not items_list:
+            amount = entities.get("amount")
+            customer_as_item = entities.get("customer")
+            
+            if amount and customer_as_item:
+                items_list = [{"item": customer_as_item, "qty": int(amount)}]
+            else:
+                return "Please specify the item and quantity to add. E.g. 'add stock for 100 shoes'."
 
     results = []
     for entry in items_list:
         item_name = entry["item"]
         qty = entry["qty"]
 
+        # --- FUZZY SEARCH ---
+        all_items = Item.query.filter_by(user_id=user_id, is_active=True).all()
+        
+        # 1. Exact / ILIKE Match
         item = Item.query.filter(
             Item.user_id == user_id,
             Item.name.ilike(f"%{item_name}%"),
             Item.is_active == True
         ).first()
 
+        # 2. String-based Fuzzy Match (difflib)
+        if not item and all_items:
+            import difflib
+            item_names = [i.name for i in all_items]
+            matches = difflib.get_close_matches(item_name, item_names, n=1, cutoff=0.5)
+            if matches:
+                item = next((i for i in all_items if i.name == matches[0]), None)
+
+        # 3. Semantic Fallback (Embeddings)
+        if not item and all_items:
+            try:
+                from utils.embedding_utils import generate_embedding, cosine_similarity
+                query_vec = generate_embedding(item_name)
+                best_score = -1
+                best_match = None
+                for itm in all_items:
+                    if itm.description_embedding:
+                        score = cosine_similarity(query_vec, itm.description_embedding)
+                        if score > best_score:
+                            best_score = score
+                            best_match = itm
+                if best_score > 0.35:
+                    item = best_match
+            except Exception as e:
+                print(f"Chatbot ADD_STOCK Semantic Search Fallback failed: {e}")
+
+        # --- PROCESS RESULT ---
         if not item:
             PENDING_STOCK[user_id] = {
-                "item_name": item_name,
+                "item_name": item_name.title(),
                 "quantity": qty,
-                "step": "CATEGORY" # Next step: ask for category
+                "step": "CATEGORY"
             }
             return (
-                f"Item '{item_name}' not found in inventory. "
+                f"Item '{item_name.title()}' not found in inventory. "
                 f"To add it as a new product, please tell me its **Category** (e.g. 'Electronics' or 'Footwear')."
             )
 

@@ -145,7 +145,6 @@ def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
                 "response": f"Bill creation for {customer_name} cancelled."
             }
 
-        import re
         phone_match = re.search(r'\b\d{10}\b', text)
         email_match = re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text)
         
@@ -278,6 +277,7 @@ def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
                 entities["customer"] = last_entities["customer"]
                 print(f"CONTEXT RECOVERY: Found customer '{entities['customer']}' from history.")
 
+    entities["raw_text"] = text
     # ── Step 4: Route to action ──────────────────────────────────────────────
     action_fn = _ROUTER.get(intent)
     if action_fn is None:
