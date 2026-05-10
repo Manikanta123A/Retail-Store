@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Users, Search, Plus, Phone, Mail, Loader2, X, Trash2, Edit3, CheckCircle
 } from 'lucide-react';
@@ -233,8 +234,8 @@ export default function Customers() {
       </div>
 
       {/* Add Customer Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+      {showAddModal && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden modal-enter">
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
               <h2 className="text-base font-semibold text-gray-900">Add customer</h2>
@@ -261,12 +262,13 @@ export default function Customers() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Edit Customer Modal */}
-      {showEditModal && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
+      {showEditModal && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 modal-overlay">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden modal-enter">
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
               <h2 className="text-base font-semibold text-gray-900">Edit customer</h2>
@@ -293,7 +295,8 @@ export default function Customers() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Customer Details Modal */}
@@ -372,8 +375,8 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
 
   const filteredBills = bills.filter(b => statusFilter ? b.status === statusFilter : true);
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 modal-overlay">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 modal-overlay">
       <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full sm:max-w-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden modal-enter">
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
           <div>
@@ -539,4 +542,6 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
       )}
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
