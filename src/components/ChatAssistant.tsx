@@ -70,7 +70,7 @@ export default function ChatAssistant() {
     setIsLoading(true);
 
     try {
-      const res = await chatService.sendMessage(trimmed, []);
+      const res = await chatService.sendMessage(trimmed, history);
       console.log('Received response:', res.data);
       const data = res.data;
       setHistory(prev => [

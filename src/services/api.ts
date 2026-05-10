@@ -63,4 +63,8 @@ export const chatService = {
   sendMessage: (message: string, history: any[] = []) => api.post('/chat/', { message, history }),
 };
 
+export const searchService = {
+  globalSearch: (query: string) => api.get(`/search/?q=${query}`),
+};
+
 export default api;

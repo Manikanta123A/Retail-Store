@@ -9,6 +9,7 @@ import { useToast } from '@/components/Toast';
 interface Item {
   id: string;
   name: string;
+  description: string;
   category: string;
   price: number;
   stock_quantity: number;
@@ -20,9 +21,9 @@ export default function Inventory() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newItem, setNewItem] = useState({ name: '', category: '', price: '', stock_quantity: '' });
+  const [newItem, setNewItem] = useState({ name: '', description: '', category: '', price: '', stock_quantity: '' });
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editItemForm, setEditItemForm] = useState({ id: '', name: '', category: '', price: '', stock_quantity: '' });
+  const [editItemForm, setEditItemForm] = useState({ id: '', name: '', description: '', category: '', price: '', stock_quantity: '' });
 
   const { toast } = useToast();
 
@@ -47,12 +48,13 @@ export default function Inventory() {
     try {
       await itemService.addItem({
         name: newItem.name,
+        description: newItem.description,
         category: newItem.category || 'General',
         price: parseFloat(newItem.price),
         stock_quantity: parseInt(newItem.stock_quantity) || 0
       });
       setShowAddModal(false);
-      setNewItem({ name: '', category: '', price: '', stock_quantity: '' });
+      setNewItem({ name: '', description: '', category: '', price: '', stock_quantity: '' });
       fetchItems();
       toast("Item added successfully", "success");
     } catch (error) {
@@ -66,6 +68,7 @@ export default function Inventory() {
     try {
       await itemService.updateItem(editItemForm.id, {
         name: editItemForm.name,
+        description: editItemForm.description,
         category: editItemForm.category || 'General',
         price: parseFloat(editItemForm.price),
         stock_quantity: parseInt(editItemForm.stock_quantity) || 0
@@ -181,7 +184,14 @@ export default function Inventory() {
                       <div className="flex justify-end gap-1.5">
                         <button 
                           onClick={() => {
-                            setEditItemForm({ id: item.id, name: item.name, category: item.category, price: item.price.toString(), stock_quantity: item.stock_quantity.toString() });
+                            setEditItemForm({ 
+                              id: item.id, 
+                              name: item.name, 
+                              description: item.description, 
+                              category: item.category, 
+                              price: item.price.toString(), 
+                              stock_quantity: item.stock_quantity.toString() 
+                            });
                             setShowEditModal(true);
                           }}
                           className="p-1.5 text-gray-400 hover:text-[#1E40AF] hover:bg-blue-50 rounded-md transition-colors"
@@ -230,6 +240,16 @@ export default function Inventory() {
                 </div>
               </div>
               <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Description (Mandatory)</label>
+                <textarea 
+                  required 
+                  value={newItem.description} 
+                  onChange={e => setNewItem({...newItem, description: e.target.value})} 
+                  placeholder="Appearance (color, type) and characteristics (material, usage, style)..."
+                  className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none min-h-[100px]" 
+                />
+              </div>
+              <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5">Category</label>
                 <input type="text" value={newItem.category} onChange={e => setNewItem({...newItem, category: e.target.value})} placeholder="e.g. Groceries" className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
               </div>
@@ -266,6 +286,16 @@ export default function Inventory() {
                   <label className="block text-xs font-medium text-gray-500 mb-1.5">Stock</label>
                   <input required type="number" min="0" value={editItemForm.stock_quantity} onChange={e => setEditItemForm({...editItemForm, stock_quantity: e.target.value})} className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none" />
                 </div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Description (Mandatory)</label>
+                <textarea 
+                  required 
+                  value={editItemForm.description} 
+                  onChange={e => setEditItemForm({...editItemForm, description: e.target.value})} 
+                  placeholder="Appearance (color, type) and characteristics (material, usage, style)..."
+                  className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none min-h-[100px]" 
+                />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5">Category</label>
