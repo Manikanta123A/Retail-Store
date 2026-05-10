@@ -104,6 +104,71 @@ def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
     """
     Internal logic to process a single intent with history for context retrieval.
     """
+    from chatbot.actions import PENDING_BILLS, action_create_bill
+    if user_id in PENDING_BILLS:
+        pending = PENDING_BILLS[user_id]
+        customer_name = pending["customer_name"]
+        
+        lower_text = text.lower().strip()
+        if lower_text in ["cancel", "stop", "abort", "no", "exit"]:
+            del PENDING_BILLS[user_id]
+            return {
+                "intent": "CANCEL_PENDING",
+                "confidence": 1.0,
+                "entities": {},
+                "response": f"Bill creation for {customer_name} cancelled."
+            }
+
+        import re
+        phone_match = re.search(r'\b\d{10}\b', text)
+        email_match = re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text)
+        
+        if phone_match:
+            phone = phone_match.group(0)
+            email = email_match.group(0) if email_match else None
+            
+            from models.customer import Customer
+            from database import db
+            import uuid
+            
+            existing = Customer.query.filter_by(phone=phone, user_id=user_id).first()
+            if existing:
+                del PENDING_BILLS[user_id]
+                return {
+                    "intent": "PROVIDE_DETAILS",
+                    "confidence": 1.0,
+                    "entities": {},
+                    "response": f"A customer with phone {phone} already exists as '{existing.name}'. Bill creation cancelled."
+                }
+                
+            new_cust = Customer(
+                id=str(uuid.uuid4()),
+                name=customer_name,
+                phone=phone,
+                email=email,
+                user_id=user_id
+            )
+            db.session.add(new_cust)
+            db.session.commit()
+            
+            entities = pending["entities"]
+            del PENDING_BILLS[user_id]
+            
+            response = action_create_bill(entities, user_id)
+            return {
+                "intent": "CREATE_BILL_CONTINUED",
+                "confidence": 1.0,
+                "entities": entities,
+                "response": f"Profile created for {customer_name}. " + response
+            }
+        else:
+            return {
+                "intent": "WAITING_FOR_DETAILS",
+                "confidence": 1.0,
+                "entities": {},
+                "response": f"Please enter a valid 10-digit mobile number for {customer_name} (and email if available), or type 'cancel' to abort."
+            }
+
     # ── Step 0: Basic Small Talk / Greetings ───────────────────────────────
     greetings = ["hi", "hello", "hey", "good morning", "good evening", "how are you"]
     if any(g == text.lower().strip() for g in greetings):
