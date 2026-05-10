@@ -1,8 +1,14 @@
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
-# Load the model once globally
-MODEL = SentenceTransformer('all-MiniLM-L6-v2')
+# Lazy loader for the model
+_MODEL = None
+
+def get_model():
+    global _MODEL
+    if _MODEL is None:
+        from sentence_transformers import SentenceTransformer
+        _MODEL = SentenceTransformer('all-MiniLM-L6-v2')
+    return _MODEL
 
 def generate_embedding(text):
     """
@@ -11,7 +17,8 @@ def generate_embedding(text):
     """
     if not text:
         return []
-    embedding = MODEL.encode(text)
+    model = get_model()
+    embedding = model.encode(text)
     return embedding.tolist()
 
 def cosine_similarity(vec_a, vec_b):

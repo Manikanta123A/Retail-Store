@@ -11,7 +11,6 @@ Models:
 
 import os
 import joblib
-import spacy
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Paths (relative to this file's directory, i.e. backend/chatbot/)
@@ -45,5 +44,6 @@ def get_classifier():
 def get_ner():
     global _ner
     if _ner is None:
+        import spacy
         _ner = spacy.load(_SPACY_MODEL)
     return _ner

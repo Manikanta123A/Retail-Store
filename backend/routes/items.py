@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from database import db
 from models.item import Item
 import uuid
-from utils.embedding_utils import generate_embedding, cosine_similarity
 
 items_bp = Blueprint('items', __name__)
 
@@ -32,6 +31,9 @@ def get_items():
     all_items = query.all()
     if not all_items:
         return jsonify([])
+
+    # Lazy import for heavy ML libraries on Vercel
+    from utils.embedding_utils import generate_embedding, cosine_similarity
 
     # Generate embedding for search query
     query_vec = generate_embedding(search_query)
@@ -66,6 +68,9 @@ def add_item():
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
         
+    # Lazy import for heavy ML libraries on Vercel
+    from utils.embedding_utils import generate_embedding
+
     # Generate embedding (Name + Description)
     # ONLY at creation time
     embedding_text = f"{name} {description}"
