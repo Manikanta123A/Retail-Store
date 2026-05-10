@@ -29,6 +29,7 @@ def train_ner():
         ("add stock for 1000 shoes", {"entities": [(14, 18, "QUANTITY"), (19, 24, "ITEM")]}),
         ("restocking 50 jeans", {"entities": [(11, 13, "QUANTITY"), (14, 19, "ITEM")]}),
         ("add 100 sarees in inventory", {"entities": [(4, 7, "QUANTITY"), (8, 14, "ITEM")]}),
+        ("add stock 100 Gold chain", {"entities": [(10, 13, "QUANTITY"), (14, 24, "ITEM")]}),
     ]
 
     optimizer = nlp.resume_training()
