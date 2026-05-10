@@ -6,8 +6,12 @@ _MODEL = None
 def get_model():
     global _MODEL
     if _MODEL is None:
-        from sentence_transformers import SentenceTransformer
-        _MODEL = SentenceTransformer('all-MiniLM-L6-v2')
+        try:
+            from sentence_transformers import SentenceTransformer
+            _MODEL = SentenceTransformer('all-MiniLM-L6-v2')
+        except Exception as e:
+            print(f"EMBEDDING MODEL LOAD ERROR: {e}")
+            _MODEL = False # Mark as failed
     return _MODEL
 
 def generate_embedding(text):
@@ -18,6 +22,8 @@ def generate_embedding(text):
     if not text:
         return []
     model = get_model()
+    if not model:
+        return []
     embedding = model.encode(text)
     return embedding.tolist()
 

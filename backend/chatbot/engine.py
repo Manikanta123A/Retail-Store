@@ -43,9 +43,9 @@ _ROUTER = {
 _MIN_CONFIDENCE = 0.40
 
 
-def handle_query(text: str, user_id: str) -> dict:
+def handle_query(text: str, user_id: str, history: list = []) -> dict:
     """
-    Main entry point. Handles single or multi-part queries.
+    Main entry point. Handles single or multi-part queries with history context.
     """
     if not text or not text.strip():
         return {
@@ -71,7 +71,7 @@ def handle_query(text: str, user_id: str) -> dict:
         for p in parts:
             p_text = p.strip()
             if not p_text: continue
-            res = _process_single_query(p_text, user_id)
+            res = _process_single_query(p_text, user_id, history)
             
             # If this part found a customer, save it for subsequent parts
             if res.get("entities", {}).get("customer"):
@@ -97,12 +97,12 @@ def handle_query(text: str, user_id: str) -> dict:
             "response": "\n".join(results)
         }
 
-    return _process_single_query(text, user_id)
+    return _process_single_query(text, user_id, history)
 
 
-def _process_single_query(text: str, user_id: str) -> dict:
+def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
     """
-    Internal logic to process a single intent from a piece of text.
+    Internal logic to process a single intent with history for context retrieval.
     """
     # ── Step 0: Basic Small Talk / Greetings ───────────────────────────────
     greetings = ["hi", "hello", "hey", "good morning", "good evening", "how are you"]
@@ -149,10 +149,31 @@ def _process_single_query(text: str, user_id: str) -> dict:
             ),
         }
 
-    # ── Step 2 & 3: NER + entity extraction ─────────────────────────────────
     ner    = get_ner()
     doc    = ner(text)
     entities = extract_entities(doc, text)
+
+    # ── Step 3.5: Contextual Recovery ───────────────────────────────────────
+    # If customer is missing, look back in history for the last mentioned customer
+    if not entities.get("customer") and history:
+        # Search from newest to oldest in history
+        for msg in reversed(history):
+            if msg.get('role') == 'bot' and msg.get('intent') in ['QUERY_CUSTOMER', 'CREATE_BILL', 'COLLECT_PAYMENT', 'CREATE_CUSTOMER']:
+                # This is a bit hacky since history doesn't store extracted entities yet, 
+                # but we can try to find the customer name in the previous bot response 
+                # or just look at the last user message.
+                pass 
+        
+        # Better approach: check the last USER message if it was a customer query
+        last_user_msg = next((m for m in reversed(history) if m.get('role') == 'user'), None)
+        if last_user_msg:
+            # Re-run extraction on the last message to see if it had a customer
+            # (Note: This is simplified; ideally we'd store entities in history)
+            last_doc = ner(last_user_msg['content'])
+            last_entities = extract_entities(last_doc, last_user_msg['content'])
+            if last_entities.get("customer"):
+                entities["customer"] = last_entities["customer"]
+                print(f"CONTEXT RECOVERY: Found customer '{entities['customer']}' from history.")
 
     # ── Step 4: Route to action ──────────────────────────────────────────────
     action_fn = _ROUTER.get(intent)

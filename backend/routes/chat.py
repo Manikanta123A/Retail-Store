@@ -20,12 +20,13 @@ def chat():
 
     data    = request.get_json(silent=True) or {}
     message = data.get("message", "").strip()
+    history = data.get("history", [])
 
     if not message:
         return jsonify({"error": "Empty message"}), 400
 
-    print(f"CHAT DEBUG: User={user_id}, Msg='{message}'")
-    result = handle_query(message, user_id)
+    print(f"CHAT DEBUG: User={user_id}, Msg='{message}', HistLen={len(history)}")
+    result = handle_query(message, user_id, history)
     print(f"CHAT DEBUG: Intent={result['intent']}, Conf={result['confidence']}")
     print(f"CHAT DEBUG: Entities={result['entities']}")
 

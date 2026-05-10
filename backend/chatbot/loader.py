@@ -44,6 +44,14 @@ def get_classifier():
 def get_ner():
     global _ner
     if _ner is None:
-        import spacy
-        _ner = spacy.load(_SPACY_MODEL)
+        try:
+            import spacy
+            _ner = spacy.load(_SPACY_MODEL)
+        except Exception as e:
+            print(f"CHATBOT NER LOAD ERROR: {e}")
+            # Fallback: simple lambda that returns an object with a .ents property
+            class MockDoc:
+                def __init__(self, text): self.text = text; self.ents = []
+                def __call__(self, text): return self
+            _ner = MockDoc("")
     return _ner

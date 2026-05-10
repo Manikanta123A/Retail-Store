@@ -314,12 +314,35 @@ def action_query_product(entities: dict, user_id: str) -> str:
         return "Available items:\n" + "\n".join(lines)
 
     results = []
+    # Search logic: Exact Match then Semantic Fallback
     for kw in keywords:
+        # 1. Exact Name/Category match
         items = Item.query.filter(
             Item.user_id == user_id,
-            Item.name.ilike(f"%{kw}%"),
+            (Item.name.ilike(f"%{kw}%")) | (Item.category.ilike(f"%{kw}%")),
             Item.is_active == True,
         ).all()
+        
+        if not items:
+            # 2. Semantic Fallback (Smart Search)
+            try:
+                from utils.embedding_utils import generate_embedding, cosine_similarity
+                all_items = Item.query.filter_by(user_id=user_id, is_active=True).all()
+                query_vec = generate_embedding(kw)
+                
+                scored = []
+                for itm in all_items:
+                    if itm.description_embedding:
+                        score = cosine_similarity(query_vec, itm.description_embedding)
+                        if score > 0.35: # Slightly higher threshold for chatbot
+                            scored.append((itm, score))
+                
+                scored.sort(key=lambda x: x[1], reverse=True)
+                items = [it for it, sc in scored[:3]] # Top 3 semantic matches
+            except Exception as e:
+                print(f"Chatbot Smart Search Fallback failed: {e}")
+                items = []
+
         for item in items:
             results.append(
                 f"{item.name}: Rs.{float(item.price):.0f} | Stock: {item.stock_quantity} | Category: {item.category or 'General'}"
@@ -328,6 +351,8 @@ def action_query_product(entities: dict, user_id: str) -> str:
     if not results:
         return f"No products found matching '{', '.join(keywords)}'."
 
+    # Remove duplicates
+    results = list(dict.fromkeys(results))
     return "Product details:\n" + "\n".join(results)
 
 
