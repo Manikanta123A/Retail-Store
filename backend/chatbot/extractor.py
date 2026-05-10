@@ -54,6 +54,10 @@ def extract_entities(doc, raw_text: str) -> dict:
 
     customer = raw.get("CUSTOMER", [None])[0]
     
+    # Exclude reserved keywords from direct NER capture
+    if customer and customer.lower() in {"stock", "items", "inventory", "restock", "bill", "invoice"}:
+        customer = None
+        
     # Invalidate customer if NER incorrectly captured email or phone as customer
     if customer:
         if _EMAIL_RE.fullmatch(customer) or _PHONE_RE.fullmatch(re.sub(r"[^\d]", "", customer)):
@@ -96,10 +100,14 @@ def extract_entities(doc, raw_text: str) -> dict:
                 break
         
         if not customer:
+            # Keywords that should NEVER be a customer name
+            EXCLUSIONS = {"stock", "items", "inventory", "restock", "price", "category", "bill", "invoice"}
+            
             for q in all_potential_names:
                 if isinstance(q, str) and not re.search(r'\d', q) and len(q) > 2:
-                    customer = q
-                    break
+                    if q.lower() not in EXCLUSIONS:
+                        customer = q
+                        break
 
     items_raw = raw.get("ITEM", [])
     quantities_raw = raw.get("QUANTITY", [])
@@ -112,10 +120,12 @@ def extract_entities(doc, raw_text: str) -> dict:
     # Only treat QUANTITY entities that actually contain digits as quantities
     quant_ents = [ent for ent in doc.ents if ent.label_ == "QUANTITY" and re.search(r'\d', ent.text)]
     
-    # Also consider AMOUNT as quantity if it's small (e.g. "2" mislabeled as AMOUNT)
+    # Also consider AMOUNT as quantity if it's a simple integer (e.g. "100" mislabeled as AMOUNT)
     for ent in doc.ents:
         if ent.label_ == "AMOUNT" and re.fullmatch(r'\d+', ent.text):
-            if int(ent.text) < 100: # Heuristic: small amounts might be quantities
+            val = int(ent.text)
+            # Heuristic: If it's a whole number and not a phone number, it could be a quantity
+            if val < 10000 and not _PHONE_RE.fullmatch(ent.text):
                 quant_ents.append(ent)
 
     used_quants = set()
@@ -123,8 +133,10 @@ def extract_entities(doc, raw_text: str) -> dict:
     for item_ent in item_ents:
         item_name = _clean(item_ent.text)
         
-        # Skip if this "item" is actually the customer name
+        # Skip if this "item" is actually the customer name or a reserved keyword
         if customer and item_name.lower() == customer.lower():
+            continue
+        if item_name.lower() in {"stock", "restock", "inventory", "item", "items", "add", "for"}:
             continue
 
         best_qty = 1
@@ -201,17 +213,21 @@ def extract_entities(doc, raw_text: str) -> dict:
             except ValueError:
                 pass
 
-    # ── Specific "due" amount extraction ──────────────────────────────────────
-    due_amount = None
-    due_match = re.search(r"(\d+(?:\.\d{1,2})?)\s*(?:due|pending)", raw_text, re.IGNORECASE)
-    if due_match:
-        due_amount = float(due_match.group(1))
+
+    # ── Specific "paid" amount extraction ─────────────────────────────────────
+    paid_amount = None
+    # Matches "paid 500", "500 paid", "received 500", "500 received", etc.
+    paid_match = re.search(r"(?:paid|received|advance)\s*(\d+(?:\.\d{1,2})?)|\b(\d+(?:\.\d{1,2})?)\s*(?:paid|received|advance)", raw_text, re.IGNORECASE)
+    if paid_match:
+        # group(1) if "paid 500", group(2) if "500 paid"
+        val = paid_match.group(1) or paid_match.group(2)
+        paid_amount = float(val)
 
     return {
         "customer":   customer,
         "items":      items,
         "amount":     amount,
-        "due_amount": due_amount,
+        "paid_amount": paid_amount,
         "phone":      phone,
         "email":      email,
         "raw":        raw,

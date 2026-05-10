@@ -21,8 +21,10 @@ from chatbot.actions   import (
     action_query_customer,
     action_query_product,
     action_delete_customer,
-    action_add_due,
-    action_undo
+    action_undo,
+    action_add_stock,
+    PENDING_BILLS,
+    PENDING_STOCK
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -35,7 +37,7 @@ _ROUTER = {
     "QUERY_CUSTOMER":   action_query_customer,
     "QUERY_PRODUCT":    action_query_product,
     "DELETE_CUSTOMER":  action_delete_customer,
-    "ADD_DUE":          action_add_due,
+    "ADD_STOCK":        action_add_stock,
     "UNDO":             action_undo,
 }
 
@@ -55,47 +57,6 @@ def handle_query(text: str, user_id: str, history: list = []) -> dict:
             "response": "Please type a message so I can help you."
         }
 
-    # ── Step 0.5: Multi-Intent Splitting ─────────────────────────────────────
-    # If the text contains a comma and both 'bill' and 'due' keywords, 
-    # treat them as separate actions for better reliability as requested.
-    if ("," in text or " and " in text.lower()) and ("bill" in text.lower() and "due" in text.lower()):
-        if "," in text:
-            parts = text.split(",")
-        else:
-            # Simple heuristic split on 'and'
-            parts = re.split(r"\s+and\s+", text, flags=re.IGNORECASE)
-        results = []
-        all_entities = {}
-        shared_customer = None
-        
-        for p in parts:
-            p_text = p.strip()
-            if not p_text: continue
-            res = _process_single_query(p_text, user_id, history)
-            
-            # If this part found a customer, save it for subsequent parts
-            if res.get("entities", {}).get("customer"):
-                shared_customer = res["entities"]["customer"]
-            # If this part is missing a customer but we have a shared one, re-run with shared customer
-            elif shared_customer and not res.get("entities", {}).get("customer"):
-                res["entities"]["customer"] = shared_customer
-                # Re-run action with updated entities
-                action_fn = _ROUTER.get(res["intent"])
-                if action_fn:
-                    try:
-                        res["response"] = action_fn(res["entities"], user_id)
-                    except:
-                        pass
-            
-            results.append(res["response"])
-            all_entities.update(res.get("entities", {}))
-        
-        return {
-            "intent": "MULTI_ACTION",
-            "confidence": 1.0,
-            "entities": all_entities,
-            "response": "\n".join(results)
-        }
 
     return _process_single_query(text, user_id, history)
 
@@ -104,7 +65,72 @@ def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
     """
     Internal logic to process a single intent with history for context retrieval.
     """
-    from chatbot.actions import PENDING_BILLS, action_create_bill
+    # ── Step -1: Handle Pending Stock Creation ───────────────────────────────
+    if user_id in PENDING_STOCK:
+        pending = PENDING_STOCK[user_id]
+        item_name = pending["item_name"]
+        qty = pending["quantity"]
+        
+        lower_text = text.lower().strip()
+        if lower_text in ["cancel", "stop", "abort", "no", "exit"]:
+            del PENDING_STOCK[user_id]
+            return {
+                "intent": "CANCEL_PENDING",
+                "confidence": 1.0,
+                "entities": {},
+                "response": f"Stock addition for {item_name} cancelled."
+            }
+            
+        if pending["step"] == "CATEGORY":
+            pending["category"] = text.strip()
+            pending["step"] = "PRICE"
+            return {
+                "intent": "WAITING_FOR_PRICE",
+                "confidence": 1.0,
+                "entities": {},
+                "response": f"Got it. Category for '{item_name}' is '{pending['category']}'. Now, please tell me the **Selling Price** for this item."
+            }
+            
+        if pending["step"] == "PRICE":
+            # Extract price from text
+            price_match = re.search(r'\d+(?:\.\d+)?', text)
+            if not price_match:
+                return {
+                    "intent": "INVALID_PRICE",
+                    "confidence": 1.0,
+                    "entities": {},
+                    "response": "Please enter a valid numeric price."
+                }
+            
+            price = float(price_match.group(0))
+            category = pending["category"]
+            
+            # Create the item in DB
+            from models.item import Item
+            from database import db
+            import uuid
+            
+            new_item = Item(
+                id=str(uuid.uuid4()),
+                name=item_name,
+                category=category,
+                price=price,
+                stock_quantity=qty,
+                user_id=user_id,
+                is_active=True
+            )
+            db.session.add(new_item)
+            db.session.commit()
+            
+            del PENDING_STOCK[user_id]
+            return {
+                "intent": "CREATE_ITEM_SUCCESS",
+                "confidence": 1.0,
+                "entities": {},
+                "response": f"Successfully created new product '{item_name}' in category '{category}' with price Rs.{price:.0f} and initial stock {qty}."
+            }
+
+    # ── Step 0: Handle Pending Bill Creation ─────────────────────────────────
     if user_id in PENDING_BILLS:
         pending = PENDING_BILLS[user_id]
         customer_name = pending["customer_name"]
@@ -187,15 +213,27 @@ def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
     confidence = float(clf.predict_proba(X).max())
 
     # ── Step 1.5: Manual Overrides ──────────────────────────────────────────
-    lower_text = text.lower()
-    if lower_text.startswith("delete "):
+    lower_text = text.lower().strip()
+    
+    # Priority Overrides
+    if "stock" in lower_text or "restock" in lower_text:
+        intent = "ADD_STOCK"
+        confidence = 1.0
+    elif "bill" in lower_text or "invoice" in lower_text:
+        intent = "CREATE_BILL"
+        confidence = 1.0
+    elif lower_text.startswith("add customer") or "register" in lower_text:
+        intent = "CREATE_CUSTOMER"
+        confidence = 1.0
+    elif lower_text.startswith("delete "):
         intent = "DELETE_CUSTOMER"
         confidence = 1.0
-    elif "due" in lower_text and any(c.isdigit() for c in text) and "paid" not in lower_text and "bill" not in lower_text:
-        intent = "ADD_DUE"
-        confidence = 1.0
-    elif lower_text.strip() == "undo":
+    elif lower_text == "undo":
         intent = "UNDO"
+        confidence = 1.0
+    elif ("paid" in lower_text or "received" in lower_text) and "bill" not in lower_text:
+        # If it says "paid" but NO "bill", it's likely a manual payment collection
+        intent = "COLLECT_PAYMENT"
         confidence = 1.0
 
     if confidence < _MIN_CONFIDENCE:

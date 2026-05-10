@@ -37,6 +37,10 @@ dataset = [
     {"text": "bill bana do manikanta 3 sarees 2 bangles", "label": "CREATE_BILL"},
     {"text": "generate invoice quickly for ashwin items shoes 2 shirts 5", "label": "CREATE_BILL"},
     {"text": "create bill for order ashwin items listed above", "label": "CREATE_BILL"},
+    {"text": "create a new bill for ashwin items shoes , 500 paid", "label": "CREATE_BILL"},
+    {"text": "generate bill for Ravi 3 shirts 200 received", "label": "CREATE_BILL"},
+    {"text": "make invoice for kanta 4 notebooks 2 pens 50 advance", "label": "CREATE_BILL"},
+    {"text": "bill bana do manikanta 3 sarees 2 bangles 100 paid", "label": "CREATE_BILL"},
 
     # -------- CREATE_CUSTOMER --------
     {"text": "add devansh 8247364575", "label": "CREATE_CUSTOMER"},
@@ -218,6 +222,19 @@ dataset = [
     {"text": "pen ???", "label": "QUERY_PRODUCT"},
     {"text": "lipstick ?", "label": "QUERY_PRODUCT"},
     {"text": "items ???", "label": "QUERY_PRODUCT"},
+
+    # -------- ADD_STOCK --------
+    {"text": "add stock for 1000 shoes", "label": "ADD_STOCK"},
+    {"text": "add 100 sarees in inventory", "label": "ADD_STOCK"},
+    {"text": "restocking 50 jeans", "label": "ADD_STOCK"},
+    {"text": "add stock 100 Gold chain", "label": "ADD_STOCK"},
+    {"text": "add items 20 jackets", "label": "ADD_STOCK"},
+    {"text": "put 500 shirts in stock", "label": "ADD_STOCK"},
+    {"text": "increase shoe stock by 200", "label": "ADD_STOCK"},
+    {"text": "stock up 50 bangles", "label": "ADD_STOCK"},
+    {"text": "add 300 belts to inventory", "label": "ADD_STOCK"},
+    {"text": "refill 400 pens", "label": "ADD_STOCK"},
+    {"text": "add stock items 50 tables", "label": "ADD_STOCK"},
 ]
 
 texts  = [d["text"]  for d in dataset]

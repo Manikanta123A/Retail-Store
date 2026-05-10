@@ -16,6 +16,8 @@ from models.payment import Payment
 
 # State for pending bills waiting for customer details
 PENDING_BILLS = {}
+# State for pending stock additions waiting for item details
+PENDING_STOCK = {}
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -58,6 +60,8 @@ def action_create_customer(entities: dict, user_id: str) -> str:
 def action_create_bill(entities: dict, user_id: str) -> str:
     customer_name = entities.get("customer")
     items_list    = entities.get("items", [])
+    
+    print(f"DEBUG: Creating bill for {customer_name}. Entities: {entities}")
 
     if not customer_name:
         return "I need a customer name to create a bill. E.g. 'bill for Ravi 2 shoes 3 shirts'."
@@ -122,10 +126,17 @@ def action_create_bill(entities: dict, user_id: str) -> str:
         missing = ", ".join(not_found)
         return f"None of the items were found in inventory: {missing}. Please check item names."
 
-    due_amt = float(entities.get("due_amount") or 0.0)
-    if due_amt > total_amount:
-        due_amt = total_amount
-    paid_amt = total_amount - due_amt
+    paid_amt_input = entities.get("paid_amount")
+
+    if paid_amt_input is not None:
+        paid_amt = float(paid_amt_input)
+        if paid_amt > total_amount:
+            paid_amt = total_amount
+        due_amt = total_amount - paid_amt
+    else:
+        # Default: fully paid
+        paid_amt = total_amount
+        due_amt = 0.0
 
     new_bill = Bill(
         id=bill_id,
@@ -176,10 +187,18 @@ def action_create_bill(entities: dict, user_id: str) -> str:
         if not any(nf.lower() in e["item"].lower() for nf in not_found)
     )
     warn = f" (Items not found: {', '.join(not_found)})" if not_found else ""
+    
+    status_text = "PAID"
+    if due_amt > 0:
+        if paid_amt > 0:
+            status_text = f"PARTIALLY PAID (Paid: Rs.{paid_amt:.0f}, Due: Rs.{due_amt:.0f})"
+        else:
+            status_text = f"UNPAID (Due: Rs.{due_amt:.0f})"
+        
     return (
-        f"Bill #{new_bill.bill_number} created and marked as PAID for {customer.name} "
-        f"— {item_summary} — Total: Rs.{total_amount:.0f}{warn}. "
-        f"You can say 'undo' to erase this bill if it was a mistake."
+        f"Bill #{new_bill.bill_number} created for {customer.name}. Status: {status_text}. "
+        f"Items: {item_summary}. Total: Rs.{total_amount:.0f}{warn}. "
+        f"You can say 'undo' to revert this."
     )
 
 
@@ -401,47 +420,49 @@ def action_delete_customer(entities: dict, user_id: str) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ADD_DUE
+# ADD_STOCK
 # ─────────────────────────────────────────────────────────────────────────────
-def action_add_due(entities: dict, user_id: str) -> str:
-    customer_name = entities.get("customer")
-    amount        = entities.get("amount")
-
-    if not customer_name:
-        return "Please specify the customer name. E.g. 'add 500 due for Ravi'."
-    if amount is None or amount <= 0:
-        return "Please specify a valid due amount."
-
-    customer = Customer.query.filter(
-        Customer.user_id == user_id,
-        Customer.name.ilike(f"%{customer_name}%")
-    ).first()
-
-    if not customer:
-        return f"Customer '{customer_name}' not found."
-
-    # Create a dummy bill to record this manual due entry
-    bill_id = str(uuid.uuid4())
-    new_bill = Bill(
-        id=bill_id,
-        customer_id=customer.id,
-        total_amount=amount,
-        discount_amount=0,
-        final_amount=amount,
-        paid_amount=0,
-        due_amount=amount,
-        status="due",
-        user_id=user_id,
-    )
+def action_add_stock(entities: dict, user_id: str) -> str:
+    items_list = entities.get("items", [])
     
-    customer.outstanding_due += Decimal(str(amount))
-    customer.total_purchases += Decimal(str(amount))
-    customer.last_purchase_date = db.func.now()
+    if not items_list:
+        # Check if amount was captured instead of quantity for "add stock for 1000 shoes"
+        # Often NER puts large numbers in AMOUNT
+        amount = entities.get("amount")
+        customer_as_item = entities.get("customer") # Sometimes NER mislabels item as customer
+        
+        if amount and customer_as_item:
+            items_list = [{"item": customer_as_item, "qty": int(amount)}]
+        else:
+            return "Please specify the item and quantity to add. E.g. 'add stock for 100 shoes'."
 
-    db.session.add(new_bill)
+    results = []
+    for entry in items_list:
+        item_name = entry["item"]
+        qty = entry["qty"]
+
+        item = Item.query.filter(
+            Item.user_id == user_id,
+            Item.name.ilike(f"%{item_name}%"),
+            Item.is_active == True
+        ).first()
+
+        if not item:
+            PENDING_STOCK[user_id] = {
+                "item_name": item_name,
+                "quantity": qty,
+                "step": "CATEGORY" # Next step: ask for category
+            }
+            return (
+                f"Item '{item_name}' not found in inventory. "
+                f"To add it as a new product, please tell me its **Category** (e.g. 'Electronics' or 'Footwear')."
+            )
+
+        item.stock_quantity += qty
+        results.append(f"Added {qty} to '{item.name}' stock. New total: {item.stock_quantity}.")
+
     db.session.commit()
-
-    return f"Added Rs.{amount:.0f} to {customer.name}'s dues. Total outstanding: Rs.{float(customer.outstanding_due):.0f}. Say 'undo' to revert this."
+    return "\n".join(results)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # UNDO LAST ACTION
