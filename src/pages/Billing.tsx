@@ -135,39 +135,39 @@ export default function Billing() {
   return (
     <div className="flex flex-col md:flex-row md:h-[calc(100vh-160px)] gap-6">
       {/* Left Column: Cart & Billing */}
-      <div className="flex-1 flex flex-col bg-white rounded-xl border border-gray-100 overflow-hidden min-h-[400px]">
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+      <div className="flex-1 flex flex-col card overflow-hidden min-h-[400px]">
+        <div className="px-5 py-4 border-b border-[#E5E7EB] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#1E40AF] rounded-lg flex items-center justify-center text-white shadow-sm">
+            <div className="w-8 h-8 bg-[#1E40AF] rounded-md flex items-center justify-center text-white">
               <Receipt size={16} />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-gray-800">New Bill</h2>
-              <p className="text-xs text-gray-400">{new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+              <h2 className="text-sm font-semibold text-[#111827]">New Bill</h2>
+              <p className="text-xs text-[#9CA3AF]">{new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
             </div>
           </div>
-          <button onClick={() => setCart([])} className="p-2 text-gray-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all" title="Clear cart">
+          <button onClick={() => setCart([])} className="p-2 text-[#D1D5DB] hover:text-[#DC2626] hover:bg-[#FEF2F2] rounded-md transition-all" title="Clear cart">
             <Trash2 size={16} />
           </button>
         </div>
 
         <div className="flex-1 flex flex-col overflow-hidden p-4 space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input 
-              type="text" 
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={16} />
+            <input
+              type="text"
               placeholder="Search items to add..."
               value={searchItem}
               onChange={(e) => setSearchItem(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+              className="input pl-10"
             />
             {searchItem && items.length > 0 && (
-              <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
+              <div className="absolute top-full left-0 w-full mt-1 card shadow-md z-10 max-h-40 overflow-y-auto">
                 {items.map(item => (
-                  <div key={item.id} onClick={() => addToCart(item)} className="px-3 py-2.5 hover:bg-blue-50 cursor-pointer flex justify-between items-center text-sm transition-colors">
+                  <div key={item.id} onClick={() => addToCart(item)} className="px-3 py-2.5 hover:bg-[#EFF6FF] cursor-pointer flex justify-between items-center text-sm transition-colors">
                     <div>
-                      <p className="font-medium text-gray-800">{item.name}</p>
-                      <p className="text-xs text-gray-400">Stock: {item.stock_quantity}</p>
+                      <p className="font-medium text-[#111827]">{item.name}</p>
+                      <p className="text-xs text-[#9CA3AF]">Stock: {item.stock_quantity}</p>
                     </div>
                     <span className="font-semibold text-[#1E40AF] tabular-nums">{formatCurrency(item.price)}</span>
                   </div>
@@ -178,8 +178,8 @@ export default function Billing() {
 
           <div className="flex-1 overflow-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-white sticky top-0 border-b border-gray-100">
-                <tr className="text-xs text-gray-400 font-medium">
+              <thead className="bg-[#F9FAFB] sticky top-0 border-b border-[#E5E7EB]">
+                <tr className="text-xs text-[#6B7280] font-medium">
                   <th className="pb-2.5 px-2">Item</th>
                   <th className="text-center pb-2.5 px-2">Qty</th>
                   <th className="text-right pb-2.5 px-2">Price</th>
@@ -187,26 +187,26 @@ export default function Billing() {
                   <th className="w-8 pb-2.5"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-[#F3F4F6]">
                 {cart.length === 0 ? (
                   <tr><td colSpan={5} className="py-12 text-center">
-                    <ShoppingCart size={32} className="mx-auto text-gray-200 mb-2" />
-                    <p className="text-sm text-gray-400">Add items to get started</p>
+                    <ShoppingCart size={32} className="mx-auto text-[#E5E7EB] mb-2" />
+                    <p className="text-sm text-[#9CA3AF]">Add items to get started</p>
                   </td></tr>
                 ) : cart.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3 px-2 font-medium text-gray-800">{item.name}</td>
+                  <tr key={item.id} className="hover:bg-[#F9FAFB] transition-colors">
+                    <td className="py-3 px-2 font-medium text-[#111827]">{item.name}</td>
                     <td className="py-3 px-2">
-                      <div className="flex items-center justify-center gap-1 bg-gray-50 rounded-lg border border-gray-200 p-0.5 w-fit mx-auto">
-                        <button onClick={() => updateQuantity(item.id, -1)} className="w-7 h-7 flex items-center justify-center hover:bg-white rounded text-gray-400 transition-colors"><Minus size={12} /></button>
+                      <div className="flex items-center justify-center gap-1 bg-[#F9FAFB] rounded-md border border-[#E5E7EB] p-0.5 w-fit mx-auto">
+                        <button onClick={() => updateQuantity(item.id, -1)} className="w-7 h-7 flex items-center justify-center hover:bg-white rounded text-[#9CA3AF] transition-colors"><Minus size={12} /></button>
                         <span className="text-sm font-semibold w-6 text-center tabular-nums">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, 1)} className="w-7 h-7 flex items-center justify-center hover:bg-white rounded text-gray-400 transition-colors"><Plus size={12} /></button>
+                        <button onClick={() => updateQuantity(item.id, 1)} className="w-7 h-7 flex items-center justify-center hover:bg-white rounded text-[#9CA3AF] transition-colors"><Plus size={12} /></button>
                       </div>
                     </td>
-                    <td className="py-3 px-2 text-right text-gray-500 tabular-nums">{formatCurrency(item.price)}</td>
-                    <td className="py-3 px-2 text-right font-semibold text-gray-900 tabular-nums">{formatCurrency(item.price * item.quantity)}</td>
+                    <td className="py-3 px-2 text-right text-[#6B7280] tabular-nums">{formatCurrency(item.price)}</td>
+                    <td className="py-3 px-2 text-right font-semibold text-[#111827] tabular-nums">{formatCurrency(item.price * item.quantity)}</td>
                     <td className="py-3 px-1 text-right">
-                      <button onClick={() => removeFromCart(item.id)} className="text-gray-300 hover:text-rose-500 transition-colors p-1"><Trash2 size={14} /></button>
+                      <button onClick={() => removeFromCart(item.id)} className="text-[#D1D5DB] hover:text-[#DC2626] transition-colors p-1"><Trash2 size={14} /></button>
                     </td>
                   </tr>
                 ))}
@@ -215,11 +215,11 @@ export default function Billing() {
           </div>
         </div>
 
-        <div className="px-5 py-4 bg-gray-50/80 border-t border-gray-100">
+        <div className="px-5 py-4 bg-[#F9FAFB] border-t border-[#E5E7EB]">
           <div className="flex justify-end">
             <div className="space-y-1 w-full md:w-56">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-gray-500">Total</span>
+                <span className="text-sm font-medium text-[#6B7280]">Total</span>
                 <span className="text-xl font-bold text-[#1E40AF] tabular-nums">{formatCurrency(total)}</span>
               </div>
             </div>
@@ -229,11 +229,11 @@ export default function Billing() {
 
       {/* Right Column: Customer & Actions */}
       <div className="w-full md:w-80 flex flex-col gap-4">
-        <div className="bg-white p-5 rounded-xl border border-gray-100 space-y-4">
+        <div className="card p-5 space-y-4">
            <div className="flex items-center justify-between">
-            <h3 className="text-xs font-medium text-gray-400">Customer</h3>
+            <h3 className="stat-label">Customer</h3>
             {!selectedCustomer && (
-              <button className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+              <button className="p-1.5 text-[#1E40AF] hover:bg-[#EFF6FF] rounded-md transition-colors">
                 <UserPlus size={16} />
               </button>
             )}
@@ -242,57 +242,57 @@ export default function Billing() {
           <div className="space-y-3">
             {!selectedCustomer ? (
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
-                <input 
-                  type="text" 
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={14} />
+                <input
+                  type="text"
                   placeholder="Find customer..."
                   value={searchCustomer}
                   onChange={e => setSearchCustomer(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+                  className="input pl-9"
                 />
                 {searchCustomer && customers.length > 0 && (
-                  <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
+                  <div className="absolute top-full left-0 w-full mt-1 card shadow-md z-10 max-h-40 overflow-y-auto">
                     {customers.map(c => (
-                      <div key={c.id} onClick={() => { setSelectedCustomer(c); setSearchCustomer(''); }} className="px-3 py-2.5 hover:bg-blue-50 cursor-pointer text-sm transition-colors">
-                        <p className="font-medium text-gray-800">{c.name}</p>
-                        <p className="text-xs text-gray-400">{c.phone}</p>
+                      <div key={c.id} onClick={() => { setSelectedCustomer(c); setSearchCustomer(''); }} className="px-3 py-2.5 hover:bg-[#EFF6FF] cursor-pointer text-sm transition-colors">
+                        <p className="font-medium text-[#111827]">{c.name}</p>
+                        <p className="text-xs text-[#9CA3AF]">{c.phone}</p>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
             ) : (
-              <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center">
+              <div className="p-3 bg-[#F9FAFB] rounded-md border border-[#E5E7EB] flex justify-between items-center">
                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-medium text-xs shadow-sm">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] flex items-center justify-center text-white font-medium text-xs">
                       {selectedCustomer.name.substring(0, 2).toUpperCase()}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-800">{selectedCustomer.name}</p>
-                      <p className="text-xs text-gray-400">{selectedCustomer.phone}</p>
+                      <p className="text-sm font-medium text-[#111827]">{selectedCustomer.name}</p>
+                      <p className="text-xs text-[#9CA3AF]">{selectedCustomer.phone}</p>
                     </div>
                  </div>
-                 <button onClick={() => setSelectedCustomer(null)} className="text-gray-400 hover:text-rose-500 transition-colors"><Trash2 size={14}/></button>
+                 <button onClick={() => setSelectedCustomer(null)} className="text-[#9CA3AF] hover:text-[#DC2626] transition-colors"><Trash2 size={14}/></button>
               </div>
             )}
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-gray-100 flex flex-col gap-5 flex-1 overflow-y-auto min-h-[300px]">
-          <h3 className="text-xs font-medium text-gray-400">Settlement</h3>
-          
+        <div className="card p-5 flex flex-col gap-5 flex-1 overflow-y-auto min-h-[300px]">
+          <h3 className="stat-label">Settlement</h3>
+
           <div className="space-y-3">
-            <p className="text-xs font-medium text-gray-500">Payment Status</p>
+            <p className="text-xs font-medium text-[#6B7280]">Payment Status</p>
             <div className="grid grid-cols-3 gap-2">
               {[PaymentStatus.PAID, PaymentStatus.PARTIAL, PaymentStatus.DUE].map((status) => (
                 <button
                   key={status}
                   onClick={() => setPaymentStatus(status)}
                   className={cn(
-                    "py-2.5 rounded-lg text-xs font-medium transition-all border",
-                    paymentStatus === status 
-                      ? "bg-[#1E40AF] text-white border-[#1E40AF] shadow-sm" 
-                      : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+                    "py-2.5 rounded-md text-xs font-medium transition-all border",
+                    paymentStatus === status
+                      ? "bg-[#1E40AF] text-white border-[#1E40AF]"
+                      : "bg-white text-[#6B7280] border-[#E5E7EB] hover:bg-[#F9FAFB]"
                   )}
                 >
                   {status}
@@ -304,19 +304,19 @@ export default function Billing() {
               <div className="space-y-4 pt-1">
                 {paymentStatus === PaymentStatus.PARTIAL && (
                   <div>
-                    <label className="text-xs font-medium text-gray-500 block mb-1.5">Amount paid (₹)</label>
-                    <input 
-                      type="number" 
+                    <label className="label block mb-1.5">Amount paid (₹)</label>
+                    <input
+                      type="number"
                       value={paidAmount}
                       onChange={(e) => setPaidAmount(e.target.value)}
-                      className="w-full border border-gray-200 rounded-lg p-3 font-semibold text-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none tabular-nums"
+                      className="input font-semibold text-lg tabular-nums"
                       placeholder="0.00"
                     />
                   </div>
                 )}
-                
+
                 <div>
-                  <label className="text-xs font-medium text-gray-500 block mb-1.5">Payment mode</label>
+                  <label className="label block mb-1.5">Payment mode</label>
                   <div className="grid grid-cols-3 gap-2">
                     {['Cash', 'UPI', 'Card'].map((mode) => (
                       <button
@@ -324,10 +324,10 @@ export default function Billing() {
                         type="button"
                         onClick={() => setPaymentMode(mode)}
                         className={cn(
-                          "py-2 px-1 rounded-lg text-xs font-medium border transition-all",
-                          paymentMode === mode 
-                            ? 'bg-blue-50 border-blue-400 text-[#1E40AF]' 
-                            : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
+                          "py-2 px-1 rounded-md text-xs font-medium border transition-all",
+                          paymentMode === mode
+                            ? 'bg-[#EFF6FF] border-[#3B82F6] text-[#1E40AF]'
+                            : 'bg-white border-[#E5E7EB] text-[#6B7280] hover:border-[#D1D5DB]'
                         )}
                       >
                         {mode}
@@ -342,10 +342,10 @@ export default function Billing() {
           <div className="flex-1" />
 
           <div className="space-y-2">
-            <button 
-              onClick={handleSaveBill} 
+            <button
+              onClick={handleSaveBill}
               disabled={isSubmitting}
-              className="w-full bg-[#1E40AF] hover:bg-blue-800 text-white py-3 rounded-lg font-medium text-sm shadow-sm transition-all active:scale-[0.97] flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full btn-primary py-3 justify-center active:scale-[0.97] disabled:opacity-60 gap-2"
             >
               <Printer size={16} />
               {isSubmitting ? 'Saving...' : 'Save & Print'}

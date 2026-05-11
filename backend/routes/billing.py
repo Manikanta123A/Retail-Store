@@ -14,13 +14,73 @@ def get_bills():
     user_id = request.headers.get('X-User-Id')
     customer_id = request.args.get('customer_id')
     search = request.args.get('search')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
     
-    query = Bill.query.filter_by(user_id=user_id)
+    query = db.session.query(Bill, Customer.name).join(Customer, Bill.customer_id == Customer.id).filter(Bill.user_id == user_id)
+    
     if customer_id:
         query = query.filter(Bill.customer_id == customer_id)
+    
+    if search:
+        query = query.filter(Customer.name.ilike(f'%{search}%'))
+
+    if start_date:
+        from datetime import datetime
+        try:
+            sd = datetime.fromisoformat(start_date.replace('Z', ''))
+            query = query.filter(Bill.created_at >= sd)
+        except: pass
+    
+    if end_date:
+        from datetime import datetime
+        try:
+            ed = datetime.fromisoformat(end_date.replace('Z', ''))
+            query = query.filter(Bill.created_at <= ed)
+        except: pass
         
-    bills = query.order_by(Bill.created_at.desc()).all()
-    return jsonify([b.to_dict() for b in bills])
+    results = query.order_by(Bill.created_at.desc()).all()
+    
+    bills_data = []
+    for bill, cust_name in results:
+        b_dict = bill.to_dict()
+        b_dict['customer_name'] = cust_name
+        bills_data.append(b_dict)
+        
+    return jsonify(bills_data)
+
+@billing_bp.route('/summary', methods=['GET'])
+def get_billing_summary():
+    user_id = request.headers.get('X-User-Id')
+    start_date = request.args.get('start_date')
+    
+    from datetime import datetime
+    try:
+        sd = datetime.fromisoformat(start_date.replace('Z', ''))
+    except:
+        sd = datetime.utcnow() - timedelta(days=30)
+
+    # All calculations on backend to save bandwidth and CPU
+    bills_query = Bill.query.filter(Bill.user_id == user_id, Bill.created_at >= sd)
+    bills = bills_query.all()
+    
+    total_sales = sum(float(b.final_amount) for b in bills)
+    total_bills = len(bills)
+    due_added = sum(float(b.due_amount) for b in bills)
+    
+    from models.payment import Payment
+    payments = Payment.query.filter(Payment.user_id == user_id, Payment.created_at >= sd).all()
+    due_collected = sum(float(p.amount) for p in payments if p.balance_before and float(p.balance_before) > 0)
+    
+    total_pending = db.session.query(db.func.sum(Customer.outstanding_due)).filter(Customer.user_id == user_id).scalar() or 0
+
+    return jsonify({
+        "totalSales": total_sales,
+        "totalBills": total_bills,
+        "dueAdded": due_added,
+        "dueCollected": due_collected,
+        "pendingDue": float(total_pending)
+    })
 
 @billing_bp.route('/', methods=['POST'])
 def create_bill():
@@ -151,11 +211,20 @@ def get_payments():
         query = query.filter_by(customer_id=customer_id)
         
     start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    from datetime import datetime, timedelta
+    
     if start_date:
-        from datetime import datetime, timedelta
-        date_obj = datetime.strptime(start_date, '%Y-%m-%d')
-        next_day = date_obj + timedelta(days=1)
-        query = query.filter(Payment.created_at >= date_obj, Payment.created_at < next_day)
+        try:
+            sd = datetime.fromisoformat(start_date.replace('Z', ''))
+            query = query.filter(Payment.created_at >= sd)
+        except: pass
+        
+    if end_date:
+        try:
+            ed = datetime.fromisoformat(end_date.replace('Z', ''))
+            query = query.filter(Payment.created_at <= ed)
+        except: pass
 
     search = request.args.get('search')
     if search:

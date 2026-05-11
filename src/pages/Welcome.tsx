@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -19,17 +20,17 @@ const features = [
     desc: 'Generate itemised bills in seconds with auto-calculated totals.',
   },
   {
-    icon: <Users size={18} className="text-amber-600" />,
+    icon: <Users size={18} className="text-[#F59E0B]" />,
     title: 'Customer Due Tracking',
     desc: 'Track every pending balance and send instant reminders.',
   },
   {
-    icon: <BarChart2 size={18} className="text-teal-600" />,
+    icon: <BarChart2 size={18} className="text-[#10B981]" />,
     title: 'Reports & Analytics',
     desc: 'Visual daily, weekly, and monthly sales & due reports.',
   },
   {
-    icon: <Mail size={18} className="text-rose-500" />,
+    icon: <Mail size={18} className="text-[#EF4444]" />,
     title: 'Email Invoices',
     desc: 'Send professional PDF invoices directly to customers.',
   },
@@ -48,17 +49,17 @@ export default function Welcome() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-[#1A1D23]">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col font-sans text-[#111827]">
 
       {/* ── Navbar ── */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <header className="sticky top-0 z-50 bg-white border-b border-[#E5E7EB]">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#1E40AF] flex items-center justify-center shadow-sm shadow-blue-500/20">
+            <div className="w-8 h-8 rounded-lg bg-[#1E40AF] flex items-center justify-center">
               <Store size={16} className="text-white" />
             </div>
-            <span className="text-[15px] font-semibold text-gray-900 tracking-tight">Retail Pro</span>
+            <span className="text-[15px] font-bold text-[#111827] tracking-tight">Anitha Jewellers</span>
           </div>
 
           {/* Nav actions */}
@@ -66,14 +67,14 @@ export default function Welcome() {
             <button
               id="nav-login-btn"
               onClick={() => navigate('/login')}
-              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-[#6B7280] hover:text-[#111827] rounded-md hover:bg-[#F3F4F6] transition-colors"
             >
               Login
             </button>
             <button
               id="nav-signup-btn"
               onClick={() => navigate('/login?tab=signup')}
-              className="px-4 py-2 text-sm font-medium text-white bg-[#1E40AF] hover:bg-blue-800 rounded-lg transition-colors shadow-sm"
+              className="btn-primary"
             >
               Sign Up
             </button>
@@ -83,28 +84,28 @@ export default function Welcome() {
 
       {/* ── Hero ── */}
       <section className="flex-1 flex flex-col items-center justify-center text-center px-5 py-16 sm:py-24 max-w-3xl mx-auto w-full page-enter">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight tracking-tight mb-5">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#111827] leading-tight tracking-tight mb-6">
           Smart Billing &amp; Customer<br className="hidden sm:block" />
-          {' '}<span className="text-[#1E40AF]">Due Management</span> for Retail Stores
+          {' '}<span className="text-[#1E40AF]">Due Management</span>
         </h1>
 
-        <p className="text-sm sm:text-base text-gray-500 max-w-xl leading-relaxed mb-8">
+        <p className="text-sm sm:text-base text-[#6B7280] max-w-xl leading-relaxed mb-10">
           Manage sales, track dues, and run your store efficiently — all from one clean, purpose-built dashboard.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
           <button
             id="hero-signup-btn"
             onClick={() => navigate('/login?tab=signup')}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#1E40AF] hover:bg-blue-800 text-white text-sm font-medium rounded-lg shadow-sm transition-all active:scale-[0.98]"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 bg-[#1E40AF] hover:bg-[#1E3A8A] text-white text-sm font-bold rounded-lg shadow-md shadow-blue-500/10 transition-all active:scale-[0.98]"
           >
             Get Started
-            <ArrowRight size={15} />
+            <ArrowRight size={16} />
           </button>
           <button
             id="hero-login-btn"
             onClick={() => navigate('/login')}
-            className="w-full sm:w-auto px-6 py-3 bg-white border border-gray-200 hover:border-gray-300 text-sm font-medium text-gray-700 rounded-lg transition-all active:scale-[0.98] shadow-sm"
+            className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#E5E7EB] hover:border-[#D1D5DB] text-sm font-semibold text-[#374151] rounded-lg transition-all active:scale-[0.98]"
           >
             Login
           </button>
@@ -112,24 +113,24 @@ export default function Welcome() {
       </section>
 
       {/* ── Features ── */}
-      <section className="py-12 sm:py-16 px-5 sm:px-6 border-t border-gray-100 bg-white">
+      <section className="py-16 sm:py-20 px-5 sm:px-6 border-t border-[#E5E7EB] bg-white">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8 sm:mb-10">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Everything your store needs</h2>
-            <p className="text-sm text-gray-400 mt-2">Four core features that cover your day-to-day operations.</p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="h2 text-[#111827]">Everything your store needs</h2>
+            <p className="text-sm text-[#9CA3AF] mt-2">Four core features that cover your day-to-day operations.</p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((f) => (
               <div
                 key={f.title}
-                className="bg-[#F8FAFC] border border-gray-100 rounded-xl p-4 sm:p-5 hover:border-gray-200 hover:shadow-sm transition-all"
+                className="card p-6 hover:border-[#3B82F6] hover:shadow-md transition-all group"
               >
-                <div className="w-9 h-9 rounded-lg bg-white border border-gray-100 flex items-center justify-center mb-3 sm:mb-4 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-[#F8F9FB] border border-[#E5E7EB] flex items-center justify-center mb-5 group-hover:bg-[#EFF6FF] group-hover:border-[#DBEAFE] transition-colors">
                   {f.icon}
                 </div>
-                <h3 className="text-sm font-semibold text-gray-800 mb-1">{f.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{f.desc}</p>
+                <h3 className="text-sm font-bold text-[#111827] mb-2">{f.title}</h3>
+                <p className="text-xs text-[#6B7280] leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -137,17 +138,17 @@ export default function Welcome() {
       </section>
 
       {/* ── Business Value ── */}
-      <section className="py-12 sm:py-16 px-5 sm:px-6">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center">
+      <section className="py-16 sm:py-20 px-5 sm:px-6 bg-[#F8F9FB]">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-3">Designed for real retail work</h2>
-            <p className="text-sm text-gray-500 leading-relaxed mb-6">
-              Retail Pro isn't a demo — it's a production-ready tool used by store owners to manage billing, dues, and customers every single day.
+            <h2 className="h2 text-[#111827] mb-4">Designed for real retail work</h2>
+            <p className="text-sm text-[#6B7280] leading-relaxed mb-8">
+              Anitha Jewellers is a production-ready tool used by store owners to manage billing, dues, and customers every single day.
             </p>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {values.map((v) => (
-                <li key={v} className="flex items-start gap-3 text-sm text-gray-600">
-                  <CheckCircle2 size={16} className="text-[#1E40AF] mt-0.5 flex-shrink-0" />
+                <li key={v} className="flex items-start gap-3 text-sm font-medium text-[#374151]">
+                  <CheckCircle2 size={18} className="text-[#10B981] mt-0.5 flex-shrink-0" />
                   {v}
                 </li>
               ))}
@@ -155,19 +156,19 @@ export default function Welcome() {
           </div>
 
           {/* Decorative stat card cluster */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {[
               { label: 'Bills Generated', value: '1,200+', color: 'border-l-[#1E40AF]' },
-              { label: 'Dues Collected', value: '₹4.8L+', color: 'border-l-teal-600' },
-              { label: 'Customers Tracked', value: '300+', color: 'border-l-amber-500' },
-              { label: 'Billing Errors', value: '~Zero', color: 'border-l-rose-500' },
+              { label: 'Dues Collected', value: '₹4.8L+', color: 'border-l-[#10B981]' },
+              { label: 'Customers Tracked', value: '300+', color: 'border-l-[#F59E0B]' },
+              { label: 'Billing Errors', value: '~Zero', color: 'border-l-[#EF4444]' },
             ].map((s) => (
               <div
                 key={s.label}
-                className={`bg-white border border-gray-100 border-l-[3px] ${s.color} rounded-xl p-5`}
+                className={cn("stat-card border-l-[3px] shadow-sm", s.color)}
               >
-                <p className="text-2xl font-bold text-gray-900 tabular-nums">{s.value}</p>
-                <p className="text-xs text-gray-400 mt-1">{s.label}</p>
+                <p className="text-2xl font-bold text-[#111827] tabular-nums">{s.value}</p>
+                <p className="stat-label mt-1">{s.label}</p>
               </div>
             ))}
           </div>
@@ -175,25 +176,31 @@ export default function Welcome() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-12 sm:py-14 px-5 sm:px-6 bg-white border-t border-gray-100">
+      <section className="py-16 sm:py-20 px-5 sm:px-6 bg-white border-y border-[#E5E7EB]">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="h2 text-[#111827] mb-3">
             Start managing your store better today
           </h2>
-          <p className="text-sm text-gray-400">No complicated setup. Just sign up and go.</p>
+          <p className="text-sm text-[#9CA3AF] mb-8">No complicated setup. Just sign up and go.</p>
+          <button
+            onClick={() => navigate('/login?tab=signup')}
+            className="btn-primary px-8 py-3 text-base"
+          >
+            Get Started Now
+          </button>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-gray-100 py-6 px-6 bg-[#F8FAFC]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-400">
+      <footer className="py-10 px-6 bg-white">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#9CA3AF]">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded bg-[#1E40AF] flex items-center justify-center">
-              <Store size={11} className="text-white" />
+            <div className="w-6 h-6 rounded bg-[#1E40AF] flex items-center justify-center">
+              <Store size={12} className="text-white" />
             </div>
-            <span className="font-medium text-gray-600">Retail Pro</span>
+            <span className="font-bold text-[#111827]">Anitha Jewellers</span>
           </div>
-          <span>Smart billing &amp; due management for retail stores.</span>
+          <span className="text-center sm:text-right font-medium">Smart billing &amp; due management. &copy; {new Date().getFullYear()} All rights reserved.</span>
         </div>
       </footer>
 

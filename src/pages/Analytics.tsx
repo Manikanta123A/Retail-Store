@@ -72,20 +72,20 @@ export default function Analytics() {
     return (
       <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-4">
         <Loader2 className="w-8 h-8 animate-spin text-[#1E40AF]" />
-        <p className="text-gray-400 text-sm font-medium">Analyzing business data...</p>
+        <p className="text-[#9CA3AF] text-sm font-medium">Analyzing business data...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-4 p-8 bg-rose-50 rounded-2xl border border-rose-100">
-        <AlertCircle className="text-rose-600" size={48} />
-        <h2 className="text-base font-semibold text-rose-900">Analytics Error</h2>
-        <p className="text-rose-700 text-sm text-center max-w-md">{error}</p>
-        <button 
+      <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-4 p-8 bg-[#FEF2F2] rounded-xl border border-[#FECACA]">
+        <AlertCircle className="text-[#DC2626]" size={40} />
+        <h2 className="h2 text-[#DC2626]">Analytics Error</h2>
+        <p className="text-[#B91C1C] text-sm text-center max-w-md">{error}</p>
+        <button
           onClick={fetchAnalytics}
-          className="mt-2 px-6 py-2 bg-rose-600 text-white rounded-lg text-sm font-medium hover:bg-rose-700 transition-colors"
+          className="btn-primary mt-2"
         >
           Try Again
         </button>
@@ -98,21 +98,21 @@ export default function Analytics() {
       {/* Header & Filters */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">Business Analytics</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Deep dive into financial trends and performance.</p>
+          <h1 className="h1">Business Analytics</h1>
+          <p className="text-sm text-[#6B7280] mt-0.5">Deep dive into financial trends and performance.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
+          <div className="flex card p-1 gap-1">
             {['weekly', 'monthly', 'custom'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={cn(
                   "px-4 py-1.5 text-xs font-medium rounded-md transition-all capitalize",
-                  filter === f 
-                    ? "bg-[#1E40AF] text-white shadow-sm" 
-                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  filter === f
+                    ? "bg-[#1E40AF] text-white"
+                    : "text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6]"
                 )}
               >
                 {f}
@@ -121,23 +121,23 @@ export default function Analytics() {
           </div>
 
           {filter === 'custom' && (
-            <form onSubmit={handleCustomSubmit} className="flex items-center gap-2 animate-in slide-in-from-right-4 duration-300">
-              <input 
-                type="date" 
-                className="text-xs bg-white border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500/20 outline-none"
+            <form onSubmit={handleCustomSubmit} className="flex items-center gap-2">
+              <input
+                type="date"
+                className="input w-auto text-xs py-1.5"
                 value={customDates.start}
                 onChange={(e) => setCustomDates({...customDates, start: e.target.value})}
                 required
               />
-              <span className="text-gray-400 text-xs">to</span>
-              <input 
-                type="date" 
-                className="text-xs bg-white border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500/20 outline-none"
+              <span className="text-[#9CA3AF] text-xs">to</span>
+              <input
+                type="date"
+                className="input w-auto text-xs py-1.5"
                 value={customDates.end}
                 onChange={(e) => setCustomDates({...customDates, end: e.target.value})}
                 required
               />
-              <button type="submit" className="bg-gray-900 text-white p-2 rounded-lg hover:bg-black transition-colors">
+              <button type="submit" className="btn-primary p-2">
                 <Filter size={14} />
               </button>
             </form>
@@ -227,31 +227,31 @@ export default function Analytics() {
         {/* Insights & Least Selling */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Least Selling */}
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col h-full">
+          <div className="card p-6 flex flex-col h-full">
             <div className="flex items-center gap-2 mb-4">
-              <ShoppingBag className="text-gray-400" size={18} />
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Least Selling</h3>
+              <ShoppingBag className="text-[#9CA3AF]" size={18} />
+              <h3 className="section-title">Least Selling</h3>
             </div>
             <div className="space-y-3 flex-1">
               {data?.least_items?.map((item: any, i: number) => (
-                <div key={i} className="flex justify-between items-center p-3 rounded-xl bg-gray-50 border border-gray-100 transition-hover hover:border-gray-200">
-                  <span className="text-sm font-medium text-gray-700">{item.name}</span>
-                  <span className="text-xs font-semibold text-gray-400 tabular-nums">{item.quantity} sold</span>
+                <div key={i} className="flex justify-between items-center p-3 rounded-md bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#D1D5DB] transition-colors">
+                  <span className="text-sm font-medium text-[#374151]">{item.name}</span>
+                  <span className="text-xs font-semibold text-[#9CA3AF] tabular-nums">{item.quantity} sold</span>
                 </div>
               ))}
               {(!data?.least_items || data.least_items.length === 0) && (
                 <div className="h-full flex items-center justify-center py-8">
-                  <p className="text-xs text-gray-400 italic">No low-selling items found.</p>
+                  <p className="text-xs text-[#9CA3AF] italic">No low-selling items found.</p>
                 </div>
               )}
             </div>
           </div>
 
           {/* Insights */}
-          <div className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 shadow-sm flex flex-col h-full">
+          <div className="card p-6 bg-[#EFF6FF] border-[#BFDBFE] flex flex-col h-full">
             <div className="flex items-center gap-2 mb-4">
               <Lightbulb className="text-[#1E40AF]" size={18} />
-              <h3 className="text-xs font-semibold text-blue-900/60 uppercase tracking-widest">Insights</h3>
+              <h3 className="section-title text-[#1E3A8A]/70">Insights</h3>
             </div>
             <div className="space-y-4 flex-1">
               {data?.insights?.map((insight: string, i: number) => {
@@ -263,11 +263,11 @@ export default function Analytics() {
                     </div>
                     <div>
                       {isHighDue ? (
-                        <p className="text-sm text-blue-900/80 leading-relaxed">
+                        <p className="text-sm text-[#1E3A8A] leading-relaxed">
                           Top dues held by:{' '}
                           {data?.high_due_customers?.map((cust: any, idx: number) => (
                             <React.Fragment key={cust.id}>
-                              <Link 
+                              <Link
                                 to={`/dues?search=${encodeURIComponent(cust.name)}`}
                                 className="font-semibold text-[#1E40AF] hover:underline"
                               >
@@ -278,7 +278,7 @@ export default function Analytics() {
                           ))}
                         </p>
                       ) : (
-                        <p className="text-sm text-blue-900/80 leading-relaxed">{insight}</p>
+                        <p className="text-sm text-[#1E3A8A] leading-relaxed">{insight}</p>
                       )}
                     </div>
                   </div>
@@ -286,7 +286,7 @@ export default function Analytics() {
               })}
               {(!data?.insights || data.insights.length === 0) && (
                 <div className="h-full flex items-center justify-center py-8">
-                  <p className="text-xs text-blue-400 italic">No insights generated yet.</p>
+                  <p className="text-xs text-[#93C5FD] italic">No insights generated yet.</p>
                 </div>
               )}
             </div>
@@ -299,33 +299,33 @@ export default function Analytics() {
 
 const borderMap: Record<string, string> = {
   blue: 'border-l-[#1E40AF]',
-  teal: 'border-l-teal-600',
-  amber: 'border-l-amber-500',
-  indigo: 'border-l-indigo-600',
+  teal: 'border-l-[#10B981]',
+  amber: 'border-l-[#F59E0B]',
+  indigo: 'border-l-[#6366F1]',
 };
 const valueColorMap: Record<string, string> = {
   blue: 'text-[#1E40AF]',
-  teal: 'text-teal-700',
-  amber: 'text-amber-600',
-  indigo: 'text-indigo-700',
+  teal: 'text-[#059669]',
+  amber: 'text-[#D97706]',
+  indigo: 'text-[#4F46E5]',
 };
 
 function MetricCard({ title, value, description, color }: any) {
   return (
-    <div className={cn("bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] shadow-sm", borderMap[color])}>
-      <p className="text-xs font-medium text-gray-400 mb-1">{title}</p>
-      <p className={cn("text-2xl font-semibold tabular-nums", valueColorMap[color])}>{value}</p>
-      <p className="text-[10px] text-gray-400 mt-1 font-medium">{description}</p>
+    <div className={cn("stat-card border-l-[3px]", borderMap[color])}>
+      <p className="stat-label">{title}</p>
+      <p className={cn("text-2xl font-bold tabular-nums", valueColorMap[color])}>{value}</p>
+      <p className="text-[10px] text-[#9CA3AF] mt-1 font-medium">{description}</p>
     </div>
   );
 }
 
 function ChartContainer({ title, subtitle, children }: any) {
   return (
-    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col h-[380px]">
-      <div className="mb-6">
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1">{title}</h3>
-        <p className="text-sm text-gray-400 font-medium">{subtitle}</p>
+    <div className="card p-6 flex flex-col h-[380px]">
+      <div className="mb-4">
+        <h3 className="section-title mb-1">{title}</h3>
+        <p className="text-sm text-[#6B7280] font-medium">{subtitle}</p>
       </div>
       <div className="flex-1 min-h-0">
         {children}

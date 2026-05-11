@@ -1,40 +1,259 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+/* ============================================================
+   ANITHA JEWELLERS — REFINED DESIGN SYSTEM
+   Single primary (blue), neutral canvas, 8px spacing grid,
+   clear type hierarchy, minimal SaaS aesthetic.
+   ============================================================ */
+
 @theme {
+  /* —— Typography —— */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --color-primary: #1E40AF;
-  --color-primary-light: #3B82F6;
-  --color-secondary: #0F766E;
-  --color-bg: #FAFBFC;
-  --color-surface: #FFFFFF;
-  --color-border: #E8ECF1;
-  --color-ink: #1A1D23;
-  --color-muted: #6B7280;
+
+  /* —— Core Palette: ONE primary + neutrals —— */
+  --color-primary:        #1E40AF;   /* blue-800 */
+  --color-primary-hover:  #1E3A8A;   /* blue-900 */
+  --color-primary-light:  #3B82F6;   /* blue-500 */
+  --color-primary-soft:   #EFF6FF;   /* blue-50  */
+
+  --color-bg:             #F8F9FB;   /* slightly warmer grey */
+  --color-surface:        #FFFFFF;
+  --color-elevated:       #FFFFFF;
+
+  --color-ink:            #111827;   /* gray-900 */
+  --color-ink-secondary:  #374151;   /* gray-700 */
+  --color-muted:          #6B7280;   /* gray-500 */
+  --color-placeholder:    #9CA3AF;   /* gray-400 */
+
+  /* —— Borders: one subtle neutral —— */
+  --color-border:         #E5E7EB;   /* gray-200 */
+  --color-border-light:   #F3F4F6;   /* gray-100 */
+  --color-divider:        #E5E7EB;
+
+  /* —— Accents: ONLY for status / values, softer tones —— */
+  --color-success:        #10B981;   /* emerald-500 */
+  --color-success-soft:   #ECFDF5;   /* emerald-50  */
+  --color-danger:         #EF4444;   /* red-500 */
+  --color-danger-soft:    #FEF2F2;   /* red-50 */
+  --color-warning:        #F59E0B;   /* amber-500 */
+  --color-warning-soft:   #FFFBEB;   /* amber-50 */
+
+  /* —— Sidebar: subdued so content shines —— */
+  --color-sidebar-bg:     #F3F4F6;   /* gray-100 */
+  --color-sidebar-ink:    #4B5563;   /* gray-600 */
+  --color-sidebar-active: #1E40AF;   /* primary */
+  --color-sidebar-active-bg: #E0E7FF; /* indigo-100, very soft */
+
+  /* —— Shadows: minimal, single utility scale —— */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+
+  /* —— Radius —— */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 }
 
 @layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply font-sans text-[#1A1D23] bg-[#FAFBFC] antialiased;
-  }
-  
-  /* Smooth row hover for all tables */
-  tbody tr {
-    transition: background-color 0.15s ease, transform 0.1s ease;
+    @apply font-sans text-[#111827] bg-[#F8F9FB];
   }
 
-  /* Clean table headers */
+  /* —— Typography Hierarchy —— */
+  h1, .h1 {
+    @apply text-2xl font-bold tracking-tight text-[#111827];
+    line-height: 1.2;
+  }
+  h2, .h2 {
+    @apply text-xl font-semibold tracking-tight text-[#111827];
+    line-height: 1.25;
+  }
+  h3, .h3 {
+    @apply text-base font-semibold text-[#374151];
+    line-height: 1.35;
+  }
+  .section-title {
+    @apply text-sm font-semibold uppercase tracking-wide text-[#6B7280];
+  }
+  .label {
+    @apply text-xs font-medium text-[#9CA3AF];
+  }
+  .value {
+    @apply text-sm font-medium text-[#374151];
+  }
+  .value-important {
+    @apply text-base font-semibold text-[#111827];
+  }
+
+  /* —— Tables —— */
+  table {
+    @apply w-full text-left border-collapse;
+  }
+
+  thead {
+    @apply bg-[#F9FAFB];
+  }
+
   th {
-    font-weight: 600;
+    @apply text-xs font-semibold text-[#6B7280] uppercase tracking-wider;
+    padding: 14px 24px;          /* ~14px top/bottom, 24px sides */
+    border-bottom: 1px solid #E5E7EB;
   }
 
-  /* Tabular nums for all currency/number displays */
+  td {
+    @apply text-sm text-[#374151];
+    padding: 16px 24px;
+    border-bottom: 1px solid #F3F4F6;
+  }
+
+  tbody tr {
+    transition: background-color 0.12s ease;
+  }
+
+  tbody tr:hover {
+    @apply bg-[#F9FAFB];
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Tabular numbers for currency / counts */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
 }
 
-/* Scrollbar hide */
+@layer components {
+  /* —— Cards: clean, border-only, NO heavy shadow —— */
+  .card {
+    @apply bg-white rounded-lg border border-[#E5E7EB];
+    /* no shadow by default; use shadow-sm if elevation is needed */
+  }
+  .card-elevated {
+    @apply bg-white rounded-lg border border-[#E5E7EB] shadow-sm;
+  }
+
+  /* —— Sidebar: low contrast, quiet —— */
+  .sidebar {
+    @apply bg-[#F3F4F6] border-r border-[#E5E7EB];
+  }
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[#4B5563] rounded-md transition-colors;
+  }
+  .sidebar-link:hover {
+    @apply bg-[#E5E7EB] text-[#111827];
+  }
+  .sidebar-link.active {
+    @apply bg-[#E0E7FF] text-[#1E40AF];
+  }
+  /* Remove heavy left-border active indicators */
+  .sidebar-link.active {
+    border-left: none;
+    box-shadow: none;
+  }
+
+  /* —— Buttons —— */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-[#1E40AF] rounded-md transition-colors;
+  }
+  .btn-primary:hover {
+    @apply bg-[#1E3A8A];
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-[#374151] bg-white border border-[#E5E7EB] rounded-md transition-colors;
+  }
+  .btn-secondary:hover {
+    @apply bg-[#F9FAFB];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-[#6B7280] rounded-md transition-colors;
+  }
+  .btn-ghost:hover {
+    @apply bg-[#F3F4F6] text-[#374151];
+  }
+
+  /* —— Modals: airy, flat, clear action hierarchy —— */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/30 backdrop-blur-sm;
+    animation: modal-overlay-enter 0.15s ease-out both;
+  }
+  .modal-panel {
+    @apply bg-white rounded-xl shadow-lg w-full max-w-lg mx-4;
+    animation: modal-enter 0.2s ease-out both;
+  }
+  .modal-header {
+    @apply px-6 pt-6 pb-2;
+  }
+  .modal-body {
+    @apply px-6 py-4;
+  }
+  .modal-footer {
+    @apply px-6 pb-6 pt-2 flex items-center justify-end gap-3;
+  }
+
+  /* —— Form Inputs —— */
+  .input {
+    @apply w-full px-3 py-2 text-sm text-[#111827] bg-white border border-[#E5E7EB] rounded-md placeholder:text-[#9CA3AF] transition-colors;
+  }
+  .input:focus {
+    @apply outline-none border-[#3B82F6] ring-2 ring-[#3B82F6]/20;
+  }
+
+  /* —— Status badges / pills —— */
+  .badge-success {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium text-[#059669] bg-[#ECFDF5] rounded-full;
+  }
+  .badge-danger {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium text-[#DC2626] bg-[#FEF2F2] rounded-full;
+  }
+  .badge-warning {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium text-[#D97706] bg-[#FFFBEB] rounded-full;
+  }
+  .badge-neutral {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium text-[#6B7280] bg-[#F3F4F6] rounded-full;
+  }
+
+  /* —— Page layout wrapper —— */
+  .page-container {
+    @apply max-w-7xl mx-auto px-6 py-6;
+  }
+  .page-header {
+    @apply mb-6;
+  }
+
+  /* —— Stat / KPI cards —— */
+  .stat-card {
+    @apply bg-white rounded-lg border border-[#E5E7EB] p-6;
+  }
+  .stat-label {
+    @apply text-xs font-medium text-[#9CA3AF] mb-1;
+  }
+  .stat-value {
+    @apply text-2xl font-bold text-[#111827] tabular-nums;
+  }
+  .stat-delta-positive {
+    @apply text-xs font-medium text-[#059669];
+  }
+  .stat-delta-negative {
+    @apply text-xs font-medium text-[#DC2626];
+  }
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+
+/* Hide scrollbars when needed */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -43,7 +262,26 @@
   scrollbar-width: none;
 }
 
-/* Modal animations — subtle slide-up + fade, NOT zoom */
+/* Subtle custom scrollbar for overflow containers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
 @keyframes modal-enter {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -51,12 +289,6 @@
 @keyframes modal-overlay-enter {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-.modal-enter {
-  animation: modal-enter 0.2s ease-out both;
-}
-.modal-overlay {
-  animation: modal-overlay-enter 0.15s ease-out both;
 }
 
 /* Page transition — gentle fade-in */
@@ -90,64 +322,54 @@
   100% { background-position: 200% 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 6px;
 }
 
-/* Print styles */
-@media print {
-  @page {
-    margin: 0;
-  }
-  body {
-    margin: 1.5cm;
-  }
-}
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
-/* Mobile table responsiveness — ensure tables have min-width so they scroll horizontally */
 @media (max-width: 640px) {
-  table {
-    min-width: 600px;
+  /* Mobile bottom-sheet modal */
+  .modal-enter {
+    animation: slide-up-mobile 0.3s ease-out both;
   }
-  
-  /* Reduce table cell padding on small screens */
+
+  /* Tables scroll horizontally */
+  table {
+    min-width: 640px;
+  }
   td, th {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Tighter page padding on mobile */
+  .page-container {
+    @apply px-4 py-4;
   }
 }
 
-/* Smooth momentum scrolling for overflow containers */
+@keyframes slide-up-mobile {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* Smooth momentum scrolling */
 .overflow-x-auto,
 .overflow-auto {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Mobile bottom-sheet modal animation */
-@keyframes slide-up-mobile {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-@media (max-width: 640px) {
-  .modal-enter {
-    animation: slide-up-mobile 0.3s ease-out both;
-  }
-}
-
-/* Elegant Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print {
+  @page { margin: 0; }
+  body { margin: 1.5cm; }
+  .sidebar, .no-print { display: none !important; }
+  .card, .card-elevated { box-shadow: none !important; border: 1px solid #E5E7EB !important; }
 }

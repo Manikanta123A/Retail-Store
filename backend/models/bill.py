@@ -18,6 +18,7 @@ class Bill(db.Model):
 
     items = db.relationship('BillItem', backref='bill', lazy=True, cascade="all, delete-orphan")
     payments = db.relationship('Payment', backref='bill', lazy=True, cascade="all, delete-orphan")
+    customer = db.relationship('Customer', backref='bills', lazy=True)
 
     def to_dict(self):
         return {

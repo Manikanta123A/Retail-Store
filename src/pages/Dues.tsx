@@ -76,55 +76,58 @@ export default function Dues() {
 
   return (
     <div className="space-y-6">
+      {/* Page Header */}
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Due Management</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Track and recover outstanding credit.</p>
+        <h1 className="h1">Due Management</h1>
+        <p className="text-sm text-[#6B7280] mt-0.5">Track and recover outstanding credit.</p>
       </div>
 
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        <div className="bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] border-l-rose-500">
-          <p className="text-xs font-medium text-gray-400 mb-1">Total Outstanding</p>
-          <p className="text-2xl font-semibold text-rose-600 tabular-nums">{formatCurrency(totalOutstanding)}</p>
-          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-            <AlertCircle size={12} className="text-rose-400" />
+        <div className="stat-card border-l-[3px] border-l-[#EF4444]">
+          <p className="stat-label">Total Outstanding</p>
+          <p className="text-2xl font-bold text-[#DC2626] tabular-nums">{formatCurrency(totalOutstanding)}</p>
+          <div className="mt-2 flex items-center gap-2 text-xs text-[#9CA3AF]">
+            <AlertCircle size={12} className="text-[#EF4444]" />
             <span>Across {customers.length} customers</span>
           </div>
         </div>
-        <div className="bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] border-l-amber-500">
-          <p className="text-xs font-medium text-gray-400 mb-1">High Risk</p>
-          <p className="text-2xl font-semibold text-amber-600 tabular-nums">{formatCurrency(highRiskDues)}</p>
-          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-            <Clock size={12} className="text-amber-400" />
+        <div className="stat-card border-l-[3px] border-l-[#F59E0B]">
+          <p className="stat-label">High Risk</p>
+          <p className="text-2xl font-bold text-[#D97706] tabular-nums">{formatCurrency(highRiskDues)}</p>
+          <div className="mt-2 flex items-center gap-2 text-xs text-[#9CA3AF]">
+            <Clock size={12} className="text-[#F59E0B]" />
             <span>Older than 60 days</span>
           </div>
         </div>
-        <div className="bg-white p-5 rounded-xl border border-gray-100 border-l-[3px] border-l-emerald-600">
-          <p className="text-xs font-medium text-gray-400 mb-1">Recovered this Month</p>
-          <p className="text-2xl font-semibold text-emerald-600 tabular-nums">{formatCurrency(recoveryThisMonth)}</p>
-          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-            <CheckCircle2 size={12} className="text-emerald-400" />
+        <div className="stat-card border-l-[3px] border-l-[#10B981]">
+          <p className="stat-label">Recovered this Month</p>
+          <p className="text-2xl font-bold text-[#059669] tabular-nums">{formatCurrency(recoveryThisMonth)}</p>
+          <div className="mt-2 flex items-center gap-2 text-xs text-[#9CA3AF]">
+            <CheckCircle2 size={12} className="text-[#10B981]" />
             <span>From recent payments</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-3">
+      {/* Table Card */}
+      <div className="card overflow-hidden">
+        <div className="px-5 py-4 border-b border-[#E5E7EB] flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <input
               type="text"
               placeholder="Search by name or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full sm:w-72 pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+              className="input pl-10 sm:w-72"
             />
           </div>
           <div className="flex flex-wrap gap-2">
             <select
               value={filterRisk}
               onChange={(e) => setFilterRisk(e.target.value)}
-              className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="input w-auto"
             >
               <option value="All">All Risks</option>
               <option value="High">High Risk</option>
@@ -135,66 +138,65 @@ export default function Dues() {
               type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="input w-auto"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table>
             <thead>
-              <tr className="text-xs text-gray-400 font-medium border-b border-gray-100">
-                <th className="px-6 py-3">Customer</th>
-                <th className="px-6 py-3">Total Due</th>
-                <th className="px-6 py-3">Due Since</th>
-                <th className="px-6 py-3">Risk</th>
-                <th className="px-6 py-3"></th>
+              <tr>
+                <th>Customer</th>
+                <th>Total Due</th>
+                <th>Due Since</th>
+                <th>Risk</th>
+                <th></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 text-sm">
+            <tbody>
               {loading ? (
-                <tr><td colSpan={5} className="p-10 text-center"><Loader2 className="w-5 h-5 animate-spin mx-auto text-blue-600" /></td></tr>
+                <tr><td colSpan={5} className="p-10 text-center"><Loader2 className="w-5 h-5 animate-spin mx-auto text-[#1E40AF]" /></td></tr>
               ) : filteredDues.length === 0 ? (
-                <tr><td colSpan={5} className="p-10 text-center text-gray-400 text-sm">No dues found.</td></tr>
+                <tr><td colSpan={5} className="p-10 text-center text-[#9CA3AF] text-sm">No dues found.</td></tr>
               ) : (
                 filteredDues.map((due) => {
                   const daysOld = Math.floor((new Date().getTime() - new Date(due.last_purchase_date || due.created_at).getTime()) / (1000 * 3600 * 24));
                   const risk_level = daysOld > 60 ? 'High' : daysOld > 30 ? 'Medium' : 'Low';
 
                   return (
-                    <tr key={due.id} className="hover:bg-gray-50/60 transition-colors group">
-                      <td className="px-6 py-3.5">
+                    <tr key={due.id}>
+                      <td>
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                          <div className="w-8 h-8 rounded-full bg-[#F3F4F6] flex items-center justify-center text-[#6B7280]">
                             <User size={14} />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-800">{due.name}</p>
-                            <p className="text-xs text-gray-400">{due.phone}</p>
+                            <p className="font-medium text-[#111827]">{due.name}</p>
+                            <p className="text-xs text-[#9CA3AF]">{due.phone}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-3.5">
-                        <p className="text-rose-600 font-semibold tabular-nums">{formatCurrency(due.outstanding_due)}</p>
+                      <td>
+                        <p className="text-[#DC2626] font-semibold tabular-nums">{formatCurrency(due.outstanding_due)}</p>
                       </td>
-                      <td className="px-6 py-3.5">
-                        <span className="text-gray-700 font-medium">{format(new Date(due.last_purchase_date || due.created_at), 'MMM dd, yyyy')}</span>
-                        <span className="text-xs text-gray-400 block mt-0.5">{daysOld} days ago</span>
+                      <td>
+                        <span className="text-[#374151] font-medium">{format(new Date(due.last_purchase_date || due.created_at), 'MMM dd, yyyy')}</span>
+                        <span className="text-xs text-[#9CA3AF] block mt-0.5">{daysOld} days ago</span>
                       </td>
-                      <td className="px-6 py-3.5">
+                      <td>
                         <span className={cn(
-                          "px-2 py-1 rounded-md text-xs font-medium border",
-                          risk_level === 'High' ? 'bg-rose-50 text-rose-600 border-rose-200' :
-                          risk_level === 'Medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
-                          'bg-blue-50 text-blue-600 border-blue-200'
+                          risk_level === 'High' ? 'badge-danger' :
+                          risk_level === 'Medium' ? 'badge-warning' :
+                          'badge-neutral'
                         )}>
                           {risk_level}
                         </span>
                       </td>
-                      <td className="px-6 py-3.5 text-right">
+                      <td className="text-right">
                         <button
                           onClick={() => { setSelectedCustomer(due); setCollectModalOpen(true); }}
-                          className="flex items-center gap-1.5 text-[#1E40AF] font-medium text-xs hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-all ml-auto"
+                          className="flex items-center gap-1.5 text-[#1E40AF] font-medium text-xs hover:bg-[#EFF6FF] px-3 py-1.5 rounded-lg transition-all ml-auto"
                         >
                           Collect
                           <ArrowRight size={13} />

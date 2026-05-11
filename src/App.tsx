@@ -20,11 +20,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#FAFBFC] gap-4">
-        <div className="w-10 h-10 rounded-xl bg-[#1E40AF] flex items-center justify-center shadow-lg shadow-blue-500/20">
+      <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#F8F9FB] gap-4">
+        <div className="w-10 h-10 rounded-xl bg-[#1E40AF] flex items-center justify-center">
           <Loader2 className="animate-spin text-white" size={20} />
         </div>
-        <p className="text-sm font-medium text-gray-400 animate-pulse">Loading...</p>
+        <p className="text-sm font-medium text-[#9CA3AF] animate-pulse">Loading...</p>
       </div>
     );
   }

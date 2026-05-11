@@ -38,25 +38,25 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFBFC] flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[#1E40AF] mb-4 shadow-lg shadow-blue-500/20">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#1E40AF] mb-4">
             <Store size={22} className="text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">Retail Pro</h1>
-          <p className="text-sm text-gray-400 mt-1">Billing & Due Management</p>
+          <h1 className="text-xl font-bold text-[#111827] tracking-tight">Anitha Jewellers</h1>
+          <p className="text-sm text-[#6B7280] mt-1">Billing & Due Management</p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="card overflow-hidden">
           {/* Tabs */}
-          <div className="flex border-b border-gray-100">
+          <div className="flex border-b border-[#E5E7EB]">
             <button
               className={`flex-1 py-3.5 text-sm font-medium transition-colors ${
-                isLoginTab 
-                  ? 'text-[#1E40AF] border-b-2 border-[#1E40AF]' 
-                  : 'text-gray-400 hover:text-gray-600'
+                isLoginTab
+                  ? 'text-[#1E40AF] border-b-2 border-[#1E40AF]'
+                  : 'text-[#9CA3AF] hover:text-[#374151]'
               }`}
               onClick={() => { setIsLoginTab(true); setError(''); }}
             >
@@ -64,9 +64,9 @@ export default function Login() {
             </button>
             <button
               className={`flex-1 py-3.5 text-sm font-medium transition-colors ${
-                !isLoginTab 
-                  ? 'text-[#1E40AF] border-b-2 border-[#1E40AF]' 
-                  : 'text-gray-400 hover:text-gray-600'
+                !isLoginTab
+                  ? 'text-[#1E40AF] border-b-2 border-[#1E40AF]'
+                  : 'text-[#9CA3AF] hover:text-[#374151]'
               }`}
               onClick={() => { setIsLoginTab(false); setError(''); }}
             >
@@ -76,7 +76,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
             {error && (
-              <div className="flex items-center gap-3 p-3 bg-rose-50 border border-rose-100 rounded-lg text-rose-600 text-sm">
+              <div className="flex items-center gap-3 p-3 bg-[#FEF2F2] border border-[#FECACA] rounded-md text-[#DC2626] text-sm">
                 <AlertCircle size={16} className="flex-shrink-0" />
                 {error}
               </div>
@@ -84,15 +84,15 @@ export default function Login() {
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Username</label>
+                <label className="label block mb-1.5">Username</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={16} />
                   <input
                     type="text"
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+                    className="input pl-10"
                     placeholder="Enter username"
                   />
                 </div>
@@ -101,43 +101,43 @@ export default function Login() {
               {!isLoginTab && (
                 <>
                   <div>
-                    <label className="text-xs font-medium text-gray-500 mb-1.5 block">Full Name</label>
+                    <label className="label block mb-1.5">Full Name</label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={16} />
                       <input
                         type="text"
                         required
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+                        className="input pl-10"
                         placeholder="Enter full name"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-gray-500 mb-1.5 block">Email</label>
+                    <label className="label block mb-1.5">Email</label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={16} />
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+                        className="input pl-10"
                         placeholder="Enter email address"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-gray-500 mb-1.5 block">Phone</label>
+                    <label className="label block mb-1.5">Phone</label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={16} />
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+                        className="input pl-10"
                         placeholder="Enter phone number"
                       />
                     </div>
@@ -146,15 +146,15 @@ export default function Login() {
               )}
 
               <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Password</label>
+                <label className="label block mb-1.5">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={16} />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+                    className="input pl-10"
                     placeholder="Enter password"
                   />
                 </div>
@@ -164,7 +164,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1E40AF] hover:bg-blue-800 text-white py-3 rounded-lg font-medium text-sm shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full btn-primary py-3 active:scale-[0.98] justify-center disabled:opacity-60"
             >
               {isSubmitting ? (
                 <Loader2 className="animate-spin" size={18} />

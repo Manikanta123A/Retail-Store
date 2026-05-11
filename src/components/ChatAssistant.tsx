@@ -16,17 +16,17 @@ const INTENT_META: Record<string, { label: string; color: string; Icon: React.El
   QUERY_CUSTOMER:   { label: 'Customer Info',    color: 'bg-sky-100 text-sky-700',        Icon: Search },
   QUERY_PRODUCT:    { label: 'Product Info',     color: 'bg-pink-100 text-pink-700',      Icon: Package },
   DELETE_CUSTOMER:  { label: 'Delete Customer',  color: 'bg-red-100 text-red-700',        Icon: X },
+  ADD_STOCK:        { label: 'Add Stock',       color: 'bg-orange-100 text-orange-700', Icon: Package },
   GREETING:         { label: 'Small Talk',       color: 'bg-blue-100 text-blue-700',      Icon: Sparkles },
   UNKNOWN:          { label: 'Unknown',          color: 'bg-gray-100 text-gray-500',      Icon: HelpCircle },
 };
 
 // ─── Quick-action chips shown before first message ────────────────────────────
 const QUICK_CHIPS = [
-  { text: 'Create bill for Ravi 2 shoes', icon: ShoppingCart },
-  { text: 'Add Vaishu 9398432494 vaishu@gmail.com', icon: UserPlus },
+  { text: 'Bill for Ravi 2 shoes', icon: ShoppingCart },
+  { text: 'Add stock 50 sarees', icon: Package },
   { text: 'Ravi paid 500', icon: Banknote },
-  { text: 'Show details of Ravi', icon: Search },
-  { text: 'Delete Ravi and 9876543210', icon: X },
+  { text: 'Add customer Anita', icon: UserPlus },
 ];
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -40,6 +40,7 @@ interface ChatMessage {
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function ChatAssistant() {
   const [isOpen, setIsOpen]       = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [message, setMessage]     = useState('');
   const [history, setHistory]     = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -129,12 +130,21 @@ export default function ChatAssistant() {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <X className="w-4 h-4 text-white" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setShowGuide(true)}
+                  className="p-1.5 hover:bg-white/20 rounded-lg transition-colors text-white mr-1"
+                  title="How to use"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="w-4 h-4 text-white" />
+                </button>
+              </div>
             </div>
 
             {/* ── Chat Area ──────────────────────────────────────────────── */}
@@ -247,6 +257,59 @@ export default function ChatAssistant() {
                 </div>
               )}
             </div>
+
+            {/* ── Tutorial Guide Overlay ─────────────────────────────────────── */}
+            <AnimatePresence>
+              {showGuide && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-40 flex flex-col"
+                  style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(10px)' }}
+                >
+                  <div className="p-6 flex-1 overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <h4 className="text-xl font-bold text-indigo-900">User Guide</h4>
+                      <button onClick={() => setShowGuide(false)} className="p-2 hover:bg-indigo-50 rounded-full transition-colors">
+                        <X className="w-5 h-5 text-indigo-400" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-6">
+                      {[
+                        { title: '📦 Inventory & Stock', desc: 'Add or check items quickly.', ex: '"add stock 50 sarees" or "price of gold chain"' },
+                        { title: '🧾 Billing & Sales', desc: 'Create bills in one sentence.', ex: '"bill for Ravi 2 shoes, 1200 paid"' },
+                        { title: '👥 Customers', desc: 'Manage your customer base.', ex: '"add customer Anita 9876543210"' },
+                        { title: '💰 Payments', desc: 'Record partial or full payments.', ex: '"Ravi paid 500" or "show dues for Priya"' },
+                      ].map((item, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                          className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50"
+                        >
+                          <h5 className="font-bold text-indigo-700 text-sm mb-1">{item.title}</h5>
+                          <p className="text-gray-600 text-xs mb-2">{item.desc}</p>
+                          <div className="bg-white/80 p-2 rounded-lg text-[11px] font-mono text-indigo-500 italic">
+                            {item.ex}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => setShowGuide(false)}
+                      className="w-full mt-8 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Zap className="w-4 h-4" />
+                      Got it, let's go!
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* ── Input ──────────────────────────────────────────────────── */}
             <form

@@ -37,9 +37,11 @@ export const itemService = {
 };
 
 export const billingService = {
-  getBills: (search = '', customerId = '') => api.get(`/billing/?search=${search}&customer_id=${customerId}`),
+  getBills: (search = '', customerId = '', params: any = {}) => 
+    api.get(`/billing/`, { params: { search, customer_id: customerId, ...params } }),
   getBill: (id: string) => api.get(`/billing/${id}`),
   getPayments: (params: any = {}) => api.get('/billing/payments', { params }),
+  getSummary: (startDate: string) => api.get('/billing/summary', { params: { start_date: startDate } }),
   createBill: (data: any) => api.post('/billing/', data),
   deleteBill: (id: string) => api.delete(`/billing/${id}`),
   payBill: (id: string, amount: number, paymentMode: string = 'Cash') => api.put(`/billing/${id}/pay`, { amount, payment_mode: paymentMode }),

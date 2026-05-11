@@ -56,37 +56,39 @@ export default function Payments() {
 
   return (
     <div className="space-y-6">
+      {/* Page Header */}
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Payment History</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Track all incoming payments and collections.</p>
+        <h1 className="h1">Payment History</h1>
+        <p className="text-sm text-[#6B7280] mt-0.5">Track all incoming payments and collections.</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 flex flex-col lg:flex-row gap-3">
+      {/* Table Card */}
+      <div className="card overflow-hidden">
+        <div className="px-5 py-4 border-b border-[#E5E7EB] flex flex-col lg:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <input
               type="text"
               placeholder="Search by customer name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 outline-none transition-all"
+              className="input pl-10"
             />
           </div>
           <div className="flex flex-wrap gap-2">
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
               <input
                 type="date"
                 value={filterDate}
                 onChange={e => setFilterDate(e.target.value)}
-                className="pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 outline-none"
+                className="input pl-10 w-auto"
               />
             </div>
             <select
               value={filterMode}
               onChange={e => setFilterMode(e.target.value)}
-              className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 outline-none"
+              className="input w-auto"
             >
               <option value="All">All Modes</option>
               <option value="Cash">Cash</option>
@@ -95,77 +97,72 @@ export default function Payments() {
               <option value="Collection">Collection</option>
             </select>
             <div className="relative w-28">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-medium text-gray-400">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#9CA3AF]">₹</span>
               <input
                 type="number"
                 placeholder="Min"
                 value={filterMinAmount}
                 onChange={e => setFilterMinAmount(e.target.value)}
-                className="w-full pl-7 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 outline-none"
+                className="input pl-7 w-full"
               />
             </div>
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table>
             <thead>
-              <tr className="text-xs text-gray-400 font-medium border-b border-gray-100">
-                <th className="px-6 py-3">Transaction</th>
-                <th className="px-6 py-3">Customer</th>
-                <th className="px-6 py-3">Mode</th>
-                <th className="px-6 py-3 text-right">Amount</th>
-                <th className="px-6 py-3 text-right">Date</th>
+              <tr>
+                <th>Transaction</th>
+                <th>Customer</th>
+                <th>Mode</th>
+                <th className="text-right">Amount</th>
+                <th className="text-right">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 text-sm">
+            <tbody>
               {loading ? (
-                <tr><td colSpan={5} className="p-10 text-center"><Loader2 className="w-5 h-5 animate-spin mx-auto text-blue-600" /></td></tr>
+                <tr><td colSpan={5} className="p-10 text-center"><Loader2 className="w-5 h-5 animate-spin mx-auto text-[#1E40AF]" /></td></tr>
               ) : filteredPayments.length === 0 ? (
-                <tr><td colSpan={5} className="p-10 text-center text-gray-400 text-sm">No payments found.</td></tr>
+                <tr><td colSpan={5} className="p-10 text-center text-[#9CA3AF] text-sm">No payments found.</td></tr>
               ) : (
                 filteredPayments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-blue-50/40 transition-colors group">
-                    <td className="px-6 py-3.5">
-                      <div
-                        className="flex items-center gap-3 cursor-pointer"
-                        onClick={() => setSelectedBillId(payment.bill_id)}
-                      >
-                        <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-100 transition-colors">
+                  <tr key={payment.id} className="cursor-pointer" onClick={() => setSelectedBillId(payment.bill_id)}>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
                           <FileText size={16} />
                         </div>
                         <div>
-                          <p className="font-medium text-gray-800 group-hover:text-[#1E40AF] transition-colors">Bill #{payment.bill_number}</p>
-                          <div className="flex items-center gap-1.5 mt-0.5">
-                            {payment.transaction_count > 1 && (
-                              <span className="bg-blue-50 text-blue-700 text-[10px] px-1.5 py-0.5 rounded-md font-medium border border-blue-200">
-                                {payment.transaction_count} txns
-                              </span>
-                            )}
-                          </div>
+                          <p className="font-medium text-[#111827] hover:text-[#1E40AF] transition-colors">
+                            Bill #{payment.bill_number}
+                          </p>
+                          {payment.transaction_count > 1 && (
+                            <span className="badge-neutral mt-0.5 inline-flex">
+                              {payment.transaction_count} txns
+                            </span>
+                          )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-3.5">
+                    <td>
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                        <div className="w-7 h-7 rounded-full bg-[#F3F4F6] flex items-center justify-center text-[#6B7280]">
                           <User size={12} />
                         </div>
-                        <span className="text-sm font-medium text-gray-700">{payment.customer_name}</span>
+                        <span className="text-sm font-medium text-[#374151]">{payment.customer_name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-3.5">
-                      <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded-md border border-gray-200">
-                        {payment.payment_mode}
-                      </span>
+                    <td>
+                      <span className="badge-neutral">{payment.payment_mode}</span>
                     </td>
-                    <td className="px-6 py-3.5 text-right">
-                      <p className="text-emerald-600 font-semibold tabular-nums">+{formatCurrency(payment.total_paid_in_history)}</p>
+                    <td className="text-right">
+                      <p className="text-[#059669] font-semibold tabular-nums">+{formatCurrency(payment.total_paid_in_history)}</p>
                     </td>
-                    <td className="px-6 py-3.5 text-right">
+                    <td className="text-right">
                       <div className="flex flex-col items-end">
-                        <span className="text-sm font-medium text-gray-700">{format(new Date(payment.latest_date), 'MMM dd, yyyy')}</span>
-                        <span className="text-xs text-gray-400">{format(new Date(payment.latest_date), 'hh:mm aa')}</span>
+                        <span className="text-sm font-medium text-[#374151]">{format(new Date(payment.latest_date), 'MMM dd, yyyy')}</span>
+                        <span className="text-xs text-[#9CA3AF]">{format(new Date(payment.latest_date), 'hh:mm aa')}</span>
                       </div>
                     </td>
                   </tr>
