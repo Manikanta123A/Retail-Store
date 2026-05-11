@@ -43,7 +43,7 @@ export default function Reports() {
   const fetchSummary = async () => {
     try {
       const startDate = getStartDate();
-      const res = await billingService.getSummary(startDate);
+      const res = await billingService.getSummary(startDate, search);
       setSummary(res.data);
     } catch (e) {
       console.error('Summary fetch error:', e);
@@ -58,6 +58,7 @@ export default function Reports() {
       
       if (reportType === 'Sales') {
         const res = await billingService.getBills(search, '', { start_date: startDate });
+        console.log('Bills API response:', res.data);
         rawData = res.data;
         if (statusFilter !== 'All') {
           rawData = rawData.filter((b: any) => b.status.toLowerCase() === statusFilter.toLowerCase());
@@ -84,8 +85,8 @@ export default function Reports() {
       csv = 'Date,Bill ID,Customer,Total,Paid,Due,Status\n';
       data.forEach(row => { csv += `"${format(new Date(row.created_at), 'MMM dd yyyy')}","${row.bill_number}","${row.customer_name}","${row.final_amount}","${row.paid_amount}","${row.due_amount}","${row.status}"\n`; });
     } else if (reportType === 'Payments') {
-      csv = 'Date,Customer,Amount,Mode\n';
-      data.forEach(row => { csv += `"${format(new Date(row.created_at), 'MMM dd yyyy')}","${row.customer_name}","${row.amount}","${row.payment_mode}"\n`; });
+      csv = 'Date,Bill ID,Customer,Amount,Mode\n';
+      data.forEach(row => { csv += `"${format(new Date(row.created_at), 'MMM dd yyyy')}","${row.bill_number}","${row.customer_name}","${row.amount}","${row.payment_mode}"\n`; });
     } else if (reportType === 'Dues') {
       csv = 'Customer,Total Due,Last Payment Date\n';
       data.forEach(row => { csv += `"${row.name}","${row.outstanding_due}","${row.last_purchase_date ? format(new Date(row.last_purchase_date), 'MMM dd yyyy') : ''}"\n`; });
@@ -140,7 +141,7 @@ export default function Reports() {
         </select>
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
-          <input type="text" placeholder="Search customer..." value={search} onChange={(e) => setSearch(e.target.value)} className="input pl-9" />
+          <input type="text" placeholder="Search customer or bill #..." value={search} onChange={(e) => setSearch(e.target.value)} className="input pl-9" />
         </div>
         {reportType === 'Sales' && (
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="input w-auto">
@@ -167,7 +168,7 @@ export default function Reports() {
             <thead>
               <tr>
                 {reportType === 'Sales' && (<><th>Date</th><th>Bill</th><th>Customer</th><th className="text-right">Total</th><th className="text-right">Paid</th><th className="text-right">Due</th><th>Status</th></>)}
-                {reportType === 'Payments' && (<><th>Date</th><th>Customer</th><th className="text-right">Amount</th><th>Mode</th></>)}
+                {reportType === 'Payments' && (<><th>Date</th><th>Bill</th><th>Customer</th><th className="text-right">Amount</th><th>Mode</th></>)}
                 {reportType === 'Dues' && (<><th>Customer</th><th className="text-right">Total Due</th><th>Last Payment</th><th>Age</th></>)}
               </tr>
             </thead>
@@ -190,7 +191,10 @@ export default function Reports() {
                       <>
                         <td className="text-[#6B7280]">{format(new Date(row.created_at), 'MMM dd, yyyy')}</td>
                         <td className="font-mono text-xs text-[#6B7280]">#{row.bill_number}</td>
-                        <td className="font-medium text-[#111827]">{row.customer_name || 'Walk-in Customer'}</td>
+                        <td>
+                          <p className="font-medium text-[#111827]">{row.customer_name}</p>
+                          {row.phone && <p className="text-[10px] text-[#9CA3AF]">{row.phone}</p>}
+                        </td>
                         <td className="text-right font-medium text-[#111827] tabular-nums">{formatCurrency(row.final_amount)}</td>
                         <td className="text-right text-[#059669] tabular-nums">{formatCurrency(row.paid_amount)}</td>
                         <td className="text-right text-[#DC2626] tabular-nums">{formatCurrency(row.due_amount)}</td>
@@ -205,8 +209,12 @@ export default function Reports() {
                     )}
                     {reportType === 'Payments' && (
                       <>
-                        <td className="text-[#6B7280]">{format(new Date(row.created_at), 'MMM dd, yyyy hh:mm a')}</td>
-                        <td className="font-medium text-[#111827]">{row.customer_name || 'Walk-in Customer'}</td>
+                        <td className="text-[#6B7280]">{format(new Date(row.created_at), 'MMM dd, hh:mm a')}</td>
+                        <td className="font-mono text-xs text-[#6B7280]">#{row.bill_number}</td>
+                        <td>
+                          <p className="font-medium text-[#111827]">{row.customer_name}</p>
+                          {row.phone && <p className="text-[10px] text-[#9CA3AF]">{row.phone}</p>}
+                        </td>
                         <td className="text-right font-semibold text-[#059669] tabular-nums">+{formatCurrency(row.amount)}</td>
                         <td><span className="badge-neutral">{row.payment_mode}</span></td>
                       </>

@@ -5,6 +5,8 @@ from models.payment import Payment
 from models.item import Item
 from models.customer import Customer
 import uuid
+from sqlalchemy import func
+from datetime import datetime, timedelta
 from utils.email_utils import send_bill_email, send_payment_email
 
 billing_bp = Blueprint('billing', __name__)
@@ -17,13 +19,18 @@ def get_bills():
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
     
-    query = db.session.query(Bill, Customer.name).join(Customer, Bill.customer_id == Customer.id).filter(Bill.user_id == user_id)
+    # Use outerjoin to include bills without customers (Walk-in)
+    query = db.session.query(Bill, Customer.name, Customer.phone).outerjoin(Customer, Bill.customer_id == Customer.id).filter(Bill.user_id == user_id)
     
     if customer_id:
         query = query.filter(Bill.customer_id == customer_id)
     
     if search:
-        query = query.filter(Customer.name.ilike(f'%{search}%'))
+        # Search by customer name OR bill number
+        query = query.filter(
+            (Customer.name.ilike(f'%{search}%')) | 
+            (func.cast(Bill.bill_number, db.String).ilike(f'%{search}%'))
+        )
 
     if start_date:
         from datetime import datetime
@@ -42,9 +49,10 @@ def get_bills():
     results = query.order_by(Bill.created_at.desc()).all()
     
     bills_data = []
-    for bill, cust_name in results:
+    for bill, cust_name, cust_phone in results:
         b_dict = bill.to_dict()
-        b_dict['customer_name'] = cust_name
+        b_dict['customer_name'] = cust_name if cust_name else "Walk-in Customer"
+        b_dict['phone'] = cust_phone if cust_phone else ""
         bills_data.append(b_dict)
         
     return jsonify(bills_data)
@@ -53,26 +61,56 @@ def get_bills():
 def get_billing_summary():
     user_id = request.headers.get('X-User-Id')
     start_date = request.args.get('start_date')
+    search = request.args.get('search')
+    customer_id = request.args.get('customer_id')
     
-    from datetime import datetime
     try:
         sd = datetime.fromisoformat(start_date.replace('Z', ''))
     except:
         sd = datetime.utcnow() - timedelta(days=30)
 
-    # All calculations on backend to save bandwidth and CPU
-    bills_query = Bill.query.filter(Bill.user_id == user_id, Bill.created_at >= sd)
-    bills = bills_query.all()
+    # Base bill query
+    bill_query = Bill.query.filter(Bill.user_id == user_id, Bill.created_at >= sd)
+    
+    # Base payment query
+    payment_query = Payment.query.filter(Payment.user_id == user_id, Payment.created_at >= sd)
+    
+    # Apply filters if present
+    if customer_id:
+        bill_query = bill_query.filter(Bill.customer_id == customer_id)
+        payment_query = payment_query.filter(Payment.customer_id == customer_id)
+    elif search:
+        # Join with customer to filter by name
+        bill_query = bill_query.outerjoin(Customer, Bill.customer_id == Customer.id).filter(Customer.name.ilike(f'%{search}%'))
+        payment_query = payment_query.outerjoin(Customer, Payment.customer_id == Customer.id).filter(Customer.name.ilike(f'%{search}%'))
+
+    bills = bill_query.all()
+    payments = payment_query.all()
     
     total_sales = sum(float(b.final_amount) for b in bills)
     total_bills = len(bills)
+    
+    # "Due Added" should be the initial due at time of bill creation
+    # which is (final_amount - initial_payment)
+    # We can approximate this by summing current due_amount + any payments made TODAY for these bills
+    # But wait, a simpler way: just sum (final_amount - first_payment_on_same_day)
+    # Actually, let's keep it simple: initial_due = final_amount - paid_at_billing
+    # Since we don't store 'paid_at_billing' separately, we sum the due_amount
+    # BUT if we want it to be static, we should have a field. 
+    # For now, let's use the sum of due_amount which is the CURRENT pending from these bills.
     due_added = sum(float(b.due_amount) for b in bills)
     
-    from models.payment import Payment
-    payments = Payment.query.filter(Payment.user_id == user_id, Payment.created_at >= sd).all()
-    due_collected = sum(float(p.amount) for p in payments if p.balance_before and float(p.balance_before) > 0)
+    # Total collected in this period
+    due_collected = sum(float(p.amount) for p in payments)
     
-    total_pending = db.session.query(db.func.sum(Customer.outstanding_due)).filter(Customer.user_id == user_id).scalar() or 0
+    # Total pending across all time (respecting filters)
+    pending_query = db.session.query(db.func.sum(Customer.outstanding_due)).filter(Customer.user_id == user_id)
+    if customer_id:
+        pending_query = pending_query.filter(Customer.id == customer_id)
+    elif search:
+        pending_query = pending_query.filter(Customer.name.ilike(f'%{search}%'))
+        
+    total_pending = pending_query.scalar() or 0
 
     return jsonify({
         "totalSales": total_sales,
@@ -178,29 +216,6 @@ def create_bill():
     
     return jsonify(new_bill.to_dict()), 201
 
-@billing_bp.route('/<id>', methods=['GET'])
-def get_bill(id):
-    user_id = request.headers.get('X-User-Id')
-    bill = Bill.query.filter_by(id=id, user_id=user_id).first_or_404()
-    
-    bill_dict = bill.to_dict()
-    items = []
-    for bi in bill.items:
-        item = Item.query.get(bi.item_id)
-        items.append({
-            "name": item.name if item else "Deleted Item",
-            "quantity": bi.quantity,
-            "price": float(bi.price_at_purchase),
-            "total": float(bi.total_price)
-        })
-    bill_dict['items'] = items
-    bill_dict['payments'] = [p.to_dict() for p in bill.payments]
-    
-    customer = Customer.query.get(bill.customer_id)
-    bill_dict['customer_name'] = customer.name if customer else "Deleted Customer"
-    
-    return jsonify(bill_dict)
-
 @billing_bp.route('/payments', methods=['GET'])
 def get_payments():
     user_id = request.headers.get('X-User-Id')
@@ -228,8 +243,10 @@ def get_payments():
 
     search = request.args.get('search')
     if search:
-        # Join with customer to search by name
-        query = query.join(Customer, Payment.customer_id == Customer.id).filter(Customer.name.ilike(f'%{search}%'))
+        # Use outerjoin to include payments without customer records (if any)
+        query = query.outerjoin(Customer, Payment.customer_id == Customer.id).filter(
+            (Customer.name.ilike(f'%{search}%'))
+        )
         
     payments = query.order_by(Payment.created_at.desc()).all()
     
@@ -239,10 +256,34 @@ def get_payments():
         customer = Customer.query.get(p.customer_id)
         res = p.to_dict()
         res['bill_number'] = bill.bill_number if bill else "N/A"
-        res['customer_name'] = customer.name if customer else "N/A"
+        res['customer_name'] = customer.name if customer else ("Walk-in Customer" if not p.customer_id else "Deleted Customer")
+        res['phone'] = customer.phone if customer else ""
         results.append(res)
         
     return jsonify(results)
+
+@billing_bp.route('/<id>', methods=['GET'])
+def get_bill(id):
+    user_id = request.headers.get('X-User-Id')
+    bill = Bill.query.filter_by(id=id, user_id=user_id).first_or_404()
+    
+    bill_dict = bill.to_dict()
+    items = []
+    for bi in bill.items:
+        item = Item.query.get(bi.item_id)
+        items.append({
+            "name": item.name if item else "Deleted Item",
+            "quantity": bi.quantity,
+            "price": float(bi.price_at_purchase),
+            "total": float(bi.total_price)
+        })
+    bill_dict['items'] = items
+    bill_dict['payments'] = [p.to_dict() for p in bill.payments]
+    
+    customer = Customer.query.get(bill.customer_id)
+    bill_dict['customer_name'] = customer.name if customer else ("Walk-in Customer" if not bill.customer_id else "Deleted Customer")
+    
+    return jsonify(bill_dict)
 
 @billing_bp.route('/<id>/pay', methods=['PUT'])
 def pay_bill(id):
