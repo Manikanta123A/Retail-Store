@@ -205,11 +205,21 @@ def _process_single_query(text: str, user_id: str, history: list = []) -> dict:
         }
 
     # ── Step 1: Classify intent ──────────────────────────────────────────────
-    vec        = get_vectorizer()
-    clf        = get_classifier()
-    X          = vec.transform([text])
-    intent     = clf.predict(X)[0]
-    confidence = float(clf.predict_proba(X).max())
+    # ── Step 1: Classify intent ──────────────────────────────────────────────
+    intent = "UNKNOWN"
+    confidence = 0.0
+
+    try:
+        vec = get_vectorizer()
+        clf = get_classifier()
+        if vec and clf:
+            X = vec.transform([text])
+            intent = clf.predict(X)[0]
+            confidence = float(clf.predict_proba(X).max())
+    except Exception as e:
+        print(f"CHATBOT ML LOAD ERROR: {e}")
+        # Fallback to UNKNOWN, let manual overrides handle it
+        pass
 
     # ── Step 1.5: Manual Overrides ──────────────────────────────────────────
     lower_text = text.lower().strip()

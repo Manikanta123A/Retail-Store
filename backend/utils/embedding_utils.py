@@ -1,10 +1,14 @@
 import numpy as np
 
+import os
+
 # Lazy loader for the model
 _MODEL = None
+IS_VERCEL = os.environ.get("VERCEL") == "1"
 
 def get_model():
     global _MODEL
+    if IS_VERCEL: return False
     if _MODEL is None:
         try:
             from sentence_transformers import SentenceTransformer
