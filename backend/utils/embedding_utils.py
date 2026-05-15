@@ -1,4 +1,4 @@
-import numpy as np
+
 
 import os
 
@@ -36,6 +36,7 @@ def cosine_similarity(vec_a, vec_b):
     Computes cosine similarity between two vectors:
     similarity = dot(A, B) / (||A|| * ||B||)
     """
+    import numpy as np
     a = np.array(vec_a)
     b = np.array(vec_b)
     
