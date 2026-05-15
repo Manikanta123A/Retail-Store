@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Users, Search, Plus, Phone, Mail, Loader2, X, Trash2, Edit3, CheckCircle
 } from 'lucide-react';
@@ -25,10 +26,9 @@ function getAvatarColor(name: string) {
 }
 
 export default function Customers() {
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDue, setFilterDue] = useState(false);
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [newCustomer, setNewCustomer] = useState({ name: '', phone: '', email: '' });
@@ -37,64 +37,61 @@ export default function Customers() {
 
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchCustomers();
-  }, [searchTerm]);
-
-  const fetchCustomers = async () => {
-    setLoading(true);
-    try {
+  const { data: customers = [], isLoading: loading } = useQuery({
+    queryKey: ['customers', searchTerm],
+    queryFn: async () => {
       const response = await customerService.getCustomers(searchTerm);
-      setCustomers(response.data);
-    } catch (error) {
-      console.error('Failed to fetch customers:', error);
-    } finally {
-      setLoading(false);
+      return response.data;
     }
-  };
+  });
 
-  const handleAddCustomer = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await customerService.addCustomer(newCustomer);
+  const addMutation = useMutation({
+    mutationFn: (newCust: any) => customerService.addCustomer(newCust),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
       setShowAddModal(false);
       setNewCustomer({ name: '', phone: '', email: '' });
-      fetchCustomers();
       toast("Customer added successfully", "success");
-    } catch (error) {
-      console.error('Failed to add customer', error);
-      toast('Failed to add customer. Ensure phone number is unique.', 'error');
-    }
-  };
+    },
+    onError: () => toast('Failed to add customer. Ensure phone number is unique.', 'error')
+  });
 
-  const handleUpdateCustomer = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await customerService.updateCustomer(editCustomer.id, {
-        name: editCustomer.name,
-        phone: editCustomer.phone,
-        email: editCustomer.email
-      });
+  const updateMutation = useMutation({
+    mutationFn: (data: {id: string, payload: any}) => customerService.updateCustomer(data.id, data.payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
       setShowEditModal(false);
-      fetchCustomers();
       toast("Customer updated", "success");
-    } catch (error) {
-      console.error('Failed to update customer', error);
-      toast('Failed to update customer.', 'error');
-    }
+    },
+    onError: () => toast('Failed to update customer.', 'error')
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => customerService.deleteCustomer(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      toast("Customer deleted", "info");
+    },
+    onError: () => toast('Cannot delete — customer has existing bills.', 'error')
+  });
+
+  const handleAddCustomer = (e: React.FormEvent) => {
+    e.preventDefault();
+    addMutation.mutate(newCustomer);
   };
 
-  const handleDeleteCustomer = async (id: string, e: React.MouseEvent) => {
+  const handleUpdateCustomer = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateMutation.mutate({
+      id: editCustomer.id,
+      payload: { name: editCustomer.name, phone: editCustomer.phone, email: editCustomer.email }
+    });
+  };
+
+  const handleDeleteCustomer = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm('Delete this customer? This may fail if they have bills.')) {
-      try {
-        await customerService.deleteCustomer(id);
-        fetchCustomers();
-        toast("Customer deleted", "info");
-      } catch (error) {
-        console.error('Failed to delete customer', error);
-        toast('Cannot delete — customer has existing bills.', 'error');
-      }
+      deleteMutation.mutate(id);
     }
   };
 
@@ -307,74 +304,65 @@ export default function Customers() {
       {/* Customer Details Modal */}
       {selectedCustomer && (
         <CustomerDetailsModal
-          customer={selectedCustomer}
+          customer={customers.find((c: any) => c.id === selectedCustomer.id) || selectedCustomer}
           onClose={() => setSelectedCustomer(null)}
-          onUpdate={fetchCustomers}
         />
       )}
     </div>
   );
 }
 
-function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, onClose: () => void, onUpdate: () => void }) {
-  const [bills, setBills] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+function CustomerDetailsModal({ customer, onClose }: { customer: any, onClose: () => void }) {
+  const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('');
   const [selectedBillId, setSelectedBillId] = useState<string | null>(null);
   const [collectBill, setCollectBill] = useState<any>(null);
   const [collectCustomerModal, setCollectCustomerModal] = useState(false);
   const [quickAmount, setQuickAmount] = useState<string>(customer.outstanding_due.toString());
   const [quickMode, setQuickMode] = useState<string>('Cash');
-  const [isCollecting, setIsCollecting] = useState(false);
 
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchBills();
-  }, [customer.id]);
+  const { data: bills = [], isLoading: loading } = useQuery({
+    queryKey: ['bills', customer.id],
+    queryFn: async () => {
+      const response = await billingService.getBills('', customer.id);
+      return response.data;
+    }
+  });
 
-  const handleQuickCollect = async () => {
+  const collectMutation = useMutation({
+    mutationFn: (data: {amount: number, mode: string}) => customerService.collectDues(customer.id, data.amount, data.mode),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['bills', customer.id] });
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      setQuickAmount('0');
+      toast(`₹${variables.amount.toLocaleString()} collected from ${customer.name}`, 'success');
+    },
+    onError: () => toast('Failed to collect payment', 'error')
+  });
+
+  const deleteBillMutation = useMutation({
+    mutationFn: (id: string) => billingService.deleteBill(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bills', customer.id] });
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      toast("Bill deleted", "info");
+    },
+    onError: () => toast('Failed to delete bill.', 'error')
+  });
+
+  const handleQuickCollect = () => {
     const amount = parseFloat(quickAmount);
     if (isNaN(amount) || amount <= 0) { toast('Enter a valid amount', 'error'); return; }
     if (amount > customer.outstanding_due) { toast('Amount exceeds due', 'error'); return; }
 
-    setIsCollecting(true);
-    try {
-      await customerService.collectDues(customer.id, amount, quickMode);
-      setQuickAmount('0');
-      fetchBills();
-      onUpdate();
-      toast(`₹${amount.toLocaleString()} collected from ${customer.name}`, 'success');
-    } catch (e) {
-      console.error(e);
-      toast('Failed to collect payment', 'error');
-    } finally {
-      setIsCollecting(false);
-    }
+    collectMutation.mutate({ amount, mode: quickMode });
   };
 
-  const fetchBills = async () => {
-    setLoading(true);
-    try {
-      const response = await billingService.getBills('', customer.id);
-      setBills(response.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteBill = async (id: string) => {
+  const handleDeleteBill = (id: string) => {
     if (confirm('Delete this bill? Stock and dues will be reverted.')) {
-      try {
-        await billingService.deleteBill(id);
-        fetchBills();
-        toast("Bill deleted", "info");
-      } catch (error) {
-        console.error('Failed to delete bill', error);
-        toast('Failed to delete bill.', 'error');
-      }
+      deleteBillMutation.mutate(id);
     }
   };
 
@@ -442,10 +430,10 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
               </select>
               <button
                 onClick={handleQuickCollect}
-                disabled={isCollecting || parseFloat(quickAmount) <= 0}
+                disabled={collectMutation.isPending || parseFloat(quickAmount) <= 0}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-[#10B981] hover:bg-[#059669] disabled:opacity-50 text-white text-xs font-semibold rounded-md transition-colors"
               >
-                {isCollecting ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
+                {collectMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle size={12} />}
                 Collect
               </button>
             </div>
@@ -539,7 +527,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
           customerName={`Bill #${collectBill.bill_number}`}
           maxAmount={collectBill.due_amount}
           onClose={() => setCollectBill(null)}
-          onSuccess={() => { setCollectBill(null); fetchBills(); }}
+          onSuccess={() => { setCollectBill(null); queryClient.invalidateQueries({ queryKey: ['bills', customer.id] }); queryClient.invalidateQueries({ queryKey: ['customers'] }); }}
         />
       )}
 
@@ -550,7 +538,7 @@ function CustomerDetailsModal({ customer, onClose, onUpdate }: { customer: any, 
           customerName={customer.name}
           maxAmount={customer.outstanding_due}
           onClose={() => setCollectCustomerModal(false)}
-          onSuccess={() => { setCollectCustomerModal(false); onUpdate(); onClose(); }}
+          onSuccess={() => { setCollectCustomerModal(false); queryClient.invalidateQueries({ queryKey: ['customers'] }); onClose(); }}
         />
       )}
     </div>
